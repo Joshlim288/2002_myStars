@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @since 2020-10-17
  */
 
-public abstract class User implements Serializable {
+public abstract class User {
 
     /**
      * This user's user ID.

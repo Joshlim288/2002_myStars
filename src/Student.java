@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @since 2020-10-17
  */
 
-public class Student extends User implements Serializable {
+public class Student extends User {
 
     /**
      * This student's name.

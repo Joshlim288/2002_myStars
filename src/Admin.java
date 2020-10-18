@@ -8,7 +8,7 @@
  * @since 2020-10-17
  */
 
-public class Admin extends User{
+public class Admin extends User {
 
     /**
      * This admin's name.
