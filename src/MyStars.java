@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class MyStars {
@@ -20,7 +21,7 @@ public class MyStars {
             if (menuChoice.length() == 1 && Character.isDigit(menuChoice.toCharArray()[0])) {
                 switch(Integer.parseInt(menuChoice)){
                     case(1) -> {
-                        currentUser = login("Student");
+                        currentUser = login("Student", sc);
                         if (currentUser == null) {
                             System.out.println("Invalid UserID or password");
                         } else {
@@ -30,7 +31,7 @@ public class MyStars {
                     }
 
                     case(2) -> {
-                        currentUser = login("Admin");
+                        currentUser = login("Admin", sc);
                         if (currentUser == null) {
                             System.out.println("Invalid UserID or password");
                         } else {
@@ -57,8 +58,13 @@ public class MyStars {
      * @param domain
      * Domain that the user is trying to logon to
      */
-    public static User login(String domain) {
-        return null;
+    public static User login(String domain, Scanner sc) {
+        String userId, password;
+        System.out.print("Enter userId: ");
+        userId = sc.nextLine();
+        System.out.println("Enter password: ");
+        password = Arrays.toString(System.console().readPassword());
+        return AccessControl.validate(userId, password, domain);
     }
 
     /**
@@ -68,6 +74,6 @@ public class MyStars {
      * Needs to close fileIO and write back all updated data
      */
     public static void quit() {
-
+        FileHandler.close();
     }
 }
