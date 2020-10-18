@@ -1,7 +1,8 @@
-import java.security.SecureRandom;
 import java.util.ArrayList;
 
 /**
+ * Utility class for controlling access and handling security
+ *
  * We might want to change this to a utility class as well, perhaps serving all security functions
  * Like adding/storing passwords, in addition to current functionality
  */
