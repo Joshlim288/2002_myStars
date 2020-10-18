@@ -30,27 +30,32 @@ enum typeOfLesson{
 public class Lesson {
 
     /**
-     * This lesson's lesson type.
+     * This lesson's type (e.g. LEC, TUT, LAB)
+     * Represented with <code>typeOfLesson</code> enumeration.
      */
     private typeOfLesson lessonType;
 
     /**
      * This lesson's group.
+     * Each lesson can only belong to one group.
      */
     private String group;
 
     /**
-     * This lesson's day.
+     * Day on which lesson is held.
+     * Represented with <code>dayOfWeek</code> enumeration.
      */
     private dayOfWeek day;
 
     /**
      * This lesson's start time.
+     * Implemented using LocalDateTime class.
      */
     private LocalDateTime startTime;
 
     /**
      * This lesson's end time.
+     * Implemented using LocalDateTime class.
      */
     private LocalDateTime endTime;
 
@@ -60,7 +65,8 @@ public class Lesson {
     private String venue;
 
     /**
-     * This lesson's teaching weeks.
+     * This lesson's teaching weeks represented by array of integers representing week number.
+     * (e.g. 1,3,5,7,9,11,13)
      */
     private int[] teachingWeeks;
 

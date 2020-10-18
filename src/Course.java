@@ -2,9 +2,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Course represents a course taught in the university (e.g. CZ2002 OODP)
- * It consists of multiple indexes which then consists of its lessons.
- * Database of courses maintained and obtained through <code>FileHandler</code>.
+ * Course represents a course taught in the university (e.g. CZ2002 - OODP).
+ * It consists of multiple indexes which have lessons of different timings.
+ * The database of courses is maintained and obtained through <code>FileHandler</code>.
  * @author Chong Shen Rui
  * @version 1.0
  * @since 2020-10-18
@@ -21,7 +21,7 @@ enum typeOfCourse{
 public class Course implements Serializable {
 
     /**
-     * This course's course code.
+     * Uniquely identifies the course.
      */
     private String courseCode;
 
@@ -31,22 +31,24 @@ public class Course implements Serializable {
     private String courseName;
 
     /**
-     * Type of course.
+     * This course's type (e.g. CORE/MPE/UE)
+     * Represented with <code>typeOfCourse</code> enumeration.
      */
     private typeOfCourse courseType;
 
     /**
-     * This course's allocated AUs.
+     * AUs allocated for this course.
      */
     private int academicUnits;
 
     /**
-     * This course's school.
+     * The school that teaches this course.
      */
     private String school;
 
     /**
      * Indexes under this course.
+     * Stored as an ArrayList of indexes to allow for flexibility of modification.
      */
     private ArrayList<Index> indexes;
 
