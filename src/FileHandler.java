@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.ArrayList;
 //Feels too much like functional programming but we can discuss later
 
-//TODO: Course methods, password handlers, decide if entities need Serializable
 /**
  * FileHandler simulates a database by reading in all data stored.<br>
  * Objects can call FileHandler methods to retrieve their desired data.
@@ -211,8 +210,8 @@ public class FileHandler {
     }
 
     /**
-     * Adds a new student into studentList.
-     * @param newAdmin The student object to be added.
+     * Adds a new admin into adminList.
+     * @param newAdmin The admin object to be added.
      * @return true if addition is successful.
      */
     public static boolean addAdmin(Admin newAdmin) {
@@ -229,20 +228,46 @@ public class FileHandler {
         return adminList;
     }
 
-    // TODO
+    /**
+     * Retrieves a course object from courseList based on course code.
+     * @param courseCode The course code of the course we are retrieving.
+     * @return the course if the course code exists; null otherwise
+     */
     public static Course getCourse(String courseCode) {
+        for (Course course : courseList) {
+            if (course.getCourseCode().equals(courseCode)) {
+                return course;
+            }
+        }
         return null;
     }
 
+    /**
+     * Removes a course from courseList based on course code.
+     * @param courseCode The course code of the course we are removing.
+     * @return true if removal is successful
+     */
     public static boolean removeCourse(String courseCode) {
-        return false;
+        Course courseToRemove = getCourse(courseCode);
+        return courseList.remove(courseToRemove); // if courseToRemove is null, will return false
     }
 
+    /**
+     * Adds a new course into courseList.
+     * @param newCourse The course object to be added.
+     * @return true if addition is successful.
+     */
     public static boolean addCourse(Course newCourse) {
-        return false;
+        // check if course with identical course code already exists in the list
+        if (courseList.contains(newCourse)) { // checks using equals method in Course
+            System.out.println("The course already exists in the database!");
+            return false;
+        }
+        courseList.add(newCourse);
+        return true;
     }
 
     public static ArrayList<Course> getCourseList(){
-        return null;
+        return courseList;
     }
 }
