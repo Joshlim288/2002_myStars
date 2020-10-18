@@ -7,14 +7,14 @@ import java.util.ArrayList;
  */
 public class AccessControl {
 
-    public static User validate(String userId, String hashedPassword, String domain){
+    public static User validate(String userId, String password, String domain){
         ArrayList<User> userList;
         if (domain.equals("Student")) userList = new ArrayList<>(FileHandler.getStudentList());
         else if (domain.equals("Admin")) userList = new ArrayList<>(FileHandler.getAdminList());
         else return null;
 
         for (User account: userList) {
-            if (account.getUserID().equals(userId) && BCrypt.checkpw(hashedPassword, account.getHashedPassword())) {
+            if (account.getUserID().equals(userId) && BCrypt.checkpw(password, account.getHashedPassword())) {
                 return account;
             }
         }
