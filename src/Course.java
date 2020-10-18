@@ -5,6 +5,7 @@ import java.util.ArrayList;
  * Course represents a course taught in the university (e.g. CZ2002 - OODP).
  * It consists of multiple indexes which have lessons of different timings.
  * The database of courses is maintained and obtained through <code>FileHandler</code>.
+ * Enumeration for type of courses also included here.
  * @author Chong Shen Rui
  * @version 1.0
  * @since 2020-10-18
@@ -18,7 +19,7 @@ enum typeOfCourse{
     CORE, MPE, GER, UE
 }
 
-public class Course implements Serializable {
+public class Course {
 
     /**
      * Uniquely identifies the course.

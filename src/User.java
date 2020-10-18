@@ -1,5 +1,3 @@
-import java.io.Serializable;
-
 /**
  * User represents a user in the STARS system.<br>
  * It is inherited by Student and Admin.
