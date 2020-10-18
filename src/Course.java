@@ -118,5 +118,17 @@ public class Course implements Serializable {
     public void setIndexes(ArrayList<Index> indexes) {
         this.indexes = indexes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Course)) {
+            return false;
+        }
+        Course other = (Course) o;
+        return other.getCourseCode() == courseCode;
+    }
 }
 
