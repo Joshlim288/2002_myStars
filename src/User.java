@@ -19,7 +19,7 @@ public abstract class User implements Serializable {
     /**
      * This user's password (hashed).
      */
-    private transient String hashedPassword;
+    private String hashedPassword;
 
     /**
      * Constructor for User, using userID and hashedPassword.
