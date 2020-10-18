@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 //Feels too much like functional programming but we can discuss later
-
+//TODO: add validations and error messages
 /**
  * FileHandler simulates a database by reading in all data stored.<br>
  * Objects can call FileHandler methods to retrieve their desired data.
@@ -27,6 +27,12 @@ public class FileHandler {
     private static ArrayList<Admin> adminList;
 
     /**
+     * ArrayList holding all user objects. <br>
+     * Each user object represents an account, and so holds the userID and hashedPassword for a user.
+     */
+    private static ArrayList<User> userList;
+
+    /**
      * Load all saved objects
      */
     public static void initialize(){
@@ -42,6 +48,9 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Load courseList from data/courseData.dat
+     */
     private static void loadCourses() {
         try {
             FileInputStream fileIn = new FileInputStream("data/courseData.dat");
@@ -59,6 +68,9 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Load studentList from data/studentData.dat
+     */
     private static void loadStudents() {
         try {
             FileInputStream fileIn = new FileInputStream("data/studentData.dat");
@@ -76,6 +88,9 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Load adminList from data/adminData.dat
+     */
     private static void loadAdmins() {
         try {
             FileInputStream fileIn = new FileInputStream("data/adminData.dat");
@@ -94,6 +109,26 @@ public class FileHandler {
     }
 
     /**
+     * Load userList from data/userData.dat
+     */
+    private static void loadUsers() {
+        try {
+            FileInputStream fileIn = new FileInputStream("data/userData.dat");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            userList = (ArrayList<User>) in.readObject();
+            if (userList.isEmpty()) {
+                System.out.println("...user data loaded but is empty");
+            } else {
+                System.out.println("...user data loaded");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Save edited lists back to file
      */
     public static void close(){ // can consider setting all lists to null
@@ -101,8 +136,12 @@ public class FileHandler {
         saveCourses();
         saveStudents();
         saveAdmins();
+        saveUsers();
     }
 
+    /**
+     * Save courseList to data/courseData.dat
+     */
     private static void saveCourses() {
         try {
             FileOutputStream fileOut = new FileOutputStream("data/courseData.dat");
@@ -116,6 +155,9 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Save studentList to data/studentData.dat
+     */
     private static void saveStudents() {
         try {
             FileOutputStream fileOut = new FileOutputStream("data/studentData.dat");
@@ -129,6 +171,9 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Save adminList to data/adminData.dat
+     */
     private static void saveAdmins() {
         try {
             FileOutputStream fileOut = new FileOutputStream("data/adminData.dat");
@@ -137,6 +182,22 @@ public class FileHandler {
             out.close();
             fileOut.close();
             System.out.println("... admin data saved");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Save userList to data/userData.dat
+     */
+    private static void saveUsers() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("data/userData.dat");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(userList);
+            out.close();
+            fileOut.close();
+            System.out.println("... user data saved");
         } catch (IOException e) {
             e.printStackTrace();
         }
