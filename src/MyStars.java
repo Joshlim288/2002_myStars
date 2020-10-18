@@ -7,7 +7,6 @@ public class MyStars {
         User currentUser;
         StudentInterface sUI;
         AdminInterface aUI;
-        AccessControl ac;
         FileHandler.initialize();
         Scanner sc = new Scanner(System.in);
         do {

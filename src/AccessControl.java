@@ -8,6 +8,18 @@ import java.util.ArrayList;
  */
 public class AccessControl {
 
+    /**
+     * Used to validate user credentials
+     * @param userId
+     * userId to be searched for
+     * @param password
+     * unhashed password entered by user
+     * @param domain
+     * domain the user is attempting to log on to
+     * @return
+     * a User object that corresponds to the parameters given if a matching account is found,
+     * null object otherwise
+     */
     public static User validate(String userId, String password, String domain){
         ArrayList<User> userList;
         if (domain.equals("Student")) userList = new ArrayList<>(FileHandler.getStudentList());
