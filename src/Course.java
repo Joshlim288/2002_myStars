@@ -140,5 +140,16 @@ public class Course {
         Course other = (Course) o;
         return other.getCourseCode() == courseCode;
     }
+
+    public Index searchIndex(int indexCode) {
+        for (Index index : indexes)
+        {
+            if (index.getIndexNum()==(indexCode))
+            {
+                return index;
+            }
+        }
+        return null;
+    }
 }
 
