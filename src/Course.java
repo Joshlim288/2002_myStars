@@ -116,6 +116,15 @@ public class Course {
         return indexes;
     }
 
+    //ADDD
+    public Index searchIndexes(int indexSearched){
+        for (Index i : indexes){
+            if(i.getIndexNum() == indexSearched)
+                return i;
+        }
+        return null;
+    }
+
     public void setIndexes(ArrayList<Index> indexes) {
         this.indexes = indexes;
     }

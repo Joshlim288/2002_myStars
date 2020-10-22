@@ -167,7 +167,7 @@ public class Index {
     // TODO: Exception handling if at max capacity
     public void addToEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
         enrolledStudents.add(student);
-        this.currentVacancy++;
+        this.currentVacancy--;
     }
 
     /**
@@ -178,6 +178,6 @@ public class Index {
     // TODO: Exception handling if at zero capacity
     public void removeFromEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
             enrolledStudents.remove(student);
-            this.currentVacancy--;
+            this.currentVacancy++;
     }
 }
