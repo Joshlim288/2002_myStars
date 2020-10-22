@@ -1,15 +1,16 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Lesson represents the actual classes held for an index of a course.
- * These classes encompasses lectures, tutorials, seminars, etc.
- * These classes can have different venues, timings, and so on.
- * ArrayList of lessons is a variable for <code>Index</code>
- * @author Shen Rui
+ * Lessons encompasses lectures, tutorials, seminars, etc.
+ * Lessons can have different venues, timings, and so on.
+ * There are multiple lessons per index of a course.
+ * Enumerations for day of lessons and type of lessons are also included.
+ * @author Chong Shen Rui
  * @version 1.0
  * @since 2020-10-18
  */
-
 
 /**
  * Definition of enumeration called dayOfWeek, with 7 elements, referred to as:
@@ -35,6 +36,7 @@ public class Lesson {
      */
     private typeOfLesson lessonType;
 
+    //TODO: Confirm if group should be an attribute here.
     /**
      * This lesson's group.
      * Each lesson can only belong to one group.
@@ -66,19 +68,19 @@ public class Lesson {
 
     /**
      * This lesson's teaching weeks represented by array of integers representing week number.
-     * (e.g. 1,3,5,7,9,11,13)
+     * Valid range of teaching weeks is 1-13.
      */
     private int[] teachingWeeks;
 
     /**
      * Constructor for <code>Lesson</code>.<br>
      * @param lessonType Type of lesson. Represented with <code>typeOfLesson</code> enumeration.
-     * @param group //Might move to Index
+     * @param group //The group this lesson belongs to.
      * @param day Day on which lesson is held. Represented with <code>dayofWeek</code> enumeration.
      * @param startTime This lesson's start time.
      * @param endTime This lesson's end time.
      * @param venue This lesson's venue.
-     * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 14).
+     * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 13).
      */
     public Lesson(typeOfLesson lessonType, String group, dayOfWeek day, LocalDateTime startTime, LocalDateTime endTime,
                   String venue, int[] teachingWeeks) {
@@ -143,8 +145,19 @@ public class Lesson {
         return teachingWeeks;
     }
 
+    /**
+     * Range validation done to ensure teaching weeks fall between Week 1 -13
+     */
     public void setTeachingWeeks(int[] teachingWeeks) {
-        this.teachingWeeks = teachingWeeks;
+        for (int i = 0; i < teachingWeeks.length; i++) {
+            if (teachingWeeks[i] > 13 || teachingWeeks[i] < 1) {
+                System.out.println("Invalid teaching weeks entered.\n" +
+                        "Choose from Weeks 1 - 13");
+                break;
+            }
+            else {
+                this.teachingWeeks = teachingWeeks;
+            }
+        }
     }
-
 }

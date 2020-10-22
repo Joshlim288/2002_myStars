@@ -1,12 +1,13 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Index represents the actual schedules for each course.
  * There can be multiple indexes per course, where the timings of the lessons may differ (except for LEC).
- * Contains ArrayList of Lesson.
+ * Contains an ArrayList of Lesson.
  * Contains two ArrayList of Student, one for students registered, the other for students in waitlist.
- * @author Shen Rui
- * @version 1.1
+ * @author Chong Shen Rui
+ * @version 1.2
  * @since 2020-10-18
  */
 
@@ -108,6 +109,7 @@ public class Index {
         return lessons;
     }
 
+    // TODO: Check if necessary to have set method for lessons as a whole
     public void setLessons(ArrayList<Lesson> lessons) {
         this.lessons = lessons;
     }
@@ -116,7 +118,7 @@ public class Index {
         return waitlist;
     }
 
-    // TODO, change to editing or removing waitlist rather than setting whole list
+    // TODO: Check if necessary to have set method for entire waitlist
     public void setWaitlist(ArrayList<Student> waitlist) {
         this.waitlist = waitlist;
     }
@@ -125,8 +127,57 @@ public class Index {
         return enrolledStudents;
     }
 
-    // TODO, change to editing or removing enrolled students rather than setting whole list
+    // TODO: Check if necessary to have set method for entire enrolledStudents
     public void setEnrolledStudents(ArrayList<Student> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
+    }
+
+    /**
+     * Method to add a student to current waitlist
+     * Student added to the back of the queue.
+     * @param waitlist The waitlist to add to.
+     * @param student The student to add to waitlist.
+     */
+    public void addToWaitlist(ArrayList<Student> waitlist, Student student){
+        waitlist.add(student);
+    }
+
+    /**
+     * Method to remove a student from current waitlist.
+     * Student at front of queue removed
+     * Exception handling if waitlist is already empty
+     * @param waitlist The waitlist to remove from.
+     */
+    //TODO: Improve if possible (first draft)
+    public Student removeFromWaitlist(ArrayList<Student> waitlist){
+        try{
+            return waitlist.remove(0);
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println("Waitlist is empty!");
+            return null;
+        }
+    }
+
+    /**
+     * Method to add a student from EnrolledStudents ArrayList
+     * @param enrolledStudents The ArrayList to add the student into.
+     * @param student The student to be added.
+     */
+    // TODO: Exception handling if at max capacity
+    public void addToEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
+        enrolledStudents.add(student);
+        this.currentVacancy--;
+    }
+
+    /**
+     * Method to remove a student from EnrolledStudents ArrayList
+     * @param enrolledStudents The ArrayList to remove the student from.
+     * @param student The student to be removed.
+     */
+    // TODO: Exception handling if at zero capacity
+    public void removeFromEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
+            enrolledStudents.remove(student);
+            this.currentVacancy++;
     }
 }

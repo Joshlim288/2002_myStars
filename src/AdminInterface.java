@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class AdminInterface {
+public class AdminInterface implements UserInterface{
     private AdminHandler adHandler;
     private Scanner sc;
     public AdminInterface (User currentUser, Scanner sc) {
