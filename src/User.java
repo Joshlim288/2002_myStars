@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @version 1.0
  * @since 2020-10-17
  */
-
+//TODO: add validations and error messages
 public abstract class User {
 
     /**
@@ -45,5 +45,17 @@ public abstract class User {
 
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User other = (User) o;
+        return other.getUserID().equals(userID);
     }
 }
