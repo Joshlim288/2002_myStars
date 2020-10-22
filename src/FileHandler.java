@@ -32,7 +32,7 @@ public class FileHandler {
      */
     private static ArrayList<User> userList;
 
-    /**
+/**
      * Load all saved objects
      */
     public static void initialize(){
@@ -330,5 +330,48 @@ public class FileHandler {
 
     public static ArrayList<Course> getCourseList(){
         return courseList;
+    }
+
+    /**
+     * Retrieves a user object from userList based on userID.
+     * @param userID The user ID of the user we are retrieving.
+     * @return the user if the user ID exists; null otherwise
+     */
+    public static User getUser(String userID) {
+        for (User user : userList) {
+            if (user.getUserID().equals(userID)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Removes a user from userList based on user ID.
+     * @param userID The user ID of the user we are removing.
+     * @return true if removal is successful
+     */
+    public static boolean removeUser(String userID) {
+        User userToRemove = getUser(userID);
+        return userList.remove(userToRemove); // if userToRemove is null, will return false
+    }
+
+    /**
+     * Adds a new user into userList.
+     * @param newUser The user object to be added.
+     * @return true if addition is successful.
+     */
+    public static boolean addUser(User newUser) {
+        // check if user with identical userid already exists in the list
+        if (userList.contains(newUser)) { // checks using equals method in Course
+            System.out.println("The user already exists in the database!");
+            return false;
+        }
+        userList.add(newUser);
+        return true;
+    }
+
+    public static ArrayList<User> getUserList(){
+        return userList;
     }
 }
