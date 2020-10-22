@@ -20,13 +20,18 @@ public abstract class User {
     private String hashedPassword;
 
     /**
+     * The domain this user belongs to
+     */
+    private String domain;
+    /**
      * Constructor for User, using userID and hashedPassword.
      * @param userID This user's user ID.
      * @param hashedPassword This user's password (hashed).
      */
-    public User(String userID, String hashedPassword) {
+    public User(String userID, String hashedPassword, String domain) {
         this.userID = userID;
         this.hashedPassword = hashedPassword;
+        this.domain = domain;
     }
 
     public String getUserID() {
@@ -36,6 +41,8 @@ public abstract class User {
     public String getHashedPassword() {
         return hashedPassword;
     }
+
+    public String getDomain() {return domain;}
 
     public void setUserID(String userID) {
         this.userID = userID;

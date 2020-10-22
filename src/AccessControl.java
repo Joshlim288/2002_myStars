@@ -20,12 +20,9 @@ public class AccessControl {
      * a User object that corresponds to the parameters given if a matching account is found,
      * null object otherwise
      */
-    public static User validate(String userId, String password, String domain){
+    public static User validate(String userId, String password){
         ArrayList<User> userList;
-        if (domain.equals("Student")) userList = new ArrayList<>(FileHandler.getStudentList());
-        else if (domain.equals("Admin")) userList = new ArrayList<>(FileHandler.getAdminList());
-        else return null;
-
+        userList = FileHandler.getUserList();
         for (User account: userList) {
             if (account.getUserID().equals(userId) && BCrypt.checkpw(password, account.getHashedPassword())) {
                 return account;

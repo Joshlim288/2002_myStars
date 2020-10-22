@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class StudentInterface
-{
+public class StudentInterface implements UserInterface{
     private StudentHandler studHandler;
     private Scanner sc;
 
@@ -84,4 +83,5 @@ public class StudentInterface
         while(choice!=7);
 
     }
+
 }
