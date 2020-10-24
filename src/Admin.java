@@ -34,7 +34,7 @@ public class Admin extends User {
      * @param staffNum This admin's unique staffNum
      */
     public Admin(String userID, String hashedPassword, String adminName, String faculty, String staffNum) {
-        super(userID, hashedPassword);
+        super(userID, hashedPassword, "Admin");
         this.adminName = adminName;
         this.faculty = faculty;
         this.staffNum = staffNum;

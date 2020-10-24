@@ -59,7 +59,7 @@ public class Student extends User {
      * @param major This student's major.
      */
     public Student(String userID, String hashedPassword, String studentName, String matricNum, int maxAUs, String major) {
-        super(userID, hashedPassword);
+        super(userID, hashedPassword, "Student");
         this.studentName = studentName;
         this.matricNum = matricNum;
         this.maxAUs = maxAUs;

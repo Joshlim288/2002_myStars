@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 //Feels too much like functional programming but we can discuss later
 //TODO: add validations and error messages
 /**
@@ -373,5 +374,17 @@ public class FileHandler {
 
     public static ArrayList<User> getUserList(){
         return userList;
+    }
+
+    public static String readFile(String fileName) {
+        try {
+            File file = new File("data/" + fileName);
+            Scanner sc = new Scanner(file);
+            sc.useDelimiter("\\Z");
+            return sc.next();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
