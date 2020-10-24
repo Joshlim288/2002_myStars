@@ -9,36 +9,19 @@ import java.util.ArrayList;
 public class AccessControl {
 
     /**
-     * Used to validate user credentials. Currently uses the jBCrypt library
-     * @param userId
-     * userId to be searched for
-     * @param password
-     * unhashed password entered by user
-     * @return
-     * a User object that corresponds to the parameters given if a matching account is found,
-     * null object otherwise
+     * Used to validate user credentials.
+     * Retrieves the list of users for the system, and checks if the given credentials match any of them.
+     * Our implementation assumes userID is unique among all users, regardless of domain
+     * @param userId userId to be searched for
+     * @param password unhashed password entered by user
+     * @return a User object if a matching account is found, null if not
      */
     public static User validate(String userId, String password){
         ArrayList<User> userList = FileHandler.getUserList();
-        Object test = new ArrayList<User>();
-        if (test instanceof ArrayList<?>)
-        userList = (ArrayList<User>) test;
         for (User account: userList) {
-            if (account.getUserID().equals(userId) && BCrypt.checkpw(password, account.getHashedPassword())) {
+            if(account.validate(userId, password))
                 return account;
-            }
         }
         return null;
-    }
-
-    /**
-     * Used to hash a String. Currently uses the jBCrypt library
-     * @param toHash
-     * String to be hashed
-     * @return
-     * Hashed string
-     */
-    public static String hash(String toHash) {
-        return BCrypt.hashpw(toHash, BCrypt.gensalt());
     }
 }

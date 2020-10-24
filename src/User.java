@@ -48,9 +48,29 @@ public abstract class User {
         this.userID = userID;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    /**
+     * Used to hash a String. Currently uses the jBCrypt library
+     * @param toHash String to be hashed
+     * @return Hashed string
+     */
+    private String hash(String toHash) {
+        return BCrypt.hashpw(toHash, BCrypt.gensalt());
     }
+
+    /**
+     * Set password for a user
+     * Will automatically hash the given password, so password is not stored as raw text
+     * @param password String to change the user's password to
+     */
+    public void setPassword(String password) {
+        this.hashedPassword = hash(password);
+    }
+
+    public boolean validate(String checkID, String checkpw) {
+        return checkID.equals(this.userID) && BCrypt.checkpw(checkpw, hashedPassword);
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
