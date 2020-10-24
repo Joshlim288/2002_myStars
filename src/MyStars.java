@@ -4,8 +4,6 @@ import java.util.Scanner;
 public class MyStars {
     public static void main(String[] args){
         String menuChoice;
-        User currentUser = null;
-        UserInterface ui = null;
         FileHandler.initialize();
         Scanner sc = new Scanner(System.in);
         do {
@@ -18,21 +16,18 @@ public class MyStars {
             if (menuChoice.length() == 1 && Character.isDigit(menuChoice.toCharArray()[0])) {
                 switch(Integer.parseInt(menuChoice)){
                     case(1) -> {
-                        currentUser = login(sc);
+                        User currentUser = login(sc);
                         if (currentUser == null) {
                             System.out.println("Invalid UserID or password");
                             continue;
                         }
 
-                        ui = UserInterfaceCreator.makeInterface(currentUser.getDomain(), currentUser, sc);
+                        UserInterface ui = UserInterfaceCreator.makeInterface(currentUser.getDomain(), currentUser, sc);
                         if (ui == null) {
                             System.out.println("Invalid domain, check record");
                             continue;
                         }
                         ui.start();
-                        currentUser = null;
-                        ui = null;
-
                     }
                     case(2) -> {
                         System.out.println("Exiting MyStars");
