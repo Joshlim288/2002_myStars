@@ -117,6 +117,14 @@ public class Student extends User {
         return coursesRegistered.get(course);
     }
 
+//    public Course getCourse(String courseCode) {
+//        for (Course course : coursesRegistered) {
+//            if (course.getCourseCode().equals(courseCode)) {
+//                return course;
+//            }
+//        }
+//        return null;
+//    }
     /**
      * Adds a course into this student's registered courses for the semester.
      * @param course The course to be added.

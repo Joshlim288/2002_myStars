@@ -48,8 +48,8 @@ public class StudentInterface implements UserInterface{
                     cc = sc.nextLine();
                     course=FileHandler.getCourse(cc);
                     studHandler.dropCourse(course);
-
                     break;
+
                 case 3:
                     System.out.println("Enter Length:");
 
