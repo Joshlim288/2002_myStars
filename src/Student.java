@@ -109,6 +109,15 @@ public class Student extends User {
     }
 
     /**
+     * Retrieves a index the student is registered in when course is passed in as a parameter.
+     * @param course The corresponding course to retreive the index.
+     * @return <code>Index</code> the student is in is returned.
+     */
+    public Index retrieveIndex(String course){
+        return coursesRegistered.get(course);
+    }
+
+    /**
      * Adds a course into this student's registered courses for the semester.
      * @param course The course to be added.
      * @param index The index of the course to be added.
