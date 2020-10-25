@@ -11,6 +11,7 @@
  * Try to add JavaDocs as you go
  */
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class StudentHandler {
     Student currentStudent;
@@ -19,6 +20,18 @@ public class StudentHandler {
         this.currentStudent = currentStudent;
     }
 
+
+    /**
+     * Method to add a course for current student.
+     * Retrieves indexes under the course and prompts for student's choice
+     * Includes checking of index capacity and clashes with student's current timetable
+     * Adds student to waitlist if chosen index is full
+     * Exception handling if waitlist is already empty
+     * @param course Course to be added
+     */
+    //TODO: Improve input validation
+    //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
+    //TODO: checkTimetableClash()
     public void addCourse(Course course)
     {
         if(course==null)
@@ -37,35 +50,37 @@ public class StudentHandler {
             System.out.println("Course Code: " + cCode);
             System.out.println("Course Name: " + cName);
             System.out.println("Course Index available: ");
-            // this might supposed to be a for loop to print each indexes
-            System.out.println(course.getIndexes());
+
+            ArrayList<Index> indexes = course.getIndexes();
+            System.out.println("Index : Remaining Vacancies" +
+                                "----------------");
+            for (Index index: indexes){
+                System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
+            }
 
             System.out.println("Select an Index: ");
             int input = sc.nextInt();
-
-            // CHECK FOR TIMETABLE CLASHES //
-
-            System.out.println("Checking index for vacancy...");
             Index index = course.searchIndex(input);
-            if (course.getIndexes().contains(index))
+
+            //TODO: checkTimetableClash() not yet implemented.
+            //currentStudent.checkTimetableClash(Index index);
+
+            if (indexes.contains(input))
             {
-                if (checkVacancies(index) > 0)
+                if (!index.isAtMaxCapacity())
                 {
-                    System.out.println("Index available ");
                     index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
                     System.out.println("You have successfully registered for "+input+"!");
-                    // currentStudent.setCurrentAU(currentStudent.setCurrentAU()+course.getAcademicUnits());
-                    // increase AU
+                    currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
                 }
                 else
                 {
-                    System.out.println("No vacancy for selected index");
-                    Scanner scanner = new Scanner(System.in);
-                    char ch = scanner. next(). charAt(0);
-                    System.out.println("Do you still want to register index? (y/n) You will be added to a waiting list if yes");
+                    System.out.println("You have selected an index with no more vacancy.");
+                    System.out.println("Do you want to be added to waitlist? (Y/N)");
+                    char ch = sc.next().charAt(0);
                     if(ch=='y')
                     {
-                        System.out.println("You have been added to waiting list for "+ index);
+                        System.out.println("You have been added to waitlist for Index "+ index);
                         index.addToWaitlist(index.getWaitlist(), this.currentStudent);
                         // there should be more stuffs happening when added to wait list
                     }
@@ -81,7 +96,7 @@ public class StudentHandler {
             }
             else
             {
-                System.out.println("Index does not exist!");
+                System.out.println("You did not choose a valid index!");
             }
         }
     }
