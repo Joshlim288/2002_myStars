@@ -92,21 +92,21 @@ public class Student extends User {
         this.maxAUs = maxAUs;
     }
 
-    public String getMajor() {
-        return major;
-    }
+    public int getCurrentAUs() { return currentAUs; }
 
-    public void setMajor(String major) {
-        this.major = major;
-    }
+    public void setCurrentAUs(int currentAUs) { this.currentAUs = currentAUs; }
+
+    public String getMajor() { return major; }
+
+    public void setMajor(String major) { this.major = major; }
 
     public LocalDateTime[] getAccessTime() {
         return accessTime;
     }
 
-        public HashMap<Course, Index> getCoursesRegistered() {
-            return coursesRegistered;
-        }
+    public HashMap<Course, Index> getCoursesRegistered() {
+        return coursesRegistered;
+    }
 
     /**
      * Retrieves a index the student is registered in when course is passed in as a parameter.
