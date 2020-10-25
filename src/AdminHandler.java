@@ -1,32 +1,29 @@
-/**
- * Control class for handling admin matters
- * Try not to ask for input here, get input using scanner in AdminInterface
- * Then pass the input as arguments
- *
- * Return types also no need to remain void, change to your requirements
- *
- * If you need any data, you can call the static methods in FileHandler with the class name
- * e.g. FileHandler.getStudent(name)
- *
- * Try to add JavaDocs as you go
- */
-public class AdminHandler {
+
+import java.time.LocalDateTime;
+import java.util.Scanner;
+public class AdminHandler implements AdminInterface{
+    Scanner sc = new Scanner(System.in);
     Admin currentAdmin;
 
     public AdminHandler(Admin currentAdmin) {
         this.currentAdmin = currentAdmin;
     }
 
-    public void editCourse(){
+    public void editCourse(Course course, String school, String indexnum){
 
     }
 
-    public void addCourse(){
+    public void addCourse(Course newcoursecode){
+
+        FileHandler.addcourse(newcoursecode);
 
     }
+        else{
+        system.out.println("Error, null course code input.");
+    }
 
-    public void checkSlot(){
-
+    public int checkSlot(Index indexnum){
+        return indexnum.getCurrentVacancy();
     }
 
     /**
@@ -38,11 +35,21 @@ public class AdminHandler {
 
     }
 
-    public void editAccessPeriod(){
-
+    public void editAccessPeriod(String matricNum, LocalDateTime start, LocalDateTime end){
+        Student student = FileHandler.getStudent(matricNum);
+        student.setAccessTime(start, end);
+        FileHandler.saveStudents();
     }
 
-    public void addStudent(){
+    public void addStudent(Student student){
+        FileHandler.getStudentList().add(student);
+        FileHandler.saveStudents();
+        FileHandler.saveUsers();
+
+
+
+
+
 
     }
-}
+}}
