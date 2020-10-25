@@ -104,9 +104,9 @@ public class Student extends User {
         return accessTime;
     }
 
-    public HashMap<Course, Index> getCoursesRegistered() {
-        return coursesRegistered;
-    }
+        public HashMap<Course, Index> getCoursesRegistered() {
+            return coursesRegistered;
+        }
 
     /**
      * Retrieves a index the student is registered in when course is passed in as a parameter.
@@ -165,5 +165,4 @@ public class Student extends User {
         Student other = (Student) o;
         return other.getMatricNum() == this.matricNum;
     }
-
 }
