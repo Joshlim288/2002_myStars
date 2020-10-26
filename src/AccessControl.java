@@ -16,10 +16,10 @@ public class AccessControl {
      * @param password unhashed password entered by user
      * @return a User object if a matching account is found, null if not
      */
-    public static User validate(String userId, String password){
+    public static User validate(String userId, String password) throws AccessDeniedException{
         ArrayList<User> userList = FileHandler.getUserList();
-        for (User account: userList) {
-            if(account.validate(userId, password))
+        for (User account : userList) {
+            if (account.validate(userId, password))
                 return account;
         }
         return null;

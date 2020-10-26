@@ -66,7 +66,7 @@ public abstract class User {
         this.hashedPassword = hash(password);
     }
 
-    public boolean validate(String checkID, String checkpw) {
+    public boolean validate(String checkID, String checkpw) throws AccessDeniedException{
         return checkID.equals(this.userID) && BCrypt.checkpw(checkpw, hashedPassword);
     }
 

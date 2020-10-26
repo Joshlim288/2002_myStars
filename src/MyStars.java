@@ -16,18 +16,23 @@ public class MyStars {
             if (menuChoice.length() == 1 && Character.isDigit(menuChoice.toCharArray()[0])) {
                 switch(Integer.parseInt(menuChoice)){
                     case(1) -> {
-                        User currentUser = login(sc);
-                        if (currentUser == null) {
-                            System.out.println("Invalid UserID or password");
-                            continue;
+                        try {
+                            User currentUser = login(sc);
+                            if (currentUser == null) {
+                                System.out.println("Invalid UserID or password");
+                                continue;
+                            }
+                            UserInterface ui = UserInterfaceCreator.makeInterface(currentUser.getDomain(), currentUser, sc);
+                            if (ui == null) {
+                                System.out.println("Invalid domain, check record");
+                                continue;
+                            }
+                            ui.start();
+                        } catch (AccessDeniedException e) {
+                            System.out.println(e.getMessage());
                         }
 
-                        UserInterface ui = UserInterfaceCreator.makeInterface(currentUser.getDomain(), currentUser, sc);
-                        if (ui == null) {
-                            System.out.println("Invalid domain, check record");
-                            continue;
-                        }
-                        ui.start();
+
                     }
                     case(2) -> {
                         System.out.println("Exiting MyStars");
@@ -47,7 +52,7 @@ public class MyStars {
      * @param sc
      * Main scanner passed down
      */
-    public static User login(Scanner sc) {
+    public static User login(Scanner sc) throws AccessDeniedException{
         String userId, password;
         System.out.print("Enter userId: ");
         userId = sc.nextLine();
