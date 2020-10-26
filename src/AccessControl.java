@@ -22,6 +22,6 @@ public class AccessControl {
             if (account.validate(userId, password))
                 return account;
         }
-        return null;
+        throw new AccessDeniedException("Invalid UserID or password");
     }
 }

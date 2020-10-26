@@ -18,10 +18,6 @@ public class MyStars {
                     case(1) -> {
                         try {
                             User currentUser = login(sc);
-                            if (currentUser == null) {
-                                System.out.println("Invalid UserID or password");
-                                continue;
-                            }
                             UserInterface ui = UserInterfaceCreator.makeInterface(currentUser.getDomain(), currentUser, sc);
                             if (ui == null) {
                                 System.out.println("Invalid domain, check record");
