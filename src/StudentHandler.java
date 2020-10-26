@@ -12,6 +12,8 @@
  */
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StudentHandler {
     Student currentStudent;
@@ -123,7 +125,13 @@ public class StudentHandler {
 
     public void checkRegistered()
     {
+        HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
 
+        //Iterate through coursesRegistered HashMap and print out information
+        //TODO: Initial implementation placed here. Consider implementing this method in Student class instead.
+        //TODO: Decide on how much information to show when printing out courses and index
+        coursesRegistered.forEach((course, index) -> System.out.println(course.getCourseName() + " " +
+                course.getCourseName() + ": Index" + index.getIndexNum()));
     }
 
     public int checkVacancies(Index index)
