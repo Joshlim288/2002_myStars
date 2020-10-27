@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class AdminInterface {
 
@@ -48,9 +49,8 @@ public class AdminInterface {
                     String studentname = sc.next();
                     System.out.println("Enter matriculation number: ");
                     String studentmatric = sc.next();
-                    if (FileHandler.getStudentList().contains(studentmatric)){
-                        System.out.println("Matriculation number already exist!");
-                        break;}
+                    if (adHandler.checkmatricexist(studentmatric))
+                        break;
                     System.out.println("Enter gender: ");
                     String studentgender = sc.next();
                     System.out.println("Enter nationality: ");
@@ -70,22 +70,36 @@ public class AdminInterface {
                 case 3:
                     System.out.println("Enter course code: ");
                     String coursecode = sc.next();
-                    Course course = FileHandler.getCourse(coursecode);
                     System.out.println("Enter school: ");
                     String school = sc.next();
-                    System.out.println("Enter index number: ");
-                    String indexnum = sc.next();
-                    if (FileHandler.courseList.contains(coursecode)){
-                        adHandler.editCourse(course,school,indexnum);}
+                    System.out.println("Enter course name: ");
+                    String coursename = sc.next();
+                    System.out.println("Enter course type: ");
+                    typeOfCourse coursetype = (typeOfCourse) sc.next();
+                    System.out.println("Enter academic units: ");
+                    int aus = sc.nextInt();
+                    ArrayList<Index> index = new ArrayList<Index>;
+                    System.out.println("Enter number of indexes: ");
+                    int indexlength = sc.nextInt();
+                    for (int i=0; i<indexlength; i++){
+                        System.out.println("Enter index number" + (indexlength+1) + ": ");
+                        int indexnum = sc.nextInt();
+                        index.get(i).set(indexnum);
+                                                    }
+                    if (FileHandler.getCourse(coursecode)!=null){
+                        adHandler.editCourse(coursecode, coursename,coursetype, aus,  school, index);}
                     else
-                        FileHandler.addCourse(course);
+
+                        adHandler.addCourse(coursecode, coursename,coursetype, aus,  school, index);
                     break;
                 case 4:
+                    System.out.println("Enter course code: ");
+                    String course = sc.next();
                     System.out.println("Enter index number: ");
-                    String index = sc.next();
-                    Index indvac = FileHandler.getIndexNum(index);
-                    if(indvac != null){
-                        System.out.println("The vacancy for"+ index +"is: "+ indvac.getIndexVacancy());
+                    int indexno = sc.nextInt();
+                    adHandler.checkSlot(course, indexno);
+                    if(FileHandler.getCourse(course).getIndex(indexno)!=null){
+                        System.out.println("The vacancy for"+ index +"is: "+ adHandler.checkSlot(course, indexno));
                     }else{
                         System.out.println("Index not found!");
                     }
