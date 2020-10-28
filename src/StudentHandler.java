@@ -12,6 +12,8 @@
  */
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StudentHandler {
     Student currentStudent;
@@ -35,12 +37,9 @@ public class StudentHandler {
     public void addCourse(Course course)
     {
         if(course==null)
-        {
             System.out.println("Course does not exist!");
-        }
 
-        else
-        {
+        else {
             Scanner sc = new Scanner(System.in);
 
             String cCode = course.getCourseCode();
@@ -54,44 +53,35 @@ public class StudentHandler {
             ArrayList<Index> indexes = course.getIndexes();
             System.out.println("Index : Remaining Vacancies" +
                                 "----------------");
-            for (Index index: indexes){
-                System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
-            }
 
-            System.out.println("Select an Index: ");
-            int input = sc.nextInt();
-            Index index = course.searchIndex(input);
+            for (Index index: indexes)
+                System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
+
+            System.out.println("Enter the index you would like to enroll in: ");
+            Index index = course.searchIndex(sc.nextInt());
 
             //TODO: checkTimetableClash() not yet implemented.
             //currentStudent.checkTimetableClash(Index index);
 
-            if (indexes.contains(input))
-            {
-                if (!index.isAtMaxCapacity())
-                {
+            if (indexes.contains(index)) {
+                if (!index.isAtMaxCapacity()) {
                     index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-                    System.out.println("You have successfully registered for "+input+"!");
+                    System.out.println("You have successfully registered for "+ index.getIndexNum() +"!");
                     currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
                 }
-                else
-                {
+                else {
                     System.out.println("You have selected an index with no more vacancy.");
                     System.out.println("Do you want to be added to waitlist? (Y/N)");
                     char ch = sc.next().charAt(0);
-                    if(ch=='y')
-                    {
+                    if(ch=='y') {
                         System.out.println("You have been added to waitlist for Index "+ index);
                         index.addToWaitlist(index.getWaitlist(), this.currentStudent);
                         // there should be more stuffs happening when added to wait list
                     }
                     else if(ch=='n')
-                    {
                         System.out.println("Returning to main menu..");
-                    }
                     else
-                    {
                         System.out.println("You have entered an invalid choice. Returning to main menu..");
-                    }
                 }
             }
             else
@@ -104,16 +94,12 @@ public class StudentHandler {
     public void dropCourse(Course course)
     {
         if(course==null)
-        {
             System.out.println("Course does not exist!");
 
-        }
-//        else if()
-//        {
-//            System.out.println("You are not enrolled in this course!");
-//        }
-        else
-        {
+        else if (!currentStudent.getCoursesRegistered().containsKey(course))
+            System.out.println("You are not enrolled in this course!");
+
+        else{
             String cCode = course.getCourseCode();
             String cName = course.getCourseName();
             Index cIndex= this.currentStudent.retrieveIndex(cCode);
@@ -122,16 +108,30 @@ public class StudentHandler {
             System.out.println("Course Name: " + cName);
             System.out.println("Index Number: " + cIndex.getIndexNum());
 
+            //Remove student from list of enrolled students in index
             cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
+
+            //Remove course from student's registered courses
+            currentStudent.removeCourse(course);
             System.out.println("You have successfully dropped "+cIndex+"!");
-            // UPDATE WAITING LIST
-            // maybe create new method to update waiting list //
+
+            //If there are students in waitlist, register them for the index
+            if(!cIndex.getWaitlist().isEmpty()) {
+                cIndex.removeFromWaitlist(cIndex.getWaitlist());
+                //TODO: Notify the student who has been added to index from waitlist
+            }
         }
     }
 
     public void checkRegistered()
     {
+        HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
 
+        //Iterate through coursesRegistered HashMap and print out information
+        //TODO: Initial implementation placed here. Consider implementing this method in Student class instead.
+        //TODO: Decide on how much information to show when printing out courses and index
+        coursesRegistered.forEach((course, index) -> System.out.println(course.getCourseName() + " " +
+                course.getCourseName() + ": Index" + index.getIndexNum()));
     }
 
     public int checkVacancies(Index index)
@@ -217,6 +217,9 @@ public class StudentHandler {
 
     public void swapIndex(Course course)
     {
+
+        Scanner sc = new Scanner(System.in);
+
         if(course==null)
         {
             System.out.println("Course does not exist!");
@@ -235,6 +238,9 @@ public class StudentHandler {
             System.out.println("Course Code: " + cCode);
             System.out.println("Course Name: " + cName);
             System.out.println("Index Number: " + cIndex.getIndexNum());
+
+            System.out.println("Please enter the student's matriculation number whom you would like to swap with:");
+
 
             /*
             Request for student2's particulars i.e ( full name / matric no. / password )
