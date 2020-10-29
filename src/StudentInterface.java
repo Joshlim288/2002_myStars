@@ -35,14 +35,49 @@ public class StudentInterface implements UserInterface{
             switch (choice)
             {
                 case 1:
+                    System.out.println("You have selected to add Course");
                     System.out.println("-----------");
                     System.out.println("Enter Course Code: ");
                     cc = sc.nextLine();
                     course=FileHandler.getCourse(cc);
-                    studHandler.addCourse(course);
+                    if(course!=null)
+                    {
+                        String cCode = course.getCourseCode();
+                        String cName = course.getCourseName();
+
+                        System.out.println("You have selected to add : ");
+                        System.out.println("Course Code: " + cCode);
+                        System.out.println("Course Name: " + cName);
+                        System.out.println("Course Index available: ");
+
+                        ArrayList<Index> indexes = course.getIndexes();
+                        System.out.println("Index : Remaining Vacancies" +
+                                "----------------");
+
+                        for (Index index: indexes)
+                            System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
+
+                        System.out.println("Enter the index you would like to enroll in: ");
+                        Index index = course.searchIndex(sc.nextInt());
+                        //TODO: checkTimetableClash() not yet implemented.
+                        //currentStudent.checkTimetableClash(Index index);
+                        if(index!=null)
+                            if (indexes.contains(index)){
+                                studHandler.addCourse(course,index);
+                                System.out.println("You have successfully registered for "+ index.getIndexNum() +"!");
+                            }
+
+                            else
+                                System.out.println("You did not choose a valid index!");
+                        else
+                            System.out.println("Index does not exist!");
+                    }
+                    else
+                        System.out.println("Course does not exist!");
                     break;
 
                 case 2:
+                    System.out.println("You have selected to drop Course");
                     System.out.println("-----------");
                     System.out.println("Enter Course Code: ");
                     cc = sc.nextLine();
@@ -61,8 +96,12 @@ public class StudentInterface implements UserInterface{
                     break;
 
                 case 5:
-                    System.out.println("Enter Length:");
-
+                    System.out.println("You have selected to change index ");
+                    System.out.println("-----------");
+                    System.out.println("Enter Course Code: ");
+                    cc = sc.nextLine();
+                    course=FileHandler.getCourse(cc);
+                    studHandler.changeIndex(course);
                     break;
 
                 case 6:

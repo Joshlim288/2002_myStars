@@ -34,62 +34,42 @@ public class StudentHandler {
     //TODO: Improve input validation
     //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
     //TODO: checkTimetableClash()
-    public void addCourse(Course course)
+
+    public bool getResponse(char input)
     {
-        if(course==null)
-            System.out.println("Course does not exist!");
-
-        else {
-            Scanner sc = new Scanner(System.in);
-
-            String cCode = course.getCourseCode();
-            String cName = course.getCourseName();
-
-            System.out.println("You have selected to add : ");
-            System.out.println("Course Code: " + cCode);
-            System.out.println("Course Name: " + cName);
-            System.out.println("Course Index available: ");
-
-            ArrayList<Index> indexes = course.getIndexes();
-            System.out.println("Index : Remaining Vacancies" +
-                                "----------------");
-
-            for (Index index: indexes)
-                System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
-
-            System.out.println("Enter the index you would like to enroll in: ");
-            Index index = course.searchIndex(sc.nextInt());
-
-            //TODO: checkTimetableClash() not yet implemented.
-            //currentStudent.checkTimetableClash(Index index);
-
-            if (indexes.contains(index)) {
-                if (!index.isAtMaxCapacity()) {
-                    index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-                    System.out.println("You have successfully registered for "+ index.getIndexNum() +"!");
-                    currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
-                }
-                else {
-                    System.out.println("You have selected an index with no more vacancy.");
-                    System.out.println("Do you want to be added to waitlist? (Y/N)");
-                    char ch = sc.next().charAt(0);
-                    if(ch=='y') {
-                        System.out.println("You have been added to waitlist for Index "+ index);
-                        index.addToWaitlist(index.getWaitlist(), this.currentStudent);
-                        // there should be more stuffs happening when added to wait list
-                    }
-                    else if(ch=='n')
-                        System.out.println("Returning to main menu..");
-                    else
-                        System.out.println("You have entered an invalid choice. Returning to main menu..");
-                }
-            }
-            else
-            {
-                System.out.println("You did not choose a valid index!");
-            }
+        while(true)
+        {
+            if (input == 'y' || input == 'Y')
+                return True;
+            else if (input == 'n' || input == 'N')
+                return False;
         }
     }
+    public void addCourse(Course course, Index index)
+    {
+        if (!index.isAtMaxCapacity())
+        {
+            index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
+            currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
+        }
+        else
+            {
+            System.out.println("You have selected an index with no more vacancy.");
+            System.out.println("Do you want to be added to waitlist? (Y/N)");
+            char ch = sc.next().charAt(0);
+            if(ch=='y')
+            {
+                System.out.println("You have been added to waitlist for Index "+ index);
+                index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+                // there should be more stuffs happening when added to wait list
+            }
+            else if(ch=='n')
+                System.out.println("Returning to main menu..");
+            else
+                System.out.println("You have entered an invalid choice. Returning to main menu..");
+        }
+    }
+
 
     public void dropCourse(Course course)
     {
