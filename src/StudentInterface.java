@@ -91,8 +91,11 @@ public class StudentInterface implements UserInterface{
                     break;
 
                 case 4:
-                    System.out.println("Enter Length:");
-
+                    System.out.println("Enter course code: ");
+                    String course1 = sc.next();
+                    System.out.println("Enter index number: ");
+                    int indexno = sc.nextInt();
+                    System.out.println(course1+" " + indexno + " has "+ studHandler.checkVacancies(course1,indexno)+ " vacancies");
                     break;
 
                 case 5:

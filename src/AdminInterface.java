@@ -50,6 +50,7 @@ public class AdminInterface {
                     System.out.println("Enter matriculation number: ");
                     String studentmatric = sc.next();
                     if (adHandler.checkmatricexist(studentmatric))
+                        System.out.println("Matriculation number already exist.");
                         break;
                     System.out.println("Enter gender: ");
                     String studentgender = sc.next();
@@ -111,12 +112,14 @@ public class AdminInterface {
                     String printstudentcourse = sc.next();
                     System.out.println("Enter index number: ");
                     int printstudentindex = sc.nextInt();
-                    adHandler.printStudentListbyIndex(printstudentcourse, printstudentindex);
+                    System.out.println("The student list for index " +printstudentindex+ " is:");
+                    System.out.println(adHandler.printStudentListbyIndex(printstudentcourse, printstudentindex));
                     break;
                 case 6:
                     System.out.println("Enter course code: ");
                     String printstudentcourse2 = sc.next();
-                    adHandler.printStudentListbyCourse(printstudentcourse2);
+                    System.out.println("The student list for course " +printstudentcourse2+ " is:");
+                    System.out.println(adHandler.printStudentListbyCourse(printstudentcourse2));
                     break;
                 case 7:
                     break;

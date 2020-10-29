@@ -114,9 +114,10 @@ public class StudentHandler {
                 course.getCourseName() + ": Index" + index.getIndexNum()));
     }
 
-    public int checkVacancies(Index index)
+    public int checkVacancies(String course, int index)
     {
-        return index.getCurrentVacancy();
+        return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
+
     }
 
     public void changeIndex(Course course)
