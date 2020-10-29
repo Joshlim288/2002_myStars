@@ -40,7 +40,9 @@ public class StudentInterface implements UserInterface{
                     System.out.println("Enter Course Code: ");
                     cc = sc.nextLine();
                     course=FileHandler.getCourse(cc);
-                    if(course!=null)
+                    if(course==null)
+                        System.out.println("Course does not exist!");
+                    else
                     {
                         String cCode = course.getCourseCode();
                         String cName = course.getCourseName();
@@ -61,19 +63,28 @@ public class StudentInterface implements UserInterface{
                         Index index = course.searchIndex(sc.nextInt());
                         //TODO: checkTimetableClash() not yet implemented.
                         //currentStudent.checkTimetableClash(Index index);
-                        if(index!=null)
-                            if (indexes.contains(index)){
-                                studHandler.addCourse(course,index);
-                                System.out.println("You have successfully registered for "+ index.getIndexNum() +"!");
+                        if(index==null)
+                            System.out.println("Index does not exist!");
+                        else {
+                            if (indexes.contains(index))
+                            {
+                                if (!index.isAtMaxCapacity())
+                                {
+                                    studHandler.addCourse(course, index);
+                                    System.out.println("You have successfully registered for " + index.getIndexNum() + "!");
+                                }
+                                else
+                                    {
+                                    char ch = sc.next().charAt(0);
+                                    System.out.println("You have selected an index with no more vacancy.");
+                                    System.out.println("Do you want to be added to waitlist? (Y/N)");
+                                    studHandler.askForWaitList(course, index, studHandler.getResponse(ch));
+                                }
                             }
-
                             else
                                 System.out.println("You did not choose a valid index!");
-                        else
-                            System.out.println("Index does not exist!");
+                        }
                     }
-                    else
-                        System.out.println("Course does not exist!");
                     break;
 
                 case 2:
@@ -82,7 +93,23 @@ public class StudentInterface implements UserInterface{
                     System.out.println("Enter Course Code: ");
                     cc = sc.nextLine();
                     course=FileHandler.getCourse(cc);
-                    studHandler.dropCourse(course);
+
+                    if(course==null)
+                        System.out.println("Course does not exist!");
+
+                    else if (!currentStudent.getCoursesRegistered().containsKey(course))
+                        System.out.println("You are not enrolled in this course!");
+
+                    else{
+                        String cCode = course.getCourseCode();
+                        String cName = course.getCourseName();
+                        Index cIndex= StudentHandler.currentStudent.retrieveIndex(cCode);
+                        System.out.println("You have selected to drop : ");
+                        System.out.println("Course Code: " + cCode);
+                        System.out.println("Course Name: " + cName);
+                        System.out.println("Index Number: " + cIndex.getIndexNum());
+
+                        studHandler.dropCourse(course);
                     break;
 
                 case 3:
@@ -91,8 +118,11 @@ public class StudentInterface implements UserInterface{
                     break;
 
                 case 4:
-                    System.out.println("Enter Length:");
-
+                    System.out.println("Enter course code: ");
+                    String course1 = sc.next();
+                    System.out.println("Enter index number: ");
+                    int indexno = sc.nextInt();
+                    System.out.println(course1+" " + indexno + " has "+ studHandler.checkVacancies(course1,indexno)+ " vacancies");
                     break;
 
                 case 5:

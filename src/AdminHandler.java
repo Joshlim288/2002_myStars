@@ -85,17 +85,13 @@ public class AdminHandler{
     /**
      * Check if the matric number is available.
      * @param matric
-     * @returns false if matric number already exist
+     * @returns true if matric number already exist
      */
     public boolean checkmatricexist(String matric){
-        for(int i =0;i<FileHandler.getStudentList().size();i++)
-        {
-            if(FileHandler.getStudentList().get(i).getMatricNum().equals(matric))
-            {
-                System.out.println("Matriculation number already exists!");
-                return true;
-            }
-        }
+        ArrayList<Student> studentList= FileHandler.getStudentList();
+        for(Student studenti: studentList)
+        {if(studenti.getMatricNum().equals(matric))
+                return true;}
         return false;
     }
 
@@ -109,8 +105,6 @@ public class AdminHandler{
                 return typeOfCourse.GER;
             case 4:
                 return typeOfCourse.UE;
-            default:
-                return typeOfCourse.CORE;
         }
     }
     public typeOfLesson chooseLessonType(int useropt){

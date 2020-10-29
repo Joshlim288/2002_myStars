@@ -35,71 +35,51 @@ public class StudentHandler {
     //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
     //TODO: checkTimetableClash()
 
-    public bool getResponse(char input)
+    public boolean getResponse(char input)
     {
         while(true)
         {
             if (input == 'y' || input == 'Y')
-                return True;
+                return true;
             else if (input == 'n' || input == 'N')
-                return False;
+                return false;
         }
     }
+
+    public void askForWaitList(Course course, Index index,boolean ans)
+    {
+        if(ans==true)
+        {
+            System.out.println("You have been added to waitlist for Index "+ index);
+            index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+            // there should be more stuffs happening when added to wait list
+        }
+        else if(ans==false)
+            System.out.println("Returning to main menu..");
+        else
+            System.out.println("You have entered an invalid choice. Returning to main menu..");
+    }
+
     public void addCourse(Course course, Index index)
     {
-        if (!index.isAtMaxCapacity())
-        {
             index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
             currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
-        }
-        else
-            {
-            System.out.println("You have selected an index with no more vacancy.");
-            System.out.println("Do you want to be added to waitlist? (Y/N)");
-            char ch = sc.next().charAt(0);
-            if(ch=='y')
-            {
-                System.out.println("You have been added to waitlist for Index "+ index);
-                index.addToWaitlist(index.getWaitlist(), this.currentStudent);
-                // there should be more stuffs happening when added to wait list
-            }
-            else if(ch=='n')
-                System.out.println("Returning to main menu..");
-            else
-                System.out.println("You have entered an invalid choice. Returning to main menu..");
-        }
     }
 
 
-    public void dropCourse(Course course)
+    public void dropCourse(Course course,Index cIndex)
     {
-        if(course==null)
-            System.out.println("Course does not exist!");
+        //Remove student from list of enrolled students in index
+        cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
 
-        else if (!currentStudent.getCoursesRegistered().containsKey(course))
-            System.out.println("You are not enrolled in this course!");
+        //Remove course from student's registered courses
+        currentStudent.removeCourse(course);
+        System.out.println("You have successfully dropped "+cIndex+"!");
 
-        else{
-            String cCode = course.getCourseCode();
-            String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
-            System.out.println("You have selected to drop : ");
-            System.out.println("Course Code: " + cCode);
-            System.out.println("Course Name: " + cName);
-            System.out.println("Index Number: " + cIndex.getIndexNum());
-
-            //Remove student from list of enrolled students in index
-            cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
-
-            //Remove course from student's registered courses
-            currentStudent.removeCourse(course);
-            System.out.println("You have successfully dropped "+cIndex+"!");
-
-            //If there are students in waitlist, register them for the index
-            if(!cIndex.getWaitlist().isEmpty()) {
-                cIndex.removeFromWaitlist(cIndex.getWaitlist());
-                //TODO: Notify the student who has been added to index from waitlist
-            }
+        //If there are students in waitlist, register them for the index
+        if(!cIndex.getWaitlist().isEmpty()) {
+            cIndex.removeFromWaitlist(cIndex.getWaitlist());
+            //TODO: Notify the student who has been added to index from waitlist
         }
     }
 
@@ -114,9 +94,10 @@ public class StudentHandler {
                 course.getCourseName() + ": Index" + index.getIndexNum()));
     }
 
-    public int checkVacancies(Index index)
+    public int checkVacancies(String course, int index)
     {
-        return index.getCurrentVacancy();
+        return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
+
     }
 
     public void changeIndex(Course course)
