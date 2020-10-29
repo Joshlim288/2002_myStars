@@ -46,30 +46,30 @@ public class AdminHandler{
      * @param indexnum
      */
     public ArrayList<Student> printStudentListbyIndex(String coursecode, int indexnum){         /*getStudentList()*/
-        for (int i = 0; i < FileHandler.getCourseList().size();i++){
-            Course course = FileHandler.getCourse(i);
-            if (course.getCourseCode()==coursecode){
-                return course.searchIndex(indexnum).getEnrolledStudents();
+        ArrayList<Course> courselist = FileHandler.getCourseList();
+        ArrayList<Student> studentlistbyindex = new ArrayList<>();
+        for (Course coursei : courselist){
+            if (coursei.getCourseCode()==coursecode) {
+                studentlistbyindex.addAll(coursei.searchIndex(indexnum).getEnrolledStudents());
+                break;
             }
         }
+        return studentlistbyindex;
         }
 
     /**
      * Prints student list in the index specified by the admin
-     * @param indexnum
+     * @param coursecode
+     * @returns array list of students
      */
-    public void printStudentListbyCourse(String coursecode){         /*getStudentList()*/
-        if (byIndex){
-            for (int i = 0; i < FileHandler.getCourseList().size();i++){
-                Course course = FileHandler.getCourse(i);
-                for (int i = 0; i < course.searchIndex().getEnrolledStudent().size(); i++) {
-                    System.out.println((i + 1) + ". " + index.getStudent().get(i).getName());
-                }}}
-        else{
-            for (int k = 0; k < FileHandler.getCourse().getIndex().get(i).getStudent().size(); k++) {
-                System.out.println((i + 1) + ". " + course.getIndex().get(i).getStudent().get(k).getName());
-            }
+    public ArrayList<Student> printStudentListbyCourse(String coursecode){         /*getStudentList()*/
+        ArrayList<Index> indexlist = FileHandler.getCourse(coursecode).getIndexes();
+        ArrayList<Student> studentlistbycourse = new ArrayList<>();
+        for (Index indexi: indexlist){
+            studentlistbycourse.addAll(indexi.getEnrolledStudents());
         }
+        return studentlistbycourse;
+
     }
 
     public void editAccessPeriod(String matricNum, LocalDateTime start, LocalDateTime end){

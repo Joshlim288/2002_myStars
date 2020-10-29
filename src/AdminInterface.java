@@ -67,7 +67,7 @@ public class AdminInterface {
                     adHandler.addStudent(newstudent);
                     System.out.println("Student "+studentmatric+" has been added successfully!");
                     break;
-                case 3:
+                case 3: /*need help w index as it currently requires 7 additional arguments to instantiate*/
                     System.out.println("Enter course code: ");
                     String coursecode = sc.next();
                     System.out.println("Enter school: ");
@@ -111,12 +111,12 @@ public class AdminInterface {
                     String printstudentcourse = sc.next();
                     System.out.println("Enter index number: ");
                     int printstudentindex = sc.nextInt();
-                    adHandler.printStudentListbyIndex(int printstudentindex);
+                    adHandler.printStudentListbyIndex(printstudentcourse, printstudentindex);
                     break;
                 case 6:
                     System.out.println("Enter course code: ");
-                    String printstudentcourse = sc.next();
-                    adHandler.printStudentListbyCourse(String printstudentcourse);
+                    String printstudentcourse2 = sc.next();
+                    adHandler.printStudentListbyCourse(printstudentcourse2);
                     break;
                 case 7:
                     break;
