@@ -26,8 +26,8 @@ public class AdminHandler{
 
     }
 
-    public void addCourse(String courseCode, String courseName,typeOfCourse courseType, int academicUnits, String school, ArrayList<Index> indexes){
-        Course newcourse = new Course(courseCode, courseName,courseType, academicUnits,school, indexes);
+    public void addCourse(String courseCode, String courseName,typeOfCourse courseType, int academicUnits, String school){
+        Course newcourse = new Course(courseCode, courseName,courseType, academicUnits,school);
         FileHandler.addCourse(newcourse);
     }
 
@@ -111,6 +111,42 @@ public class AdminHandler{
                 return typeOfCourse.UE;
             default:
                 return typeOfCourse.CORE;
+        }
+    }
+    public typeOfLesson chooseLessonType(int useropt){
+        switch (useropt){
+            case 1:
+                return typeOfLesson.LEC;
+            case 2:
+                return typeOfLesson.TUT;
+            case 3:
+                return typeOfLesson.LAB;
+            case 4:
+                return typeOfLesson.DES;
+            case 5:
+                return typeOfLesson.PRJ;
+            case 6:
+                return typeOfLesson.SEM;
+            default:
+                return typeOfLesson.LEC;
+        }
+    }
+    public dayOfWeek chooseDayOfWeek(int useropt){
+        switch (useropt){
+            case 1:
+                return dayOfWeek.MON;
+            case 2:
+                return dayOfWeek.TUES;
+            case 3:
+                return dayOfWeek.WED;
+            case 4:
+                return dayOfWeek.THURS;
+            case 5:
+                return dayOfWeek.FRI;
+            case 6:
+                return dayOfWeek.SAT;
+            default:
+                return dayOfWeek.SUN;
         }
     }
 }

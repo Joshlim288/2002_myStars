@@ -67,33 +67,67 @@ public class AdminInterface {
                     adHandler.addStudent(newstudent);
                     System.out.println("Student "+studentmatric+" has been added successfully!");
                     break;
-                case 3: /*need help w index as it currently requires 7 additional arguments to instantiate*/
+                case 3:
+                    /**
+                     * A lot of redundancy, a lot should be moved to studentHandler, a lot of input validation
+                     * needed to be done. This is just a skeleton, will continue working on it
+                     * //TODO Josh
+                     */
+                    Course newCourse;
                     System.out.println("Enter course code: ");
-                    String coursecode = sc.next();
+                    String courseCode = sc.next();
                     System.out.println("Enter school: ");
                     String school = sc.next();
                     System.out.println("Enter course name: ");
-                    String coursename = sc.next();
+                    String courseName = sc.next();
                     System.out.println("Enter number for course type: (CORE-1, MPE-2, GER-3, UE-4)");
                     int useropt = sc.nextInt();
-                    typeOfCourse newcoursetype = adHandler.choosecoursetype(useropt);
+                    typeOfCourse courseType = adHandler.choosecoursetype(useropt);
                     System.out.println("Enter academic units: ");
                     int aus = sc.nextInt();
                     ArrayList<Index> index = new ArrayList<Index>();
                     System.out.println("Enter number of indexes: ");
                     int indexlength = sc.nextInt();
+                    newCourse = new Course(courseCode, courseName, courseType, aus, school);
                     for (int i=0; i<indexlength; i++){
-                        System.out.println("Enter index number" + (indexlength+1) + ": ");
-                        int indexnum = sc.nextInt();
-                        Index indexnewnum = new Index();
-                        index.get(i).set(indexnewnum);
-                                                    }
-                    if (FileHandler.getCourse(coursecode)!=null){
-                        adHandler.editCourse(coursecode, coursename,newcoursetype, aus,  school, index);}
-                    else
-
-                        adHandler.addCourse(coursecode, coursename,newcoursetype, aus,  school, index);
-                    break;
+                        int indexNum;
+                        int indexVacancy;
+                        int numLessons;
+                        System.out.printf("Creating Index %d:\n", i+1);
+                        System.out.print("Enter index number: ");
+                        indexNum = sc.nextInt();
+                        System.out.print("Enter number of vacancies: ");
+                        indexVacancy = sc.nextInt();
+                        newCourse.addIndex(indexNum, indexVacancy);
+                        System.out.print("Enter number of Lessons for Index "+i+1);
+                        numLessons = sc.nextInt();
+                        for (int j=0; j<numLessons; j++) {
+                            System.out.printf("Creating Lesson %d for Index %d\n",j+1, i+1);
+                            System.out.print("Enter lesson type: ");
+                            System.out.println("Enter number for course type: \n0: LEC, \n1:TUT, \n2:LAB, \n3:DES, \nPRJ, \nSEM");
+                            typeOfLesson lessonType = adHandler.chooseLessonType(sc.nextInt());
+                            System.out.print("Enter group: ");
+                            String group = sc.next();
+                            System.out.print("Enter day of week: ");
+                            dayOfWeek day = adHandler.chooseDayOfWeek(sc.nextInt());
+                            System.out.println("Enter start time");
+                            LocalDateTime startTime = LocalDateTime.parse(sc.next());
+                            System.out.println("Enter end time");
+                            LocalDateTime endTime = LocalDateTime.parse(sc.next());
+                            System.out.println("Enter venue");
+                            String venue = sc.next();
+                            System.out.println("Enter teaching weeks, separated with a comma (1-13)");
+                            String[] inputWeeks = sc.next().split(",");
+                            ArrayList<Integer> teachingWeeks = new ArrayList<>();
+                            for (String week: inputWeeks) {
+                                if (Integer.parseInt(week) < 13 && Integer.parseInt(week) > 0) {
+                                    teachingWeeks.add(Integer.parseInt(week));
+                                }
+                            }
+                            newCourse.searchIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue,
+                                    teachingWeeks);
+                        }
+                    }
                 case 4:
                     System.out.println("Enter course code: ");
                     String course = sc.next();
