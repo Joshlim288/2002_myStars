@@ -18,7 +18,7 @@ public class AdminInterface {
     public void start() {
         int choice;
         do{
-            System.out.println("Welcome Admin " + adHandler.adminName);
+            System.out.println("Welcome Admin ");
             System.out.println("Enter your choice: ");
             System.out.println("1. Edit student access period");
             System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
@@ -74,23 +74,25 @@ public class AdminInterface {
                     String school = sc.next();
                     System.out.println("Enter course name: ");
                     String coursename = sc.next();
-                    System.out.println("Enter course type: ");
-                    typeOfCourse coursetype = (typeOfCourse) sc.next();
+                    System.out.println("Enter number for course type: (CORE-1, MPE-2, GER-3, UE-4)");
+                    int useropt = sc.nextInt();
+                    typeOfCourse newcoursetype = adHandler.choosecoursetype(useropt);
                     System.out.println("Enter academic units: ");
                     int aus = sc.nextInt();
-                    ArrayList<Index> index = new ArrayList<Index>;
+                    ArrayList<Index> index = new ArrayList<Index>();
                     System.out.println("Enter number of indexes: ");
                     int indexlength = sc.nextInt();
                     for (int i=0; i<indexlength; i++){
                         System.out.println("Enter index number" + (indexlength+1) + ": ");
                         int indexnum = sc.nextInt();
-                        index.get(i).set(indexnum);
+                        Index indexnewnum = new Index();
+                        index.get(i).set(indexnewnum);
                                                     }
                     if (FileHandler.getCourse(coursecode)!=null){
-                        adHandler.editCourse(coursecode, coursename,coursetype, aus,  school, index);}
+                        adHandler.editCourse(coursecode, coursename,newcoursetype, aus,  school, index);}
                     else
 
-                        adHandler.addCourse(coursecode, coursename,coursetype, aus,  school, index);
+                        adHandler.addCourse(coursecode, coursename,newcoursetype, aus,  school, index);
                     break;
                 case 4:
                     System.out.println("Enter course code: ");
@@ -98,20 +100,26 @@ public class AdminInterface {
                     System.out.println("Enter index number: ");
                     int indexno = sc.nextInt();
                     adHandler.checkSlot(course, indexno);
-                    if(FileHandler.getCourse(course).getIndex(indexno)!=null){
-                        System.out.println("The vacancy for"+ index +"is: "+ adHandler.checkSlot(course, indexno));
+                    if(FileHandler.getCourse(course).searchIndex(indexno)!=null){
+                        System.out.println("The vacancy for"+ indexno +"is: "+ adHandler.checkSlot(course, indexno));
                     }else{
                         System.out.println("Index not found!");
                     }
                     break;
                 case 5:
-                    adHandler.printStudentList(true);
+                    System.out.println("Enter course code: ");
+                    String printstudentcourse = sc.next();
+                    System.out.println("Enter index number: ");
+                    int printstudentindex = sc.nextInt();
+                    adHandler.printStudentListbyIndex(int printstudentindex);
                     break;
                 case 6:
-                    adHandler.printStudentList(false);
+                    System.out.println("Enter course code: ");
+                    String printstudentcourse = sc.next();
+                    adHandler.printStudentListbyCourse(String printstudentcourse);
                     break;
                 case 7:
-                    adHandler.exit();
+                    break;
 
 
 
