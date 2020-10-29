@@ -78,7 +78,13 @@ public class StudentInterface implements UserInterface{
                                     char ch = sc.next().charAt(0);
                                     System.out.println("You have selected an index with no more vacancy.");
                                     System.out.println("Do you want to be added to waitlist? (Y/N)");
-                                    studHandler.askForWaitList(course, index, studHandler.getResponse(ch));
+                                    boolean ans=studHandler.getResponse(ch);
+                                    if (ans==true) {
+                                        studHandler.askForWaitList(course, index, ans);
+                                        System.out.println("You have been added to waitlist for Index " + index);
+                                    }
+                                    else if (ans==false)
+                                        System.out.println("Returning to main menu..");
                                 }
                             }
                             else
@@ -93,7 +99,24 @@ public class StudentInterface implements UserInterface{
                     System.out.println("Enter Course Code: ");
                     cc = sc.nextLine();
                     course=FileHandler.getCourse(cc);
-                    studHandler.dropCourse(course);
+                    if(course==null)
+                        System.out.println("Course does not exist!");
+
+                    else if (!studHandler.currentStudent.getCoursesRegistered().containsKey(course))
+                        System.out.println("You are not enrolled in this course!");
+
+                    else {
+                        String cCode = course.getCourseCode();
+                        String cName = course.getCourseName();
+                        Index cIndex = this.studHandler.currentStudent.retrieveIndex(cCode);
+                        System.out.println("You have selected to drop : ");
+                        System.out.println("Course Code: " + cCode);
+                        System.out.println("Course Name: " + cName);
+                        System.out.println("Index Number: " + cIndex.getIndexNum());
+
+                        studHandler.dropCourse(course, cIndex);
+                        System.out.println("You have successfully dropped " + cIndex + "!");
+                    }
                     break;
 
                 case 3:

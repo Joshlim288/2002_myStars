@@ -41,14 +41,9 @@ public class StudentHandler {
     {
         if(ans==true)
         {
-            System.out.println("You have been added to waitlist for Index "+ index);
             index.addToWaitlist(index.getWaitlist(), this.currentStudent);
             // there should be more stuffs happening when added to wait list
         }
-        else if(ans==false)
-            System.out.println("Returning to main menu..");
-        else
-            System.out.println("You have entered an invalid choice. Returning to main menu..");
     }
 
     public void addCourse(Course course, Index index)
@@ -57,37 +52,19 @@ public class StudentHandler {
             currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
     }
 
-
-    public void dropCourse(Course course)
+    public void dropCourse(Course course,Index cIndex)
     {
-        if(course==null)
-            System.out.println("Course does not exist!");
-
-        else if (!currentStudent.getCoursesRegistered().containsKey(course))
-            System.out.println("You are not enrolled in this course!");
-
-        else{
-            String cCode = course.getCourseCode();
-            String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
-            System.out.println("You have selected to drop : ");
-            System.out.println("Course Code: " + cCode);
-            System.out.println("Course Name: " + cName);
-            System.out.println("Index Number: " + cIndex.getIndexNum());
-
             //Remove student from list of enrolled students in index
             cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
 
             //Remove course from student's registered courses
             currentStudent.removeCourse(course);
-            System.out.println("You have successfully dropped "+cIndex+"!");
 
             //If there are students in waitlist, register them for the index
             if(!cIndex.getWaitlist().isEmpty()) {
                 cIndex.removeFromWaitlist(cIndex.getWaitlist());
                 //TODO: Notify the student who has been added to index from waitlist
             }
-        }
     }
 
     public void checkRegistered()
