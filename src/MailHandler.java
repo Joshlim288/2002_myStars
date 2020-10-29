@@ -20,12 +20,12 @@ public class MailHandler {
 		 * Used to send an email.
 		 * By default, email is sent from a dummy account created by us.
 		 * If you wish to use your own email, edit mailCredentials.txt in the data folder
-		 * @param email Recipient email address
+		 * @param recipient Recipient email address
 		 * @param messageText Message to be sent in the email
 		 * @param subject Subject of the email
 		 * @return true if email was successfully sent, false if not
 		 */
-		public static boolean sendMail(String email, String messageText, String subject) {
+		public static boolean sendMail(String recipient, String messageText, String subject) {
 		String credentials = FileHandler.readFile("mailCredentials.txt"); // Input credentials in mailCredentials.txt in data folder
 		String username = credentials.split("[:\n]")[1].trim();
 		String password = credentials.split("[:\n]")[3].trim();
@@ -46,7 +46,7 @@ public class MailHandler {
 		try {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(username));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
 			message.setSubject(subject);
 			message.setText(messageText);
 			Transport.send(message);

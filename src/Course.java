@@ -60,16 +60,14 @@ public class Course {
      * @param courseType This course's type. Represented with <code>typeOfCourse</code> enumeration.
      * @param academicUnits This course's allocated academic units (AUs).
      * @param school The school that teaches this course.
-     * @param indexes ArrayList of indexes that this course has.
      */
-    public Course(String courseCode, String courseName, typeOfCourse courseType, int academicUnits, String school,
-                  ArrayList<Index> indexes) {
+    public Course(String courseCode, String courseName, typeOfCourse courseType, int academicUnits, String school) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.courseType = courseType;
         this.academicUnits = academicUnits;
         this.school = school;
-        this.indexes = indexes;
+        this.indexes = new ArrayList<>();
     }
 
     public String getCourseCode() {
@@ -115,9 +113,13 @@ public class Course {
     public ArrayList<Index> getIndexes() {
         return indexes;
     }
-
     public void setIndexes(ArrayList<Index> indexes) {
         this.indexes = indexes;
+    }
+
+    public void addIndex(int indexNum, int indexVacancy) {
+        Index newIndex = new Index(indexNum, indexVacancy);
+        indexes.add(newIndex);
     }
 
     @Override

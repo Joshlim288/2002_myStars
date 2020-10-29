@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -57,21 +58,17 @@ public class Index {
      * Only administrators should be able to initialise an index.
      * @param indexNum Unique identifier for this index.
      * @param indexVacancy Maximum vacancies for this index.
-     * @param currentVacancy Current remaining vacancies for this index.
-     * @param atMaxCapacity Boolean variable, 1 when at max capacity and 0 if not.
-     * @param lessons Lessons under this index.
-     * @param waitlist Students in queue registered for this index.
      */
-    public Index(int indexNum, int indexVacancy, int currentVacancy, boolean atMaxCapacity,ArrayList<Lesson> lessons,
-                 ArrayList<Student> waitlist, ArrayList<Student> enrolledStudents) {
+    public Index(int indexNum, int indexVacancy) {
         this.indexNum = indexNum;
         this.indexVacancy = indexVacancy;
-        this.currentVacancy = currentVacancy;
-        this.atMaxCapacity = atMaxCapacity;
-        this.lessons = lessons;
-        this.waitlist = waitlist;
-        this.enrolledStudents = enrolledStudents;
+        this.currentVacancy = 0;
+        this.atMaxCapacity = false;
+        this.lessons = new ArrayList<>();
+        this.waitlist = new ArrayList<>();
+        this.enrolledStudents = new ArrayList<>();
     }
+
 
     public int getIndexNum() {
         return indexNum;
@@ -110,8 +107,10 @@ public class Index {
     }
 
     // TODO: Check if necessary to have set method for lessons as a whole
-    public void setLessons(ArrayList<Lesson> lessons) {
-        this.lessons = lessons;
+    public void addLesson(typeOfLesson type, String group, dayOfWeek day, LocalDateTime startTime, LocalDateTime endTime,
+                          String venue, ArrayList<Integer> teachingWeeks) {
+        Lesson newLesson = new Lesson(type, group, day, startTime, endTime, venue, teachingWeeks);
+        lessons.add(newLesson);
     }
 
     public ArrayList<Student> getWaitlist() {

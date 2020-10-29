@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * Lesson represents the actual classes held for an index of a course.
@@ -70,7 +71,7 @@ public class Lesson {
      * This lesson's teaching weeks represented by array of integers representing week number.
      * Valid range of teaching weeks is 1-13.
      */
-    private int[] teachingWeeks;
+    private ArrayList<Integer> teachingWeeks;
 
     /**
      * Constructor for <code>Lesson</code>.<br>
@@ -83,7 +84,7 @@ public class Lesson {
      * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 13).
      */
     public Lesson(typeOfLesson lessonType, String group, dayOfWeek day, LocalDateTime startTime, LocalDateTime endTime,
-                  String venue, int[] teachingWeeks) {
+                  String venue, ArrayList<Integer> teachingWeeks) {
         this.lessonType = lessonType;
         this.group = group;
         this.day = day;
@@ -141,16 +142,16 @@ public class Lesson {
         this.venue = venue;
     }
 
-    public int[] getTeachingWeeks() {
+    public ArrayList<Integer> getTeachingWeeks() {
         return teachingWeeks;
     }
 
     /**
      * Range validation done to ensure teaching weeks fall between Week 1 -13
      */
-    public void setTeachingWeeks(int[] teachingWeeks) {
-        for (int i = 0; i < teachingWeeks.length; i++) {
-            if (teachingWeeks[i] > 13 || teachingWeeks[i] < 1) {
+    public void setTeachingWeeks(ArrayList<Integer> teachingWeeks) {
+        for (int i = 0; i < teachingWeeks.size(); i++) {
+            if (teachingWeeks.get(i) > 13 || teachingWeeks.get(i) < 1) {
                 System.out.println("Invalid teaching weeks entered.\n" +
                         "Choose from Weeks 1 - 13");
                 break;
