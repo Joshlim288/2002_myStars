@@ -22,15 +22,6 @@ public class StudentHandler {
         this.currentStudent = currentStudent;
     }
 
-
-    /**
-     * Method to add a course for current student.
-     * Retrieves indexes under the course and prompts for student's choice
-     * Includes checking of index capacity and clashes with student's current timetable
-     * Adds student to waitlist if chosen index is full
-     * Exception handling if waitlist is already empty
-     * @param course Course to be added
-     */
     //TODO: Improve input validation
     //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
     //TODO: checkTimetableClash()
@@ -67,19 +58,35 @@ public class StudentHandler {
     }
 
 
-    public void dropCourse(Course course,Index cIndex)
+    public void dropCourse(Course course)
     {
-        //Remove student from list of enrolled students in index
-        cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
+        if(course==null)
+            System.out.println("Course does not exist!");
 
-        //Remove course from student's registered courses
-        currentStudent.removeCourse(course);
-        System.out.println("You have successfully dropped "+cIndex+"!");
+        else if (!currentStudent.getCoursesRegistered().containsKey(course))
+            System.out.println("You are not enrolled in this course!");
 
-        //If there are students in waitlist, register them for the index
-        if(!cIndex.getWaitlist().isEmpty()) {
-            cIndex.removeFromWaitlist(cIndex.getWaitlist());
-            //TODO: Notify the student who has been added to index from waitlist
+        else{
+            String cCode = course.getCourseCode();
+            String cName = course.getCourseName();
+            Index cIndex= this.currentStudent.retrieveIndex(cCode);
+            System.out.println("You have selected to drop : ");
+            System.out.println("Course Code: " + cCode);
+            System.out.println("Course Name: " + cName);
+            System.out.println("Index Number: " + cIndex.getIndexNum());
+
+            //Remove student from list of enrolled students in index
+            cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
+
+            //Remove course from student's registered courses
+            currentStudent.removeCourse(course);
+            System.out.println("You have successfully dropped "+cIndex+"!");
+
+            //If there are students in waitlist, register them for the index
+            if(!cIndex.getWaitlist().isEmpty()) {
+                cIndex.removeFromWaitlist(cIndex.getWaitlist());
+                //TODO: Notify the student who has been added to index from waitlist
+            }
         }
     }
 
@@ -135,7 +142,7 @@ public class StudentHandler {
             Index nIndex = course.searchIndex(input);
             if (course.getIndexes().contains(nIndex))
             {
-                if (checkVacancies(nIndex) > 0)
+                if (checkVacancies(cName,input) > 0)
                 {
                     // There might be more things required to be changed when changing index
                     System.out.println("Index available ");

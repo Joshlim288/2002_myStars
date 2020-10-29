@@ -93,23 +93,7 @@ public class StudentInterface implements UserInterface{
                     System.out.println("Enter Course Code: ");
                     cc = sc.nextLine();
                     course=FileHandler.getCourse(cc);
-
-                    if(course==null)
-                        System.out.println("Course does not exist!");
-
-                    else if (!currentStudent.getCoursesRegistered().containsKey(course))
-                        System.out.println("You are not enrolled in this course!");
-
-                    else{
-                        String cCode = course.getCourseCode();
-                        String cName = course.getCourseName();
-                        Index cIndex= StudentHandler.currentStudent.retrieveIndex(cCode);
-                        System.out.println("You have selected to drop : ");
-                        System.out.println("Course Code: " + cCode);
-                        System.out.println("Course Name: " + cName);
-                        System.out.println("Index Number: " + cIndex.getIndexNum());
-
-                        studHandler.dropCourse(course);
+                    studHandler.dropCourse(course);
                     break;
 
                 case 3:
