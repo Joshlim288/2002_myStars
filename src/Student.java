@@ -64,23 +64,29 @@ public class Student extends User {
      * @param hashedPassword This student's password (hashed).
      * @param studentName This student's name.
      * @param matricNum This student's matriculation number. It is unique.
-     * @param gender This student's gender (MALE / FEMALE / OTHERS).
+     * @param gender This student's gender (MALE / FEMALE / OTHERS) as string.
      * @param nationality This student's nationality
      * @param maxAUs This student's AU balance.
      * @param major This student's major.
      */
     public Student(String userID, String hashedPassword, String studentName, String matricNum,
-                   typeOfGender gender, String nationality, int maxAUs, String major) {
+                   String gender, String nationality, int maxAUs, String major) throws IllegalArgumentException {
         super(userID, hashedPassword, "Student");
-        this.studentName = studentName;
-        this.matricNum = matricNum;
-        this.gender = gender;
-        this.nationality = nationality;
-        this.currentAUs = 0;
-        this.maxAUs = maxAUs;
-        this.major = major;
-        this.accessTime = new LocalDateTime[2];
-        this.coursesRegistered = new HashMap<Course, Index>();
+        if (validateStudentName(studentName) && validateMatricNum(matricNum) && validateGender(gender) &&
+            validateNationality(nationality) && validateMaxAUs(maxAUs) && validateMajor(major)) {
+            this.studentName = studentName;
+            this.matricNum = matricNum;
+            this.gender = typeOfGender.valueOf(gender);
+            this.nationality = nationality;
+            this.currentAUs = 0;
+            this.maxAUs = maxAUs;
+            this.major = major;
+            this.accessTime = new LocalDateTime[2];
+            this.coursesRegistered = new HashMap<Course, Index>();
+        } else {
+            throw new IllegalArgumentException("Student object could not be created due to errors.");
+        }
+
     }
 
     public String getStudentName() {
@@ -107,11 +113,7 @@ public class Student extends User {
 
     public void setGender(String gender) {
         if (validateGender(gender))
-            switch (gender) {
-                case ("MALE") -> this.gender = typeOfGender.MALE;
-                case ("FEMALE") -> this.gender = typeOfGender.FEMALE;
-                case ("OTHER") -> this.gender = typeOfGender.OTHER;
-            }
+            this.gender = typeOfGender.valueOf(gender);
     }
 
     public String getNationality() {
@@ -258,13 +260,13 @@ public class Student extends User {
     }
 
     private boolean validateGender(String gender) {
-        for (typeOfGender genderType : typeOfGender.values()) {
-            if (genderType.name().equals(gender)) {
-                return true;
-            }
+        try {
+            typeOfGender.valueOf(gender);
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERROR: Gender can only be MALE / FEMALE / OTHER.");
+            return false;
         }
-        System.out.println("ERROR: Gender can only be MALE / FEMALE / OTHER.");
-        return false;
     }
 
     private boolean validateNationality(String nationality) {
@@ -297,11 +299,12 @@ public class Student extends User {
 
     /**
      * Assumes new maxAUs are already in int type.
+     * <br> Checks if maxAUs is not fewer than currentAUs, and maxAUs cannot be less than 1.
      * @param maxAUs
      * @return
      */
     private boolean validateMaxAUs(int maxAUs) {
-        if (maxAUs >= currentAUs) {
+        if (maxAUs >= currentAUs && maxAUs > 0) {
             return true;
         }
         System.out.println("ERRORS: Max AUs cannot be fewer than current AUs.");
@@ -313,5 +316,19 @@ public class Student extends User {
             return true;
         System.out.println("ERROR: Major can only contain alphabets and spaces.");
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(studentName + ", " + matricNum + "\n");
+        stringBuilder.append(nationality + ", " + gender + "\n");
+        stringBuilder.append("Major: " + major + "\n");
+        stringBuilder.append("AUs registered: " + currentAUs + "\n");
+        stringBuilder.append("Courses registered: ");
+        for (Course course : coursesRegistered.keySet()) {
+            stringBuilder.append("- " + course.getCourseCode() + " (" + coursesRegistered.get(course).getIndexNum() + ")\n");
+        }
+        return stringBuilder.toString();
     }
 }
