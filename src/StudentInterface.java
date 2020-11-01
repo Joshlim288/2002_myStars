@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class StudentInterface implements UserInterface{
+
     private StudentHandler studHandler;
     private Scanner sc;
 
-    public StudentInterface (User currentUser, Scanner sc)
-    {
+    public StudentInterface (User currentUser, Scanner sc) {
         studHandler = new StudentHandler((Student)currentUser);
         this.sc = sc;
     }
@@ -14,16 +14,14 @@ public class StudentInterface implements UserInterface{
     /**
      * Student UI is displayed here
      */
-    public void start()
-    {
+    public void start() {
         int choice;
 
         do
         {
+            System.out.println("Welcome, Student " + studHandler.currentStudent.getStudentName()
+                                + ", " + studHandler.currentStudent.getMatricNum() + "!");
             System.out.println("Choose an action: ");
-            choice = sc.nextInt();
-            String cc;
-            Course course;
             System.out.println("1. Add Course");
             System.out.println("2. Drop Course");
             System.out.println("3. Check Registered Courses");
@@ -31,6 +29,9 @@ public class StudentInterface implements UserInterface{
             System.out.println("5. Change Index");
             System.out.println("6. Swap Index");
             System.out.println("7. Back to main menu");
+            choice = sc.nextInt();
+            String cc;
+            Course course;
 
             switch (choice)
             {

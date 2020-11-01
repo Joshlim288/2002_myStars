@@ -3,10 +3,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class AdminInterface {
+public class AdminInterface implements UserInterface {
 
     private AdminHandler adHandler;
     Scanner sc = new Scanner(System.in);
+
     public AdminInterface (User currentUser, Scanner sc) {
         adHandler = new AdminHandler((Admin)currentUser);
         this.sc = sc;
@@ -17,9 +18,11 @@ public class AdminInterface {
      */
     public void start() {
         int choice;
+
         do{
-            System.out.println("Welcome Admin ");
-            System.out.println("Enter your choice: ");
+            System.out.println("Welcome, Admin " + adHandler.currentAdmin.getAdminName()
+                    + ", " + adHandler.currentAdmin.getStaffNum() + "!");
+            System.out.println("Choose an action: ");
             System.out.println("1. Edit student access period");
             System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
             System.out.println("3. Add/Update a course (course code, school, its index numbers and vacancy)");
@@ -28,6 +31,7 @@ public class AdminInterface {
             System.out.println("6. Print student list by course (all students registered for the selected course)");
             System.out.println("7. Back to main menu");
             choice = sc.nextInt();
+
             switch(choice){
                 case 1:
                     System.out.println("Enter student matriculation number");
@@ -49,9 +53,10 @@ public class AdminInterface {
                     String studentname = sc.next();
                     System.out.println("Enter matriculation number: ");
                     String studentmatric = sc.next();
-                    if (adHandler.checkmatricexist(studentmatric))
+                    if (adHandler.checkmatricexist(studentmatric)) {
                         System.out.println("Matriculation number already exist.");
                         break;
+                    }
                     System.out.println("Enter gender: ");
                     String studentgender = sc.next();
                     System.out.println("Enter nationality: ");
@@ -157,16 +162,7 @@ public class AdminInterface {
                     break;
                 case 7:
                     break;
-
-
-
             }
         } while (choice != 7);
-
-
     }
-
-
-
-
 }
