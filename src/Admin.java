@@ -7,7 +7,7 @@
  * @version 1.0
  * @since 2020-10-17
  */
-
+//TODO: add validations and error messages
 public class Admin extends User {
 
     /**
