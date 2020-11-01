@@ -12,7 +12,6 @@ import java.util.HashMap;
  * @version 1.0
  * @since 2020-10-17
  */
-//TODO: add validations and error messages
 
 /**
  * Definition of enumeration called typeOfGender, with 3 elements, referred to as:
@@ -48,14 +47,20 @@ public class Student extends User {
     /** This student's current AUs registered for the semester. */
     private int currentAUs;
 
+    /** This student's major. */
+    private String major;
+
     /**
      * This student's registered courses and the corresponding index for the semester, stored as a HashMap.
      * Key is the registered course, and value is the index registered by this student.
      */
     private HashMap<Course, Index> coursesRegistered;
 
-    /** This student's major. */
-    private String major;
+    /**
+     * This student's list of courses waiting to be registered, stored as a HashMap.
+     * Key is the course to be registered, and value is the index registered by this student.
+     */
+    private HashMap<Course, Index> waitList;
 
     /**
      * Constructor for <code>Student</code>.<br>
@@ -82,11 +87,11 @@ public class Student extends User {
             this.maxAUs = maxAUs;
             this.major = major;
             this.accessTime = new LocalDateTime[2];
-            this.coursesRegistered = new HashMap<Course, Index>();
+            this.coursesRegistered = new HashMap<>();
+            this.waitList = new HashMap<>();
         } else {
             throw new IllegalArgumentException("Student object could not be created due to errors.");
         }
-
     }
 
     public String getStudentName() {
@@ -172,9 +177,8 @@ public class Student extends User {
         }
     }
 
-    /** Retrieves the course codes of the courses registered by this student, in the form of an ArrayList */
-    public ArrayList<Course> getCoursesRegistered() {
-        return new ArrayList(coursesRegistered.keySet());
+    public HashMap<Course, Index> getCoursesRegistered() {
+        return coursesRegistered;
     }
 
     /**
@@ -207,6 +211,37 @@ public class Student extends User {
             return false;
         updateCurrentAUs();
         return true;
+    }
+
+    public HashMap<Course, Index> getWaitList() {
+        return waitList;
+    }
+
+    /**
+     * Adds a course to wait list.
+     * @param course the object of the course to be added
+     * @param index the object of the chosen index to be added
+     */
+    public void addCourseToWaitList(Course course, Index index) {
+        waitList.put(course, index);
+    }
+
+    /**
+     * Removes a course from wait list
+     * @param course the object of the course to be removed
+     * @return true if the removal is successful
+     */
+    public boolean removeCourseFromWaitList(Course course) {
+        return waitList.remove(course) != null;
+    }
+
+    /**
+     * Retrieves an index registered by this student, from this student's wait list.
+     * @param course The course object of the index to be retrieved
+     * @return <code>Index</code> object if the corresponding course exists; null otherwise.
+     */
+    public Index retrieveIndexFromWaitList(Course course) {
+        return waitList.get(course);
     }
 
     /**
@@ -242,9 +277,8 @@ public class Student extends User {
     }
 
     /**
-     * Validates matriculation number. Assumes format as:
+     * Validates matriculation number. Assumes format as a string of 9 characters where:
      * <ul>
-     *     <li>Total length of matriculation number is 9.</li>
      *     <li>First and last characters are any letters from A-Z (capital).</li>
      *     <li>Middle 7 characters can be any combination of digits from 0-9.</li>
      * </ul>
