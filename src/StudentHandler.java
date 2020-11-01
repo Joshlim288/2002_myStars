@@ -10,7 +10,7 @@
  *
  * Try to add JavaDocs as you go
  */
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,8 +63,8 @@ public class StudentHandler {
         // For all lessons in timetable, check against each lesson to be added for clashes
         for (Lesson existingLesson : timetable){
             for (Lesson newLesson : lessonsToCheck) {
-                LocalDateTime startTime = newLesson.getStartTime();
-                LocalDateTime endTime = newLesson.getEndTime();
+                LocalTime startTime = newLesson.getStartTime();
+                LocalTime endTime = newLesson.getEndTime();
 
                 if (startTime.isBefore(existingLesson.getEndTime()) &&
                         startTime.isAfter(existingLesson.getStartTime()))
@@ -85,7 +85,8 @@ public class StudentHandler {
     {
             if(!hasClash(index, currentStudent.getCoursesRegistered())) {
                 index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-                currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());
+                //TODO: Fix updating current AUs
+                //currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());
                 return true;
             }
             else

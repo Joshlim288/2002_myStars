@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -117,9 +118,9 @@ public class AdminInterface implements UserInterface {
                             System.out.print("Enter day of week: ");
                             dayOfWeek day = adHandler.chooseDayOfWeek(sc.nextInt());
                             System.out.println("Enter start time");
-                            LocalDateTime startTime = LocalDateTime.parse(sc.next());
+                            LocalTime startTime = LocalTime.parse(sc.next());
                             System.out.println("Enter end time");
-                            LocalDateTime endTime = LocalDateTime.parse(sc.next());
+                            LocalTime endTime = LocalTime.parse(sc.next());
                             System.out.println("Enter venue");
                             String venue = sc.next();
                             System.out.println("Enter teaching weeks, separated with a comma (1-13)");

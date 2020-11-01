@@ -1,5 +1,5 @@
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -107,7 +107,7 @@ public class Index {
     }
 
     // TODO: Check if necessary to have set method for lessons as a whole
-    public void addLesson(typeOfLesson type, String group, dayOfWeek day, LocalDateTime startTime, LocalDateTime endTime,
+    public void addLesson(typeOfLesson type, String group, dayOfWeek day, LocalTime startTime, LocalTime endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
         Lesson newLesson = new Lesson(type, group, day, startTime, endTime, venue, teachingWeeks);
         lessons.add(newLesson);

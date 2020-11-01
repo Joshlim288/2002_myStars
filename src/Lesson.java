@@ -1,5 +1,5 @@
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -54,13 +54,13 @@ public class Lesson {
      * This lesson's start time.
      * Implemented using LocalDateTime class.
      */
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
     /**
      * This lesson's end time.
      * Implemented using LocalDateTime class.
      */
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 
     /**
      * This lesson's venue.
@@ -83,7 +83,7 @@ public class Lesson {
      * @param venue This lesson's venue.
      * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 13).
      */
-    public Lesson(typeOfLesson lessonType, String group, dayOfWeek day, LocalDateTime startTime, LocalDateTime endTime,
+    public Lesson(typeOfLesson lessonType, String group, dayOfWeek day, LocalTime startTime, LocalTime endTime,
                   String venue, ArrayList<Integer> teachingWeeks) {
         this.lessonType = lessonType;
         this.group = group;
@@ -118,19 +118,19 @@ public class Lesson {
         this.day = day;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
