@@ -10,10 +10,10 @@
  *
  * Try to add JavaDocs as you go
  */
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class StudentHandler {
     Student currentStudent;
@@ -24,17 +24,20 @@ public class StudentHandler {
 
     //TODO: Improve input validation
     //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
-    //TODO: checkTimetableClash()
 
-    public boolean getResponse(char input)
-    {
-        while(true)
-        {
-            if (input == 'y' || input == 'Y')
-                return true;
-            else if (input == 'n' || input == 'N')
-                return false;
+    public boolean getResponse(char input) {
+        boolean answer;
+        while(true) {
+            if (input == 'y' || input == 'Y'){
+                answer = true;
+                break;
+            }
+            else if (input == 'n' || input == 'N') {
+                answer = false;
+                break;
+            }
         }
+        return answer;
     }
 
     public void askForWaitList(Course course, Index index,boolean ans)
@@ -46,10 +49,47 @@ public class StudentHandler {
         }
     }
 
-    public void addCourse(Course course, Index index)
+    //Return true if there is clash and false otherwise
+    //TODO: First draft, to improve
+    private boolean hasClash(Index indexToAdd, HashMap<Course,Index> coursesRegistered){
+        //Retrieve lessons to be added for new index
+        ArrayList<Lesson> lessonsToCheck = indexToAdd.getLessons();
+
+        // Initialise list of existing lessons to check against
+        // Iterate through coursesRegistered to add lessons for each index
+        ArrayList<Lesson> timetable = new ArrayList<Lesson>();
+        coursesRegistered.forEach((course, index) -> timetable.addAll(index.getLessons()));
+
+        // For all lessons in timetable, check against each lesson to be added for clashes
+        for (Lesson existingLesson : timetable){
+            for (Lesson newLesson : lessonsToCheck) {
+                LocalDateTime startTime = newLesson.getStartTime();
+                LocalDateTime endTime = newLesson.getEndTime();
+
+                if (startTime.isBefore(existingLesson.getEndTime()) &&
+                        startTime.isAfter(existingLesson.getStartTime()))
+                    return true;
+
+                if (endTime.isBefore(existingLesson.getEndTime()) &&
+                        endTime.isAfter(existingLesson.getStartTime()))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    // Returns true if addCourse() was successful
+    // Calls the private hasClash() method
+    // Returns false if there was a clash in timetable
+    public boolean addCourse(Course course, Index index)
     {
-            index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-            currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
+            if(!hasClash(index, currentStudent.getCoursesRegistered())) {
+                index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
+                currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());
+                return true;
+            }
+            else
+                return false;
     }
 
     public void dropCourse(Course course,Index cIndex)

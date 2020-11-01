@@ -62,29 +62,30 @@ public class StudentInterface implements UserInterface{
 
                         System.out.println("Enter the index you would like to enroll in: ");
                         Index index = course.searchIndex(sc.nextInt());
-                        //TODO: checkTimetableClash() not yet implemented.
-                        //currentStudent.checkTimetableClash(Index index);
+
                         if(index==null)
                             System.out.println("Index does not exist!");
                         else {
-                            if (indexes.contains(index))
-                            {
-                                if (!index.isAtMaxCapacity())
-                                {
-                                    studHandler.addCourse(course, index);
-                                    System.out.println("You have successfully registered for " + index.getIndexNum() + "!");
+                            if (indexes.contains(index)) {
+                                if (!index.isAtMaxCapacity()) {
+                                    boolean success = studHandler.addCourse(course, index);
+                                    if (success)
+                                        System.out.println("You have successfully registered for " + index.getIndexNum() + "!");
+                                    else
+                                        System.out.println("There is a clash, you cannot be registered for" +
+                                                index.getIndexNum() + "!");
                                 }
-                                else
-                                    {
-                                    char ch = sc.next().charAt(0);
+                                else {
                                     System.out.println("You have selected an index with no more vacancy.");
                                     System.out.println("Do you want to be added to waitlist? (Y/N)");
+                                    char ch = sc.next().charAt(0);
                                     boolean ans=studHandler.getResponse(ch);
-                                    if (ans==true) {
+                                    if (ans) {
+                                        //TODO: To account for clashes for waitlist as well
                                         studHandler.askForWaitList(course, index, ans);
                                         System.out.println("You have been added to waitlist for Index " + index);
                                     }
-                                    else if (ans==false)
+                                    else
                                         System.out.println("Returning to main menu..");
                                 }
                             }
