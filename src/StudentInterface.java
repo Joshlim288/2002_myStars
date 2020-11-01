@@ -110,7 +110,7 @@ public class StudentInterface implements UserInterface{
                     else {
                         String cCode = course.getCourseCode();
                         String cName = course.getCourseName();
-                        Index cIndex = this.studHandler.currentStudent.retrieveIndex(cCode);
+                        Index cIndex = this.studHandler.currentStudent.retrieveIndex(course);
                         System.out.println("You have selected to drop : ");
                         System.out.println("Course Code: " + cCode);
                         System.out.println("Course Name: " + cName);

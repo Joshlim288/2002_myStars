@@ -141,7 +141,7 @@ public class StudentHandler {
 
             String cCode = course.getCourseCode();
             String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
+            Index cIndex= this.currentStudent.retrieveIndex(course);
             System.out.println("You have selected to swap index for the following : ");
             System.out.println("Course Code: " + cCode);
             System.out.println("Course Name: " + cName);
@@ -219,7 +219,7 @@ public class StudentHandler {
         {
             String cCode = course.getCourseCode();
             String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
+            Index cIndex= this.currentStudent.retrieveIndex(course);
             System.out.println("You have selected to swap : ");
             System.out.println("Course Code: " + cCode);
             System.out.println("Course Name: " + cName);

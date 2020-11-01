@@ -72,7 +72,7 @@ public class AdminHandler{
 
     }
 
-    public void editAccessPeriod(String matricNum, LocalDateTime start, LocalDateTime end){
+    public void editAccessPeriod(String matricNum, String start, String end){
         Student student = FileHandler.getStudent(matricNum);
         student.setAccessTime(start, end);
 
@@ -105,6 +105,8 @@ public class AdminHandler{
                 return typeOfCourse.GER;
             case 4:
                 return typeOfCourse.UE;
+            default:
+                return typeOfCourse.CORE;
         }
     }
     public typeOfLesson chooseLessonType(int useropt){

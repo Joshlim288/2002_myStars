@@ -41,38 +41,36 @@ public class AdminInterface implements UserInterface {
                     System.out.println("Student " + matricnum +" current access period is from: "+ student.getAccessTime());
                     System.out.println("Enter new access start date: ");
                     String strnewstartdate = sc.next();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy hh:mm:ss a");
-                    LocalDateTime newstartdate = LocalDateTime.parse(strnewstartdate, formatter);
                     System.out.println("Enter new access end date: ");
                     String strnewenddate = sc.next();
-                    LocalDateTime newenddate = LocalDateTime.parse(strnewenddate, formatter);
-                    adHandler.editAccessPeriod(matricnum,newstartdate,newenddate);
+                    adHandler.editAccessPeriod(matricnum,strnewenddate,strnewenddate);
                     System.out.println("Success! Student "+ matricnum +" new access period is from" + student.getAccessTime());
                     break;
                 case 2:
                     System.out.println("Enter student name: ");
-                    String studentname = sc.next();
+                    String studentName = sc.next();
                     System.out.println("Enter matriculation number: ");
-                    String studentmatric = sc.next();
-                    if (adHandler.checkmatricexist(studentmatric)) {
+                    String studentMatric = sc.next();
+                    if (adHandler.checkmatricexist(studentMatric)) {
                         System.out.println("Matriculation number already exist.");
                         break;
                     }
                     System.out.println("Enter gender: ");
-                    String studentgender = sc.next();
+                    String gender = sc.next();
                     System.out.println("Enter nationality: ");
-                    String studentnationality = sc.next();
+                    String nationality = sc.next();
                     System.out.println("Enter userID: ");
                     String userid = sc.next();
                     System.out.println("Enter password: ");
                     String password = sc.next();
                     System.out.println("Enter maxAUs: ");
-                    int maxaus = sc.nextInt();
+                    int maxAUs = sc.nextInt();
                     System.out.println("Enter major: ");
                     String major = sc.next();
-                    Student newstudent = new Student(userid,password,studentname,studentmatric,maxaus,major);
-                    adHandler.addStudent(newstudent);
-                    System.out.println("Student "+studentmatric+" has been added successfully!");
+                    Student newStudent = new Student(userid,password,studentName,studentMatric,
+                                                    gender, nationality, maxAUs, major);
+                    adHandler.addStudent(newStudent);
+                    System.out.println("Student "+studentMatric+" has been added successfully!");
                     break;
                 case 3:
                     /**
