@@ -179,4 +179,13 @@ public class Index {
             enrolledStudents.remove(student);
             this.currentVacancy++;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Index " + indexNum + ", " + "Vacancies: " + currentVacancy
+                + "/" + indexVacancy + "\n");
+        stringBuilder.append("Number of students currently in wait list: " + waitlist.size() + "\n");
+        return stringBuilder.toString();
+    }
 }

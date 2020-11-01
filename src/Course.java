@@ -144,5 +144,15 @@ public class Course {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(courseName + ", " + courseCode + "\n");
+        stringBuilder.append("Course Type: " + courseType + "\n");
+        stringBuilder.append("Academic Units: " + academicUnits + "\n");
+        stringBuilder.append("School: " + school + "\n");
+        return stringBuilder.toString();
+    }
 }
 

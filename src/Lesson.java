@@ -161,4 +161,19 @@ public class Lesson {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Lesson Type: " + lessonType + "\n");
+        stringBuilder.append("Venue: " + venue + "\n");
+        //TODO: to format starttime and endtime, extract elements and print (LocalTime alr has its own toString)
+        stringBuilder.append(day + ", " + startTime + " - " + endTime + "\n");
+        stringBuilder.append("Teaching Weeks: ");
+        teachingWeeks.forEach((week) -> {
+            stringBuilder.append(week + ", ");
+        });
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
 }
