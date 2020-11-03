@@ -30,7 +30,7 @@ public class AdminInterface implements UserInterface {
             System.out.println("4. Check available slot for an index number (vacancy in a class)");
             System.out.println("5. Print student list by index number");
             System.out.println("6. Print student list by course (all students registered for the selected course)");
-            System.out.println("7. Back to main menu");
+            System.out.println("7. Log out!");
             choice = sc.nextInt();
 
             switch(choice){
@@ -160,6 +160,11 @@ public class AdminInterface implements UserInterface {
                     System.out.println(adHandler.printStudentListbyCourse(printstudentcourse2));
                     break;
                 case 7:
+                    System.out.println("Thank you for using MyStars!");
+                    System.out.println("Goodbye!");
+                    break;
+
+                default:
                     break;
             }
         } while (choice != 7);

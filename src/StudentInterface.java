@@ -144,22 +144,18 @@ public class StudentInterface implements UserInterface{
                     break;
 
                 case 6:
-                    System.out.println("Enter Length:");
-
+                    //TODO: Swap courses
                     break;
 
                 case 7:
-                    System.out.println("Enter Length:");
-
+                    System.out.println("Thank you for using MyStars!");
+                    System.out.println("Goodbye!");
                     break;
 
                 default:
-
                     break;
             }
         }
         while(choice!=7);
-
     }
-
 }
