@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="ClassDiagram" uuid="f9c2dbd5-0762-460a-913c-e11b603b6382">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\Josh\Desktop\2002_myStars\diagrams\ClassDiagram.vpp</jdbc-url>
+    </data-source>
+  </component>
+</project>

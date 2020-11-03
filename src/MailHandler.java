@@ -1,4 +1,7 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
+import java.util.Scanner;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -26,7 +29,7 @@ public class MailHandler {
 		 * @return true if email was successfully sent, false if not
 		 */
 		public static boolean sendMail(String recipient, String messageText, String subject) {
-		String credentials = FileHandler.readFile("mailCredentials.txt"); // Input credentials in mailCredentials.txt in data folder
+		String credentials = readCredentials();
 		String username = credentials.split("[:\n]")[1].trim();
 		String password = credentials.split("[:\n]")[3].trim();
 
@@ -53,6 +56,18 @@ public class MailHandler {
 			return true;
 		} catch (MessagingException e) {
 			return false;
+		}
+	}
+
+	private static String readCredentials() {
+		try {
+			File file = new File("data/mailCredentials.txt");// Input credentials in mailCredentials.txt in data folder
+			Scanner sc = new Scanner(file);
+			sc.useDelimiter("\\Z");
+			return sc.next();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

@@ -17,9 +17,15 @@ import java.util.HashMap;
 
 public class StudentHandler {
     Student currentStudent;
+    StudentDataManager sdm;
+    CourseDataManager cdm;
 
     public StudentHandler(Student currentStudent) {
         this.currentStudent = currentStudent;
+        this.sdm = new StudentDataManager();
+        this.cdm = new CourseDataManager();
+        sdm.load();
+        cdm.load();
     }
 
     //TODO: Improve input validation
@@ -247,5 +253,10 @@ public class StudentHandler {
              */
         }
 
+    }
+
+    public void close() {
+        sdm.save();
+        cdm.save();
     }
 }

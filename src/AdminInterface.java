@@ -16,6 +16,7 @@ public class AdminInterface implements UserInterface {
 
     /**
      * Admin UI is displayed here
+     * TODO: split off logic into the handler class, send all dataManager usage to adminHandler
      */
     public void start() {
         int choice;
@@ -76,7 +77,7 @@ public class AdminInterface implements UserInterface {
                     /**
                      * A lot of redundancy, a lot should be moved to studentHandler, a lot of input validation
                      * needed to be done. This is just a skeleton, will continue working on it
-                     * //TODO Josh
+                     * TODO Josh
                      */
                     Course newCourse;
                     System.out.println("Enter course code: ");
@@ -160,6 +161,8 @@ public class AdminInterface implements UserInterface {
                     System.out.println(adHandler.printStudentListbyCourse(printstudentcourse2));
                     break;
                 case 7:
+                    System.out.println("Saving data...");
+                    adHandler.close();
                     System.out.println("Thank you for using MyStars!");
                     System.out.println("Goodbye!");
                     break;

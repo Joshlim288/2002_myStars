@@ -23,15 +23,21 @@ public abstract class User {
      * The domain this user belongs to
      */
     private String domain;
+
+    /**
+     * The email of the user
+     */
+    private String email;
     /**
      * Constructor for User, using userID and hashedPassword.
      * @param userID This user's user ID.
      * @param hashedPassword This user's password (hashed).
      */
-    public User(String userID, String hashedPassword, String domain) {
+    public User(String userID, String hashedPassword, String domain, String email) {
         this.userID = userID;
         this.hashedPassword = hashedPassword;
         this.domain = domain;
+        this.email = email;
     }
 
     public String getUserID() {
@@ -64,6 +70,16 @@ public abstract class User {
      */
     public void setPassword(String password) {
         this.hashedPassword = hash(password);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String newEmail) {
+        if (newEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            this.email = newEmail;
+        }
     }
 
     public boolean validate(String checkID, String checkpw) throws AccessDeniedException{

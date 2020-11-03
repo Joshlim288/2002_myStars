@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * TODO shift all dataManager calls to handler
+ */
 public class StudentInterface implements UserInterface{
 
     private StudentHandler studHandler;
@@ -148,6 +151,8 @@ public class StudentInterface implements UserInterface{
                     break;
 
                 case 7:
+                    System.out.println("Saving Data...");
+                    studHandler.close();
                     System.out.println("Thank you for using MyStars!");
                     System.out.println("Goodbye!");
                     break;

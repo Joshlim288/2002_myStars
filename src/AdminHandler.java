@@ -7,9 +7,15 @@ import java.util.ArrayList;
 public class AdminHandler{
     Scanner sc = new Scanner(System.in);
     Admin currentAdmin;
+    CourseDataManager cdm;
+    StudentDataManager sdm;
 
     public AdminHandler(Admin currentAdmin) {
         this.currentAdmin = currentAdmin;
+        this.cdm = new CourseDataManager();
+        this.sdm = new StudentDataManager();
+        cdm.load();
+        sdm.load();
     }
     /**
      * Edits the course details
@@ -17,7 +23,7 @@ public class AdminHandler{
      * Retrieve the course based on coursecode. Then edits and saves the new details
      */
     public void editCourse(String courseCode, String courseName,typeOfCourse courseType, int academicUnits, String school, ArrayList<Index> indexes){
-        Course course = FileHandler.getCourse(courseCode);
+        Course course = cdm.getCourse(courseCode);
         course.setCourseName(courseName);
         course.setCourseType(courseType);
         course.setAcademicUnits(academicUnits);
@@ -28,7 +34,7 @@ public class AdminHandler{
 
     public void addCourse(String courseCode, String courseName,typeOfCourse courseType, int academicUnits, String school){
         Course newcourse = new Course(courseCode, courseName,courseType, academicUnits,school);
-        FileHandler.addCourse(newcourse);
+        cdm.addCourse(newcourse);
     }
 
     /**
@@ -37,7 +43,7 @@ public class AdminHandler{
      * @return int number of vacancys
      */
     public int checkSlot(String course, int indexnum){
-        Index index = FileHandler.getCourse(course).searchIndex(indexnum);
+        Index index = cdm.getCourse(course).searchIndex(indexnum);
         return index.getCurrentVacancy();
     }
 
@@ -46,7 +52,7 @@ public class AdminHandler{
      * @param indexnum
      */
     public ArrayList<Student> printStudentListbyIndex(String coursecode, int indexnum){         /*getStudentList()*/
-        ArrayList<Course> courselist = FileHandler.getCourseList();
+        ArrayList<Course> courselist = cdm.getCourseList();
         ArrayList<Student> studentlistbyindex = new ArrayList<>();
         for (Course coursei : courselist){
             if (coursei.getCourseCode()==coursecode) {
@@ -63,7 +69,7 @@ public class AdminHandler{
      * @returns array list of students
      */
     public ArrayList<Student> printStudentListbyCourse(String coursecode){         /*getStudentList()*/
-        ArrayList<Index> indexlist = FileHandler.getCourse(coursecode).getIndexes();
+        ArrayList<Index> indexlist = cdm.getCourse(coursecode).getIndexes();
         ArrayList<Student> studentlistbycourse = new ArrayList<>();
         for (Index indexi: indexlist){
             studentlistbycourse.addAll(indexi.getEnrolledStudents());
@@ -73,13 +79,13 @@ public class AdminHandler{
     }
 
     public void editAccessPeriod(String matricNum, String start, String end){
-        Student student = FileHandler.getStudent(matricNum);
+        Student student = sdm.getStudent(matricNum);
         student.setAccessTime(start, end);
 
     }
 
     public void addStudent(Student student){
-        FileHandler.getStudentList().add(student);
+        sdm.getStudentList().add(student);
 
     }
     /**
@@ -88,7 +94,7 @@ public class AdminHandler{
      * @returns true if matric number already exist
      */
     public boolean checkmatricexist(String matric){
-        ArrayList<Student> studentList= FileHandler.getStudentList();
+        ArrayList<Student> studentList= sdm.getStudentList();
         for(Student studenti: studentList)
         {if(studenti.getMatricNum().equals(matric))
                 return true;}
@@ -144,5 +150,10 @@ public class AdminHandler{
             default:
                 return dayOfWeek.SUN;
         }
+    }
+
+    public void close() {
+        cdm.save();
+        sdm.save();
     }
 }
