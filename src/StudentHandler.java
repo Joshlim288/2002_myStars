@@ -126,11 +126,22 @@ public class StudentHandler {
         return stringBuilder.toString();
     }
 
-    public int checkVacancies(String course, int index)
-    {
-        return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
 
+    public String getIndexVacancies(String course){
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Index> indexes= FileHandler.getCourse(course).getIndexes();
+        indexes.forEach((index) -> stringBuilder.append("Index " + index.getIndexNum() + ": " +
+                        index.getCurrentVacancy() + "/" + index.getIndexVacancy()));
+        return stringBuilder.toString();
     }
+
+    //Retired for now unless method is needed in the future
+    //public int checkVacancies(String course, int index)
+    //{
+        //return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
+
+    //}
 
     public void changeIndex(Course course)
     {
@@ -167,7 +178,7 @@ public class StudentHandler {
             Index nIndex = course.searchIndex(input);
             if (course.getIndexes().contains(nIndex))
             {
-                if (checkVacancies(cName,input) > 0)
+                if (!cIndex.isAtMaxCapacity())
                 {
                     // There might be more things required to be changed when changing index
                     System.out.println("Index available ");
