@@ -108,15 +108,16 @@ public class StudentHandler {
             }
     }
 
-    public void checkRegistered()
+    public String getRegisteredCourses()
     {
+        //Get list of courses student is registered in.
         HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
 
-        //Iterate through coursesRegistered HashMap and print out information
-        //TODO: Initial implementation placed here. Consider implementing this method in Student class instead.
-        //TODO: Decide on how much information to show when printing out courses and index
-        coursesRegistered.forEach((course, index) -> System.out.println(course.getCourseName() + " " +
+        //Use StringBuilder to create required output and return to StudentInterface
+        StringBuilder stringBuilder = new StringBuilder();
+        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseName() + " " +
                 course.getCourseName() + ": Index" + index.getIndexNum()));
+        return stringBuilder.toString();
     }
 
     public int checkVacancies(String course, int index)

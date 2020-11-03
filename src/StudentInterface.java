@@ -122,8 +122,8 @@ public class StudentInterface implements UserInterface{
                     break;
 
                 case 3:
-                    System.out.println("Enter Length:");
-
+                    System.out.println("Here are your currently registered courses:");
+                    System.out.println(studHandler.getRegisteredCourses());
                     break;
 
                 case 4:
