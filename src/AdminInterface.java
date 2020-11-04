@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class AdminInterface implements UserInterface {
+public class AdminInterface extends UserInterface {
 
     private AdminHandler adHandler;
     Scanner sc;

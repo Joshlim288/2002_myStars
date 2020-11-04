@@ -4,14 +4,13 @@ import java.util.Scanner;
 /**
  * TODO shift all dataManager calls to handler
  */
-public class StudentInterface implements UserInterface{
+public class StudentInterface extends UserInterface{
 
     private StudentHandler studHandler;
-    private Scanner sc;
 
     public StudentInterface (User currentUser, Scanner sc) {
+        super(sc);
         studHandler = new StudentHandler((Student)currentUser);
-        this.sc = sc;
     }
 
     /**
