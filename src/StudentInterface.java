@@ -47,22 +47,22 @@ public class StudentInterface implements UserInterface{
                     if (courseSelected != null) {
                         String cCode = courseSelected.getCourseCode();
                         String cName = courseSelected.getCourseName();
-                        ArrayList<Index> indexes = courseSelected.getIndexes();
+                        ArrayList<Index> indexList = courseSelected.getIndexes();
 
                         System.out.println("You have selected: " + cName + ", " + cCode + ".\n" +
                                            "Indexes available:" +
                                            "Index Number | Remaining Vacancies" +
                                            "----------------------------------");
 
-                        for (Index index : indexes)
-                            System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
+                        for (Index index : indexList)
+                            System.out.println(index);
 
                         System.out.println("Enter the index you would like to enroll in:" +
                                            "You will be added to wait-list if you choose an index with no vacancies.");
                         Index index = courseSelected.searchIndex(sc.nextInt());
 
                         if (index != null) {
-                            if (indexes.contains(index)) {
+                            if (indexList.contains(index)) {
                                 if (!index.isAtMaxCapacity()) {
                                     boolean success = studHandler.addCourse(courseSelected, index);
                                     if (success)
