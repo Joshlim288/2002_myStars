@@ -46,6 +46,12 @@ public class StudentHandler {
         return answer;
     }
 
+    public void updateWaitList(Index index)
+    {
+            index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+            // there should be more stuffs happening when added to wait list
+    }
+
     public void askForWaitList(Course course, Index index,boolean ans)
     {
         if(ans==true)
@@ -89,7 +95,7 @@ public class StudentHandler {
     // Returns false if there was a clash in timetable
     public boolean addCourse(Course course, Index index)
     {
-            if(!hasClash(index, currentStudent.getCoursesRegistered())) {
+            if(!hasClash(index, currentStudent.getCoursesRegistered()) || !hasClash(index, currentStudent.getWaitList())) {
                 index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
                 //TODO: Fix updating current AUs
                 //currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());

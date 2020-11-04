@@ -33,93 +33,82 @@ public class StudentInterface implements UserInterface{
             System.out.println("6. Swap Index");
             System.out.println("7. Back to main menu");
             choice = sc.nextInt();
-            String cc;
-            Course course;
+            String courseCodeInput;
+            Course courseSelected;
 
-            switch (choice)
-            {
+            switch (choice) {
                 case 1:
-                    System.out.println("You have selected to add Course");
-                    System.out.println("-----------");
-                    System.out.println("Enter Course Code: ");
-                    cc = sc.nextLine();
-                    course=FileHandler.getCourse(cc);
-                    if(course==null)
-                        System.out.println("Course does not exist!");
-                    else
-                    {
-                        String cCode = course.getCourseCode();
-                        String cName = course.getCourseName();
+                    System.out.println("You have selected to add Course\n" +
+                                       "-------------------------------\n" +
+                                       "Enter Course Code (e.g. CZ2002):");
+                    courseCodeInput = sc.nextLine();
+                    courseSelected = studHandler.cdm.getCourse(courseCodeInput);
 
-                        System.out.println("You have selected to add : ");
-                        System.out.println("Course Code: " + cCode);
-                        System.out.println("Course Name: " + cName);
-                        System.out.println("Course Index available: ");
+                    if (courseSelected != null) {
+                        String cCode = courseSelected.getCourseCode();
+                        String cName = courseSelected.getCourseName();
+                        ArrayList<Index> indexes = courseSelected.getIndexes();
 
-                        ArrayList<Index> indexes = course.getIndexes();
-                        System.out.println("Index : Remaining Vacancies" +
-                                "----------------");
+                        System.out.println("You have selected: " + cName + ", " + cCode + ".\n" +
+                                           "Indexes available:" +
+                                           "Index Number | Remaining Vacancies" +
+                                           "----------------------------------");
 
-                        for (Index index: indexes)
+                        for (Index index : indexes)
                             System.out.println("Index " + index.getIndexNum() + ": " + index.getCurrentVacancy());
 
-                        System.out.println("Enter the index you would like to enroll in: ");
-                        Index index = course.searchIndex(sc.nextInt());
+                        System.out.println("Enter the index you would like to enroll in:" +
+                                           "You will be added to wait-list if you choose an index with no vacancies.");
+                        Index index = courseSelected.searchIndex(sc.nextInt());
 
-                        if(index==null)
-                            System.out.println("Index does not exist!");
-                        else {
+                        if (index != null) {
                             if (indexes.contains(index)) {
                                 if (!index.isAtMaxCapacity()) {
-                                    boolean success = studHandler.addCourse(course, index);
+                                    boolean success = studHandler.addCourse(courseSelected, index);
                                     if (success)
-                                        System.out.println("You have successfully registered for " + index.getIndexNum() + "!");
+                                        System.out.println("You have successfully registered for " + index.getIndexNum() + "!\n");
                                     else
                                         System.out.println("There is a clash, you cannot be registered for" +
                                                 index.getIndexNum() + "!");
                                 }
                                 else {
-                                    System.out.println("You have selected an index with no more vacancy.");
-                                    System.out.println("Do you want to be added to waitlist? (Y/N)");
-                                    char ch = sc.next().charAt(0);
-                                    boolean ans=studHandler.getResponse(ch);
-                                    if (ans) {
-                                        //TODO: To account for clashes for waitlist as well
-                                        studHandler.askForWaitList(course, index, ans);
-                                        System.out.println("You have been added to waitlist for Index " + index);
-                                    }
-                                    else
-                                        System.out.println("Returning to main menu..");
+                                    System.out.println("Adding to wait-list...");
+                                    studHandler.updateWaitList(index);
+                                    System.out.println("You have been added to wait-list for Index " + index.getIndexNum());
                                 }
+                                System.out.println("Returning to main menu...");
                             }
-                            else
-                                System.out.println("You did not choose a valid index!");
+                        else
+                            System.out.println("Index does not exist!");
                         }
                     }
+                    else
+                        System.out.println("Course does not exist!");
+
                     break;
 
                 case 2:
                     System.out.println("You have selected to drop Course");
                     System.out.println("-----------");
                     System.out.println("Enter Course Code: ");
-                    cc = sc.nextLine();
-                    course=FileHandler.getCourse(cc);
-                    if(course==null)
+                    courseCodeInput = sc.nextLine();
+                    courseSelected = studHandler.cdm.getCourse(courseCodeInput);
+                    if(courseSelected==null)
                         System.out.println("Course does not exist!");
 
-                    else if (!studHandler.currentStudent.getCoursesRegistered().containsKey(course))
+                    else if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected))
                         System.out.println("You are not enrolled in this course!");
 
                     else {
-                        String cCode = course.getCourseCode();
-                        String cName = course.getCourseName();
-                        Index cIndex = this.studHandler.currentStudent.retrieveIndex(course);
+                        String cCode = courseSelected.getCourseCode();
+                        String cName = courseSelected.getCourseName();
+                        Index cIndex = this.studHandler.currentStudent.retrieveIndex(courseSelected);
                         System.out.println("You have selected to drop : ");
                         System.out.println("Course Code: " + cCode);
                         System.out.println("Course Name: " + cName);
                         System.out.println("Index Number: " + cIndex.getIndexNum());
 
-                        studHandler.dropCourse(course, cIndex);
+                        studHandler.dropCourse(courseSelected, cIndex);
                         System.out.println("You have successfully dropped " + cIndex + "!");
                     }
                     break;
@@ -140,9 +129,9 @@ public class StudentInterface implements UserInterface{
                     System.out.println("You have selected to change index ");
                     System.out.println("-----------");
                     System.out.println("Enter Course Code: ");
-                    cc = sc.nextLine();
-                    course=FileHandler.getCourse(cc);
-                    studHandler.changeIndex(course);
+                    courseCodeInput = sc.nextLine();
+                    courseSelected = studHandler.cdm.getCourse(courseCodeInput);
+                    studHandler.changeIndex(courseSelected);
                     break;
 
                 case 6:
