@@ -32,12 +32,12 @@ public class AdminInterface implements UserInterface {
             System.out.println("5. Print student list by index number");
             System.out.println("6. Print student list by course (all students registered for the selected course)");
             System.out.println("7. Log out!");
-            choice = sc.nextInt();
+            choice = Integer.valueOf(sc.nextLine());
 
             switch(choice){
                 case 1:
                     System.out.println("Enter student matriculation number");
-                    String matricnum = sc.next();
+                    String matricnum = sc.nextLine();
                     Student student=FileHandler.getStudent(matricnum);
                     System.out.println("Student " + matricnum +" current access period is from: "+ student.getAccessTime());
                     System.out.println("Enter new access start date: ");

@@ -69,7 +69,6 @@ public class Index {
         this.enrolledStudents = new ArrayList<>();
     }
 
-
     public int getIndexNum() {
         return indexNum;
     }
@@ -188,4 +187,6 @@ public class Index {
         stringBuilder.append("Number of students currently in wait list: " + waitlist.size() + "\n");
         return stringBuilder.toString();
     }
+
+
 }

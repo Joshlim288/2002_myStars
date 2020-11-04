@@ -1,5 +1,8 @@
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 /**
@@ -83,23 +86,30 @@ public class Lesson {
      * @param venue This lesson's venue.
      * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 13).
      */
-    public Lesson(typeOfLesson lessonType, String group, dayOfWeek day, LocalTime startTime, LocalTime endTime,
-                  String venue, ArrayList<Integer> teachingWeeks) {
-        this.lessonType = lessonType;
-        this.group = group;
-        this.day = day;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.venue = venue;
-        this.teachingWeeks = teachingWeeks;
+    public Lesson(String lessonType, String group, String day, String startTime, String endTime,
+                  String venue, ArrayList<Integer> teachingWeeks) throws ObjectCreationException {
+        if (validateLessonType(lessonType) && validateGroup(group) && validateDay(day) &&
+                validateAndConvertTime(startTime) != null && validateAndConvertTime(endTime) != null) {
+            this.lessonType = typeOfLesson.valueOf(lessonType);
+            this.group = group;
+            this.day = dayOfWeek.valueOf(day);
+            this.startTime = validateAndConvertTime(startTime); // kind of spaghetti here
+            this.endTime = validateAndConvertTime(endTime);
+            this.venue = venue;
+            this.teachingWeeks = teachingWeeks;
+        } else {
+            throw new ObjectCreationException();
+        }
     }
 
     public typeOfLesson getLessonType() {
         return lessonType;
     }
 
-    public void setLessonType(typeOfLesson lessonType) {
-        this.lessonType = lessonType;
+    public void setLessonType(String lessonType) {
+        if (validateLessonType(lessonType)) {
+            this.lessonType = typeOfLesson.valueOf(lessonType);
+        }
     }
 
     public String getGroup() {
@@ -107,31 +117,41 @@ public class Lesson {
     }
 
     public void setGroup(String group) {
-        this.group = group;
+        if (validateGroup(group)) {
+            this.group = group;
+        }
     }
 
     public dayOfWeek getDay() {
         return day;
     }
 
-    public void setDay(dayOfWeek day) {
-        this.day = day;
+    public void setDay(String day) {
+        if (validateDay(day)) {
+            this.day = dayOfWeek.valueOf(day);
+        }
     }
 
     public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
+    public void setStartTime(String startTime) {
+        LocalTime time = validateAndConvertTime(startTime);
+        if (time != null) {
+            this.startTime = time;
+        }
     }
 
     public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
+    public void setEndTime(String endTime) {
+        LocalTime time = validateAndConvertTime(endTime);
+        if (time != null) {
+            this.endTime = time;
+        }
     }
 
     public String getVenue() {
@@ -175,5 +195,49 @@ public class Lesson {
         });
         stringBuilder.append("\n");
         return stringBuilder.toString();
+    }
+
+    private boolean validateLessonType(String lessonType) {
+        try {
+            typeOfLesson.valueOf(lessonType);
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERROR: Lesson type can only be LEC / TUT / LAB / DES / PRJ / SEM");
+            return false;
+        }
+    }
+
+    private boolean validateGroup(String group) {
+        if (group.matches("^[0-9A-Z]+$")) {
+            return true;
+        }
+        System.out.println("ERROR: Group can only contain alphabets (in uppercase) and numbers.");
+        return false;
+    }
+
+    private boolean validateDay(String day) {
+        try {
+            dayOfWeek.valueOf(day);
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERROR: Day can only be MON / TUES / WED / THURS / FRI / SAT / SUN");
+            return false;
+        }
+    }
+
+    private LocalTime validateAndConvertTime(String time) {
+        if (time.matches("[0-9]{2}:[0-9]{2}")) { // check format
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            try {
+                LocalTime validDateTime = LocalTime.parse(time, formatter);
+                return validDateTime;
+            } catch (DateTimeParseException e) {
+                System.out.println("ERROR: Please enter a valid time.");
+                return null;
+            }
+        } else {
+            System.out.println("ERROR: Datetime must be in the format HH:MM (24H Time)");
+            return null;
+        }
     }
 }

@@ -61,13 +61,17 @@ public class Course {
      * @param academicUnits This course's allocated academic units (AUs).
      * @param school The school that teaches this course.
      */
-    public Course(String courseCode, String courseName, typeOfCourse courseType, int academicUnits, String school) {
-        this.courseCode = courseCode;
-        this.courseName = courseName;
-        this.courseType = courseType;
-        this.academicUnits = academicUnits;
-        this.school = school;
-        this.indexes = new ArrayList<>();
+    public Course(String courseCode, String courseName, String courseType, int academicUnits, String school) throws ObjectCreationException {
+        if (validateCourseCode(courseCode) && validateCourseName(courseName) && validateCourseType(courseType) && validateSchool(school)) {
+            this.courseCode = courseCode;
+            this.courseName = courseName;
+            this.courseType = typeOfCourse.valueOf(courseType);
+            this.academicUnits = academicUnits;
+            this.school = school;
+            this.indexes = new ArrayList<>();
+        } else {
+            throw new ObjectCreationException();
+        }
     }
 
     public String getCourseCode() {
@@ -75,7 +79,9 @@ public class Course {
     }
 
     public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+        if (validateCourseCode(courseCode)) {
+            this.courseCode = courseCode;
+        }
     }
 
     public String getCourseName() {
@@ -83,15 +89,19 @@ public class Course {
     }
 
     public void setCourseName(String courseName) {
-        this.courseName = courseName;
+        if (validateCourseName(courseName)) {
+            this.courseName = courseName;
+        }
     }
 
     public typeOfCourse getCourseType() {
         return courseType;
     }
 
-    public void setCourseType(typeOfCourse courseType) {
-        this.courseType = courseType;
+    public void setCourseType(String courseType) {
+        if (validateCourseType(courseType)) {
+            this.courseType = typeOfCourse.valueOf(courseType);
+        }
     }
 
     public int getAcademicUnits() {
@@ -107,7 +117,9 @@ public class Course {
     }
 
     public void setSchool(String school) {
-        this.school = school;
+        if (validateSchool(school)) {
+            this.school = school;
+        }
     }
 
     public ArrayList<Index> getIndexes() {
@@ -153,6 +165,40 @@ public class Course {
         stringBuilder.append("Academic Units: " + academicUnits + "\n");
         stringBuilder.append("School: " + school + "\n");
         return stringBuilder.toString();
+    }
+
+    private boolean validateCourseCode(String courseCode) {
+        if (courseCode.matches("[A-Z]{2}[0-9]{4}")) {
+            return true;
+        }
+        System.out.println("ERROR: Course code format is invalid.");
+        return false;
+    }
+
+    private boolean validateCourseName(String courseName) {
+        if (courseName.matches("^[ A-Za-z]+$")) {
+            return true;
+        }
+        System.out.println("ERROR: Course name can only contain alphabets and spaces.");
+        return false;
+    }
+
+    private boolean validateCourseType(String courseType) {
+        try {
+            courseType.valueOf(courseType);
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERROR: Course type can only be CORE / MPE / GER / UE.");
+            return false;
+        }
+    }
+
+    private boolean validateSchool(String school) {
+        if (school.matches("^[ A-Za-z]+$")) {
+            return true;
+        }
+        System.out.println("ERROR: School name can only contain alphabets and spaces.");
+        return false;
     }
 }
 
