@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class AdminInterface implements UserInterface {
 
     private AdminHandler adHandler;
-    Scanner sc = new Scanner(System.in);
+    Scanner sc;
 
     public AdminInterface (User currentUser, Scanner sc) {
         adHandler = new AdminHandler((Admin)currentUser);

@@ -23,9 +23,6 @@ enum typeOfGender {
 
 public class Student extends User {
 
-    /** This student's name. */
-    private String studentName;
-
     /** This student's matriculation number. It is unique. */
     private String matricNum;
 
@@ -65,21 +62,20 @@ public class Student extends User {
     /**
      * Constructor for <code>Student</code>.<br>
      * <code>accessTime</code> and <code>coursesRegistered</code> cannot be passed into the constructor and must instead be manually set.
-     * @param userID This student's user ID.
      * @param hashedPassword This student's password (hashed).
      * @param studentName This student's name.
      * @param matricNum This student's matriculation number. It is unique.
+     * @param email This student's email.
      * @param gender This student's gender (MALE / FEMALE / OTHERS) as string.
      * @param nationality This student's nationality
      * @param maxAUs This student's AU balance.
      * @param major This student's major.
      */
-    public Student(String userID, String hashedPassword, String studentName, String matricNum,
-                   String gender, String nationality, int maxAUs, String major) throws IllegalArgumentException {
-        super(userID, hashedPassword, "Student");
-        if (validateStudentName(studentName) && validateMatricNum(matricNum) && validateGender(gender) &&
+    public Student(String userID, String hashedPassword, String studentName, String matricNum, String email,
+                   String gender, String nationality, int maxAUs, String major) throws ObjectCreationException {
+        super(userID, hashedPassword, "Student", studentName, email);
+        if (validateMatricNum(matricNum) && validateGender(gender) &&
             validateNationality(nationality) && validateMaxAUs(maxAUs) && validateMajor(major)) {
-            this.studentName = studentName;
             this.matricNum = matricNum;
             this.gender = typeOfGender.valueOf(gender);
             this.nationality = nationality;
@@ -90,17 +86,8 @@ public class Student extends User {
             this.coursesRegistered = new HashMap<>();
             this.waitList = new HashMap<>();
         } else {
-            throw new IllegalArgumentException("Student object could not be created due to errors.");
+            throw new ObjectCreationException();
         }
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        if (validateStudentName(studentName))
-            this.studentName = studentName;
     }
 
     public String getMatricNum() {
@@ -262,18 +249,11 @@ public class Student extends User {
     }
 
     @Override
-    public boolean validate(String checkID, String checkpw) throws AccessDeniedException {
+    public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException {
         if(LocalDateTime.now().isBefore(this.accessTime[0]) || LocalDateTime.now().isAfter(this.accessTime[1]))
             throw new AccessDeniedException("Access Denied: Outside of allocated time period\n"+
                     "Time period allocated is from "+ this.accessTime[0] + " to " + this.accessTime[1]);
-        return super.validate(checkID, checkpw);
-    }
-
-    private boolean validateStudentName(String studentName) {
-        if (studentName.matches("^[ A-Za-z]+$"))
-            return true;
-        System.out.println("ERROR: Name can only contain alphabets and spaces.");
-        return false;
+        return super.validateLogin(checkID, checkpw);
     }
 
     /**
@@ -355,7 +335,7 @@ public class Student extends User {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(studentName + ", " + matricNum + "\n");
+        stringBuilder.append(super.getName() + ", " + matricNum + "\n");
         stringBuilder.append(nationality + ", " + gender + "\n");
         stringBuilder.append("Major: " + major + "\n");
         stringBuilder.append("AUs registered: " + currentAUs + "\n");
@@ -364,5 +344,23 @@ public class Student extends User {
             stringBuilder.append("- " + course.getCourseCode() + " (" + coursesRegistered.get(course).getIndexNum() + ")\n");
         }
         return stringBuilder.toString();
+    }
+
+    /**
+     * Displays course code, course name, course type, number of AUs, index number, and for each lesson in that index,
+     * the lesson information.
+     * KIV if to be placed here or handler
+     */
+    public void printRegisteredCoursesInfo() {
+        System.out.println("Courses Registered For " + super.getName());
+        for (Course course : coursesRegistered.keySet()) {
+            System.out.println(course.getCourseCode() + ": " + course.getCourseName());
+            System.out.println(course.getCourseType() + "\tAUs: " + course.getAcademicUnits());
+            Index index = coursesRegistered.get(course);
+            System.out.println("Index: " + index.getIndexNum());
+            for (Lesson lesson : index.getLessons()) {
+                System.out.println(lesson);
+            }
+        }
     }
 }

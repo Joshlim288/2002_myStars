@@ -32,15 +32,16 @@ public class Admin extends User {
      * @param adminName This admin's name.
      * @param faculty This admin's faculty.
      * @param staffNum This admin's unique staffNum
+     * @param email This admin's email
      */
-    public Admin(String userID, String hashedPassword, String adminName, String faculty, String staffNum) throws IllegalArgumentException {
-        super(userID, hashedPassword, "Admin");
+    public Admin(String userID, String hashedPassword, String adminName, String faculty, String staffNum, String email) throws ObjectCreationException {
+        super(userID, hashedPassword, "Admin", adminName, email);
         if (validateAdminName(adminName) && validateStaffNum(staffNum) && validateFaculty(faculty)) {
             this.adminName = adminName;
             this.faculty = faculty;
             this.staffNum = staffNum;
         } else {
-            throw new IllegalArgumentException("Admin object could not be created due to errors.");
+            throw new ObjectCreationException();
         }
     }
 

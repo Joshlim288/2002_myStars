@@ -23,7 +23,7 @@ public class AccessControl {
     public static User validate(String userId, String password) throws AccessDeniedException{
         ArrayList<User> userList = udm.getUserList();
         for (User account : userList) {
-            if (account.validate(userId, password))
+            if (account.validateLogin(userId, password))
                 return account;
         }
         throw new AccessDeniedException("Invalid UserID or password");
