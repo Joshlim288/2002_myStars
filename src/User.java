@@ -6,38 +6,37 @@
  * @version 1.0
  * @since 2020-10-17
  */
-//TODO: add validations and error messages
 public abstract class User {
 
-    /**
-     * This user's user ID.
-     */
+    /** This user's user ID. */
     private String userID;
 
-    /**
-     * This user's password (hashed).
-     */
+    /** This user's password (hashed). */
     private String hashedPassword;
 
-    /**
-     * The domain this user belongs to
-     */
+    /** The domain this user belongs to */
     private String domain;
 
-    /**
-     * The email of the user
-     */
+    /** This user's name */
+    private String name;
+
+    /** The email of the user */
     private String email;
     /**
      * Constructor for User, using userID and hashedPassword.
      * @param userID This user's user ID.
      * @param hashedPassword This user's password (hashed).
      */
-    public User(String userID, String hashedPassword, String domain, String email) {
-        this.userID = userID;
-        this.hashedPassword = hashedPassword;
-        this.domain = domain;
-        this.email = email;
+    public User(String userID, String hashedPassword, String domain, String name, String email) throws ObjectCreationException {
+        if (validateUserID(userID) && validateName(name) && validateEmail(email)) {
+            this.userID = userID;
+            this.hashedPassword = hashedPassword;
+            this.domain = domain;
+            this.name = name;
+            this.email = email;
+        } else {
+            throw new ObjectCreationException();
+        }
     }
 
     public String getUserID() {
@@ -51,7 +50,9 @@ public abstract class User {
     public String getDomain() {return domain;}
 
     public void setUserID(String userID) {
-        this.userID = userID;
+        if (validateUserID(userID)) {
+            this.userID = userID;
+        }
     }
 
     /**
@@ -77,16 +78,24 @@ public abstract class User {
     }
 
     public void setEmail(String newEmail) {
-        if (newEmail.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (validateEmail(newEmail)) {
             this.email = newEmail;
         }
     }
 
-    public boolean validate(String checkID, String checkpw) throws AccessDeniedException{
-        return checkID.equals(this.userID) && BCrypt.checkpw(checkpw, hashedPassword);
+    public String getName() {
+        return this.name;
     }
 
+    public void setName(String name) {
+        if (validateName(name)) {
+            this.name = name;
+        }
+    }
 
+    public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException{
+        return checkID.equals(this.userID) && BCrypt.checkpw(checkpw, hashedPassword);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -98,5 +107,27 @@ public abstract class User {
         }
         User other = (User) o;
         return other.getUserID().equals(userID);
+    }
+
+    private boolean validateName(String name) {
+        if (name.matches("^[ A-Za-z]+$"))
+            return true;
+        System.out.println("ERROR: Name can only contain alphabets and spaces.");
+        return false;
+    }
+
+    private boolean validateUserID(String userID) {
+        if (userID.matches("^[A-Za-z0-9]+$"))
+            return true;
+        System.out.println("ERROR: User ID can only contain alphabets and digits.");
+        return false;
+    }
+
+    private boolean validateEmail(String email) {
+        if (email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            return true;
+        }
+        System.out.println("ERROR: Wrong email format.");
+        return false;
     }
 }
