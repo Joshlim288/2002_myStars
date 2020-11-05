@@ -152,7 +152,7 @@ public class AdminInterface extends UserInterface {
         String nationality;
         String userid;
         String password;
-        String major
+        String major;
         int maxAUs;
 
         do {
