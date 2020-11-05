@@ -17,7 +17,7 @@ public class Index {
     /**
      * Uniquely identifies each index within a course.
      */
-    private int indexNum;
+    private String indexNum;
 
     /**
      * Maximum vacancy for this index.
@@ -59,7 +59,7 @@ public class Index {
      * @param indexNum Unique identifier for this index.
      * @param indexVacancy Maximum vacancies for this index.
      */
-    public Index(int indexNum, int indexVacancy) {
+    public Index(String indexNum, int indexVacancy) {
         this.indexNum = indexNum;
         this.indexVacancy = indexVacancy;
         this.currentVacancy = 0;
@@ -69,11 +69,11 @@ public class Index {
         this.enrolledStudents = new ArrayList<>();
     }
 
-    public int getIndexNum() {
+    public String getIndexNum() {
         return indexNum;
     }
 
-    public void setIndexNum(int indexNum) {
+    public void setIndexNum(String indexNum) {
         this.indexNum = indexNum;
     }
 
@@ -106,7 +106,7 @@ public class Index {
     }
 
     // TODO: Check if necessary to have set method for lessons as a whole
-    public void addLesson(typeOfLesson type, String group, dayOfWeek day, LocalTime startTime, LocalTime endTime,
+    public void addLesson(String type, String group, String day, LocalTime startTime, LocalTime endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
         Lesson newLesson = new Lesson(type, group, day, startTime, endTime, venue, teachingWeeks);
         lessons.add(newLesson);
