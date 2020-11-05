@@ -95,12 +95,12 @@ public class AdminInterface extends UserInterface {
     }
 
     private void createIndex(String courseCode) {
-        int indexNum;
+        String indexNum;
         int indexVacancies;
         int numLessons;
         do {
             System.out.print("Enter index number: ");
-            indexNum = sc.nextInt();
+            indexNum = sc.nextLine();
             System.out.print("Enter number of vacancies: ");
             indexVacancies = sc.nextInt();
         } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies));
@@ -112,7 +112,7 @@ public class AdminInterface extends UserInterface {
         }
     }
 
-    private void createLesson(String courseCode, int indexNum) {
+    private void createLesson(String courseCode, String indexNum) {
         String lessonType;
         String group;
         String day;
@@ -183,13 +183,13 @@ public class AdminInterface extends UserInterface {
 
     private void checkIndex() {
         String course;
-        int indexNum;
+        String indexNum;
         int vacancies = -1;
         do {
             System.out.println("Enter course code: ");
             course = sc.next();
             System.out.println("Enter index number: ");
-            indexNum = sc.nextInt();
+            indexNum = sc.nextLine();
             vacancies = adHandler.checkSlot(course, indexNum);
         } while(vacancies == -1);
         System.out.println("The vacancy for"+ indexNum +"is: "+ vacancies);
@@ -197,13 +197,13 @@ public class AdminInterface extends UserInterface {
 
     private void printByIndex() {
         String courseCode;
-        int indexNum;
+        String indexNum;
         ArrayList<Student> studentList;
         do {
             System.out.println("Enter course code: ");
             courseCode = sc.next();
             System.out.println("Enter index number: ");
-            indexNum = sc.nextInt();
+            indexNum = sc.nextLine();
             studentList = adHandler.getStudentListByIndex(courseCode, indexNum);
         } while(studentList == null);
 

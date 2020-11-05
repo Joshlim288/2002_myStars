@@ -44,35 +44,43 @@ public class StudentInterface extends UserInterface {
         } while (choice != 7);
     }
 
+    private ArrayList<Index> displayIndexesFromCourseInput(Course courseSelected){
+        String cCode = courseSelected.getCourseCode();
+        String cName = courseSelected.getCourseName();
+        ArrayList<Index> indexList = courseSelected.getIndexes();
+
+        System.out.println("You have selected: " + cName + ", " + cCode + ".\n" +
+                "Indexes available:" +
+                "Index Number | Remaining Vacancies" +
+                "----------------------------------");
+
+        for (Index index : indexList)
+            System.out.println(index);
+
+        return indexList;
+    }
+
     private void addCourse() {
+        String courseCodeInput;
+        Course courseSelected;
+
         System.out.println("You have selected to add Course\n" +
                 "Enter Course Code (e.g. CZ2002):\n" +
                 "Press ~ to return to main menu.");
-
-        String courseCodeInput;
-        Course courseSelected;
 
         courseCodeInput = getString("[A-Z]{2}[0-9]{4}");
         courseSelected = studHandler.cdm.getCourse(courseCodeInput);
 
         if (courseSelected != null) {
-            String cCode = courseSelected.getCourseCode();
-            String cName = courseSelected.getCourseName();
-            ArrayList<Index> indexList = courseSelected.getIndexes();
 
-            System.out.println("You have selected: " + cName + ", " + cCode + ".\n" +
-                    "Indexes available:" +
-                    "Index Number | Remaining Vacancies" +
-                    "----------------------------------");
-
-            for (Index index : indexList)
-                System.out.println(index);
+            // Takes in course selected and output the current indexes and vacancies
+            ArrayList<Index> indexList = displayIndexesFromCourseInput(courseSelected);
 
             System.out.println("Enter the index you would like to enroll in:" +
                     "You will be added to wait-list if you choose an index with no vacancies.");
 
             //TODO: change index to string?
-            Index index = courseSelected.getIndex(sc.nextInt());
+            Index index = courseSelected.getIndex(sc.nextLine());
 
             if (index != null) {
                 if (indexList.contains(index)) {
@@ -142,34 +150,30 @@ public class StudentInterface extends UserInterface {
         String courseCodeInput;
         Course courseSelected;
 
-        System.out.println("You have selected to change Index\n" +
-                "-------------------------------\n" +
-                "Enter Course Code (e.g. CZ2002):");
-        courseCodeInput = sc.nextLine();
+        System.out.println("You have selected to add Course\n" +
+                "Enter Course Code (e.g. CZ2002):\n" +
+                "Press ~ to return to main menu.");
+
+        courseCodeInput = getString("[A-Z]{2}[0-9]{4}");
         courseSelected = studHandler.cdm.getCourse(courseCodeInput);
 
         if (courseSelected != null) {
-            String cCode = courseSelected.getCourseCode();
-            String cName = courseSelected.getCourseName();
-            ArrayList<Index> indexList = courseSelected.getIndexes();
+
+            // Takes in course selected and output the current indexes and vacancies
+            ArrayList<Index> indexList = displayIndexesFromCourseInput(courseSelected);
             Index cIndex = this.studHandler.currentStudent.retrieveIndex(courseSelected);
 
-            System.out.println("You have selected: " + cName + ", " + cCode + ".\n" +
-                    "Indexes available:" +
-                    "Index Number | Remaining Vacancies" +
-                    "----------------------------------");
-
-            for (Index index : indexList)
-                System.out.println(index);
-
-            System.out.println("Enter the index you would like to change to:" +
+            System.out.println("Enter the index you would like to enroll in:" +
                     "You will be added to wait-list if you choose an index with no vacancies.");
-            Index index = courseSelected.getIndex(sc.nextInt());
+
+            //TODO: change index to string?
+            Index index = courseSelected.getIndex(sc.nextLine());
 
             if (index != null) {
                 if (indexList.contains(index)) {
                     if (!index.isAtMaxCapacity()) {
                         boolean success = studHandler.addCourse(courseSelected, index);
+
                         if (success) {
                             studHandler.dropCourse(courseSelected, cIndex);
                             System.out.println("You have successfully dropped " + cIndex + "!");
@@ -179,9 +183,7 @@ public class StudentInterface extends UserInterface {
                             System.out.println("There is a clash, you cannot be registered for" +
                                     index.getIndexNum() + "!");
                     } else {
-                        System.out.println("Adding to wait-list...");
-                        studHandler.updateWaitList(index);
-                        System.out.println("You have been added to wait-list for Index " + index.getIndexNum());
+                        System.out.println("No");
                     }
                     System.out.println("Returning to main menu...");
                 } else

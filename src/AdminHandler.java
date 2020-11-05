@@ -46,7 +46,7 @@ public class AdminHandler{
         }
     }
 
-    public boolean addIndex(String courseCode, int indexNum, int indexVacancies) {
+    public boolean addIndex(String courseCode, String indexNum, int indexVacancies) {
         try {
             cdm.getCourse(courseCode).addIndex(indexNum, indexVacancies);
             return true;
@@ -57,7 +57,7 @@ public class AdminHandler{
         }
     }
 
-    public boolean addLesson(String courseCode, int indexNum, String lessonType, String group, String day,
+    public boolean addLesson(String courseCode, String indexNum, String lessonType, String group, String day,
                           LocalTime startTime, LocalTime endTime, String venue, ArrayList<Integer>teachingWeeks) {
         try {
             cdm.getCourse(courseCode).getIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue, teachingWeeks);
@@ -74,7 +74,7 @@ public class AdminHandler{
      * @param  course, indexnum
      * @return int number of vacancys
      */
-    public int checkSlot(String course, int indexnum){
+    public int checkSlot(String course, String indexnum){
         Index index = cdm.getCourse(course).getIndex(indexnum);
         if (index == null) {
             System.out.println("Index not found");
@@ -87,7 +87,7 @@ public class AdminHandler{
      * Prints student list in the index specified by the admin
      * @param indexNum
      */
-    public ArrayList<Student> getStudentListByIndex(String courseCode, int indexNum){         /*getStudentList()*/
+    public ArrayList<Student> getStudentListByIndex(String courseCode, String indexNum){         /*getStudentList()*/
         try {
             Course foundCourse = cdm.getCourse(courseCode);
             Index foundIndex = foundCourse.getIndex(indexNum);

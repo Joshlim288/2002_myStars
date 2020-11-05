@@ -130,7 +130,7 @@ public class Course {
         this.indexes = indexes;
     }
 
-    public void addIndex(int indexNum, int indexVacancy) {
+    public void addIndex(String indexNum, int indexVacancy) {
         Index newIndex = new Index(indexNum, indexVacancy);
         indexes.add(newIndex);
     }
@@ -147,7 +147,7 @@ public class Course {
         return other.getCourseCode() == courseCode;
     }
 
-    public Index getIndex(int indexCode) {
+    public Index getIndex(String indexCode) {
         for (Index index : indexes)
         {
             if (index.getIndexNum()==(indexCode))
