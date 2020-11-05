@@ -27,16 +27,12 @@ public abstract class User {
      * @param userID This user's user ID.
      * @param hashedPassword This user's password (hashed).
      */
-    public User(String userID, String hashedPassword, String domain, String name, String email) throws ObjectCreationException {
-        if (validateUserID(userID) && validateName(name) && validateEmail(email)) {
-            this.userID = userID;
-            this.hashedPassword = hashedPassword;
-            this.domain = domain;
-            this.name = name;
-            this.email = email;
-        } else {
-            throw new ObjectCreationException();
-        }
+    public User(String userID, String hashedPassword, String domain, String name, String email) {
+        this.userID = userID;
+        this.hashedPassword = hashedPassword;
+        this.domain = domain;
+        this.name = name;
+        this.email = email;
     }
 
     public String getUserID() {
@@ -50,9 +46,7 @@ public abstract class User {
     public String getDomain() {return domain;}
 
     public void setUserID(String userID) {
-        if (validateUserID(userID)) {
-            this.userID = userID;
-        }
+        this.userID = userID;
     }
 
     /**
@@ -78,9 +72,7 @@ public abstract class User {
     }
 
     public void setEmail(String newEmail) {
-        if (validateEmail(newEmail)) {
-            this.email = newEmail;
-        }
+        this.email = newEmail;
     }
 
     public String getName() {
@@ -88,9 +80,7 @@ public abstract class User {
     }
 
     public void setName(String name) {
-        if (validateName(name)) {
-            this.name = name;
-        }
+        this.name = name;
     }
 
     public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException{
@@ -107,27 +97,5 @@ public abstract class User {
         }
         User other = (User) o;
         return other.getUserID().equals(userID);
-    }
-
-    private boolean validateName(String name) {
-        if (name.matches("^[ A-Za-z]+$"))
-            return true;
-        System.out.println("ERROR: Name can only contain alphabets and spaces.");
-        return false;
-    }
-
-    private boolean validateUserID(String userID) {
-        if (userID.matches("^[A-Za-z0-9]+$"))
-            return true;
-        System.out.println("ERROR: User ID can only contain alphabets and digits.");
-        return false;
-    }
-
-    private boolean validateEmail(String email) {
-        if (email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            return true;
-        }
-        System.out.println("ERROR: Wrong email format.");
-        return false;
     }
 }

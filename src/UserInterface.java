@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -11,8 +10,13 @@ import java.util.Scanner;
  */
 public abstract class UserInterface {
     protected Scanner sc;
+    protected UserValidator userValidator;
+    protected CourseValidator courseValidator;
+
     public UserInterface(Scanner sc){
         this.sc = sc;
+        userValidator = new UserValidator();
+        courseValidator = new CourseValidator();
     }
 
     public abstract void start();

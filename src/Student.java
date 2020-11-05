@@ -1,8 +1,4 @@
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -72,22 +68,17 @@ public class Student extends User {
      * @param major This student's major.
      */
     public Student(String userID, String hashedPassword, String studentName, String matricNum, String email,
-                   String gender, String nationality, String major, int maxAUs) throws ObjectCreationException {
+                   String gender, String nationality, String major, int maxAUs) {
         super(userID, hashedPassword, "Student", studentName, email);
-        if (validateMatricNum(matricNum) && validateGender(gender) &&
-            validateNationality(nationality) && validateMaxAUs(maxAUs) && validateMajor(major)) {
-            this.matricNum = matricNum;
-            this.gender = typeOfGender.valueOf(gender);
-            this.nationality = nationality;
-            this.currentAUs = 0;
-            this.maxAUs = maxAUs;
-            this.major = major;
-            this.accessTime = new LocalDateTime[2];
-            this.coursesRegistered = new HashMap<>();
-            this.waitList = new HashMap<>();
-        } else {
-            throw new ObjectCreationException();
-        }
+        this.matricNum = matricNum;
+        this.gender = typeOfGender.valueOf(gender);
+        this.nationality = nationality;
+        this.currentAUs = 0;
+        this.maxAUs = maxAUs;
+        this.major = major;
+        this.accessTime = new LocalDateTime[2];
+        this.coursesRegistered = new HashMap<>();
+        this.waitList = new HashMap<>();
     }
 
     public String getMatricNum() {
@@ -95,8 +86,8 @@ public class Student extends User {
     }
 
     public void setMatricNum(String matricNum) {
-        if (validateMatricNum(matricNum))
-            this.matricNum = matricNum;
+        this.matricNum = matricNum;
+        System.out.println("SUCCESS: New matriculation number saved.");
     }
 
     public typeOfGender getGender() {
@@ -104,8 +95,8 @@ public class Student extends User {
     }
 
     public void setGender(String gender) {
-        if (validateGender(gender))
-            this.gender = typeOfGender.valueOf(gender);
+        this.gender = typeOfGender.valueOf(gender);
+        System.out.println("SUCCESS: New gender type saved.");
     }
 
     public String getNationality() {
@@ -113,8 +104,8 @@ public class Student extends User {
     }
 
     public void setNationality(String nationality) {
-        if (validateNationality(nationality))
-            this.nationality = nationality;
+        this.nationality = nationality;
+        System.out.println("SUCCESS: New nationality saved.");
     }
 
     public int getMaxAUs() {
@@ -122,8 +113,7 @@ public class Student extends User {
     }
 
     public void setMaxAUs(int maxAUs) {
-        if (validateMaxAUs(maxAUs))
-            this.maxAUs = maxAUs;
+        this.maxAUs = maxAUs;
     }
 
     public int getCurrentAUs() { return currentAUs; }
@@ -142,8 +132,7 @@ public class Student extends User {
     public String getMajor() { return major; }
 
     public void setMajor(String major) {
-        if (validateMajor(major))
-            this.major = major;
+        this.major = major;
     }
 
     public LocalDateTime[] getAccessTime() {
@@ -152,16 +141,12 @@ public class Student extends User {
 
     /**
      * Sets the access time for this student.
-     * @param start the starting time as String for accessing STARS for this student
-     * @param end the ending time as String for accessing STARS for this student
+     * @param start the starting time as LocalDateTime for accessing STARS for this student
+     * @param end the ending time as LocalDateTime for accessing STARS for this student
      */
-    public void setAccessTime(String start, String end) {
-        LocalDateTime startTime = validateAndConvertTime(start);
-        LocalDateTime endTime = validateAndConvertTime(end);
-        if (startTime != null && endTime != null) {
-            accessTime[0] = startTime;
-            accessTime[1] = endTime;
-        }
+    public void setAccessTime(LocalDateTime start, LocalDateTime end) {
+        accessTime[0] = start;
+        accessTime[1] = end;
     }
 
     public HashMap<Course, Index> getCoursesRegistered() {
@@ -254,82 +239,6 @@ public class Student extends User {
             throw new AccessDeniedException("Access Denied: Outside of allocated time period\n"+
                     "Time period allocated is from "+ this.accessTime[0] + " to " + this.accessTime[1]);
         return super.validateLogin(checkID, checkpw);
-    }
-
-    /**
-     * Validates matriculation number. Assumes format as a string of 9 characters where:
-     * <ul>
-     *     <li>First and last characters are any letters from A-Z (capital).</li>
-     *     <li>Middle 7 characters can be any combination of digits from 0-9.</li>
-     * </ul>
-     * @param matricNum
-     * @return
-     */
-    private boolean validateMatricNum(String matricNum) {
-        if (matricNum.matches("^[A-Z][0-9]{7}[A-Z]$")) {
-            return true;
-        }
-        System.out.println("ERROR: Invalid matriculation number format.");
-        return false;
-    }
-
-    private boolean validateGender(String gender) {
-        try {
-            typeOfGender.valueOf(gender);
-            return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("ERROR: Gender can only be MALE / FEMALE / OTHER.");
-            return false;
-        }
-    }
-
-    private boolean validateNationality(String nationality) {
-        if (nationality.matches("^[ A-Za-z]+$"))
-            return true;
-        System.out.println("ERROR: Nationality can only contain alphabets and spaces.");
-        return false;
-    }
-
-    /**
-     * Validates a string representing a datetime is in the correct format (YYYY-MM-DD HH:MM:SS, 24H clock)
-     * @param dateTime the string representing a datetime
-     * @return the datetime as a LocalDateTime object, null if the string is invalid
-     */
-    private LocalDateTime validateAndConvertTime(String dateTime) {
-        if (dateTime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")) { // check format
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            try {
-                LocalDateTime validDateTime = LocalDateTime.parse(dateTime, formatter);
-                return validDateTime;
-            } catch (DateTimeParseException e) {
-                System.out.println("ERROR: Please enter a valid date and time.");
-                return null;
-            }
-        } else {
-            System.out.println("ERROR: Datetime must be in the format YYYY-MM-DD HH:MM:SS (24H Time)");
-            return null;
-        }
-    }
-
-    /**
-     * Assumes new maxAUs are already in int type.
-     * <br> Checks if maxAUs is not fewer than currentAUs, and maxAUs cannot be less than 1.
-     * @param maxAUs
-     * @return
-     */
-    private boolean validateMaxAUs(int maxAUs) {
-        if (maxAUs >= currentAUs && maxAUs > 0) {
-            return true;
-        }
-        System.out.println("ERRORS: Max AUs cannot be fewer than current AUs.");
-        return false;
-    }
-
-    private boolean validateMajor(String major) {
-        if (major.matches("^[ A-Za-z]+$"))
-            return true;
-        System.out.println("ERROR: Major can only contain alphabets and spaces.");
-        return false;
     }
 
     @Override
