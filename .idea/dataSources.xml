@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\Josh\Desktop\2002_myStars\diagrams\ClassDiagram.vpp</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ClassDiagram [2]" uuid="c20a6c27-e155-4052-9f36-36e883e25e0f">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\Joshua\OneDrive - Nanyang Technological University\Y2S1\CZ2001 Algorithm\Lab\2002_myStars\diagrams\ClassDiagram.vpp</jdbc-url>
+    </data-source>
   </component>
 </project>
