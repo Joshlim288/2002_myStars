@@ -97,7 +97,7 @@ public class StudentHandler {
     {
             if(!hasClash(index, currentStudent.getCoursesRegistered()) || !hasClash(index, currentStudent.getWaitList())) {
                 index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-                //TODO: Fix updating current AUs
+                //TODO: Fix updating current AUs and checking max AU overshot?
                 //currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());
                 return true;
             }
@@ -142,88 +142,6 @@ public class StudentHandler {
         return stringBuilder.toString();
     }
 
-    //Retired for now unless method is needed in the future
-    //public int checkVacancies(String course, int index)
-    //{
-        //return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
-
-    //}
-
-//    public void changeIndex(Course course)
-//    {
-//        if(course==null)
-//        {
-//            System.out.println("Course does not exist!");
-//        }
-////        else if()
-////        {
-////            System.out.println("You are not enrolled in this course!");
-////        }
-//        else
-//        {
-//            Scanner sc = new Scanner(System.in);
-//
-//            String cCode = course.getCourseCode();
-//            String cName = course.getCourseName();
-//            Index cIndex= this.currentStudent.retrieveIndex(course);
-//            System.out.println("You have selected to swap index for the following : ");
-//            System.out.println("Course Code: " + cCode);
-//            System.out.println("Course Name: " + cName);
-//            System.out.println("Current index Number: " + cIndex.getIndexNum()+"\n");
-//
-//            System.out.println("Course Index available: ");
-//            // this might supposed to be a for loop to print each indexes
-//            System.out.println(course.getIndexes());
-//
-//            System.out.println("Select an Index to swap: ");
-//            int input = sc.nextInt();
-//
-//            // CHECK FOR TIMETABLE CLASHES //
-//
-//            System.out.println("Checking index for vacancy...");
-//            Index nIndex = course.searchIndex(input);
-//            if (course.getIndexes().contains(nIndex))
-//            {
-//                if (!cIndex.isAtMaxCapacity())
-//                {
-//                    // There might be more things required to be changed when changing index
-//                    System.out.println("Index available ");
-//
-//                    nIndex.addToEnrolledStudents(nIndex.getEnrolledStudents(), this.currentStudent);
-//                    System.out.println("You have successfully registered for "+input+"!");
-//
-//                    cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
-//                    System.out.println("You have successfully dropped "+input+"!");
-//                }
-//                else
-//                {
-//                    System.out.println("No vacancy for selected index");
-//                    Scanner scanner = new Scanner(System.in);
-//                    char ch = scanner. next(). charAt(0);
-//                    System.out.println("Do you still want to swap index? (y/n) You will be added to a waiting list if yes");
-//                    if(ch=='y')
-//                    {
-//                        System.out.println("You have been added to waiting list for "+ nIndex);
-//                        nIndex.addToWaitlist(nIndex.getWaitlist(), this.currentStudent);
-//                        // there should be more stuffs happening when added to wait list
-//                    }
-//                    else if(ch=='n')
-//                    {
-//                        System.out.println("Returning to main menu..");
-//                    }
-//                    else
-//                    {
-//                        System.out.println("You have entered an invalid choice. Returning to main menu..");
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                System.out.println("Index does not exist!");
-//            }
-//
-//        }
-//    }
 
     public void swapIndex(Course course)
     {

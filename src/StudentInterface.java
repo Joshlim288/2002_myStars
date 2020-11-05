@@ -105,15 +105,10 @@ public class StudentInterface extends UserInterface {
     };
 
     private void dropCourse() {
-
-        String courseCodeInput;
-        Course courseSelected;
-
-        System.out.println("You have selected to drop Course");
-        System.out.println("-----------");
-        System.out.println("Enter Course Code: ");
-        courseCodeInput = sc.nextLine();
-        courseSelected = studHandler.cdm.getCourse(courseCodeInput);
+        System.out.println("You have selected to drop Course\n" +
+                          "---------------------------------" +
+                          "Enter Course Code: ");
+        Course courseSelected = studHandler.cdm.getCourse(sc.nextLine());
         if (courseSelected == null)
             System.out.println("Course does not exist!");
 
@@ -121,13 +116,11 @@ public class StudentInterface extends UserInterface {
             System.out.println("You are not enrolled in this course!");
 
         else {
-            String cCode = courseSelected.getCourseCode();
-            String cName = courseSelected.getCourseName();
             Index cIndex = this.studHandler.currentStudent.retrieveIndex(courseSelected);
-            System.out.println("You have selected to drop : ");
-            System.out.println("Course Code: " + cCode);
-            System.out.println("Course Name: " + cName);
-            System.out.println("Index Number: " + cIndex.getIndexNum());
+            System.out.println("You have selected to drop : \n" +
+                               "Course Code: " + courseSelected.getCourseCode() + "\n" +
+                               "Course Name: " + courseSelected.getCourseName() + "\n" +
+                               "Index Number: " + cIndex.getIndexNum());
 
             studHandler.dropCourse(courseSelected, cIndex);
             System.out.println("You have successfully dropped " + cIndex + "!");
@@ -198,6 +191,7 @@ public class StudentInterface extends UserInterface {
 
         String courseCodeInput;
         Course courseSelected;
+        boolean validUser = false;
 
         System.out.println("You have selected to swap Indexes");
         System.out.println("-----------");
@@ -216,19 +210,21 @@ public class StudentInterface extends UserInterface {
             System.out.println("Course Name: " + cName);
             System.out.println("Current index Number: " + cIndex.getIndexNum() + "\n");
 
-//                      Request for student2's particulars i.e ( full name / matric no. / password )
-            System.out.println("Please enter the student's matriculation number whom you would like to swap with:");
-            String studName = sc.nextLine();
+            System.out.println("Enter the student's particulars:");
 
-//                        Check if student2's info is correct and exist in database
-//                        Check if both students have indicated " willing to swap "  for the indexes
+            User targetUser;
+            // Retrieve and validate other student's details
+            targetUser = MyStars.login(sc);
 
-//                        if(index==null)
-//                            System.out.println("Index does not exist!");
-//                        else
-//                                System.out.println("You did not choose a valid index!");
+            Student targetStudent = studHandler.sdm.getStudent(((Student)targetUser).getMatricNum());
 
-        }
+            studHandler.currentStudent.removeCourse();
+            studHandler.currentStudent.addCourse();
+            targetStudent.removeCourse();
+            targetStudent.addCourse();
+
+            System.out.println("Swap completed.");
+            }
     };
 
     private void logout(){
