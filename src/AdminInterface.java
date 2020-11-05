@@ -47,9 +47,10 @@ public class AdminInterface extends UserInterface {
 
     private void editAccessPeriod() {
         LocalDateTime[] accessTime = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String newStart;
         String newEnd;
-        String matricNum;
+        String matricNum = null;
         while (accessTime == null){
             System.out.println("Enter student matriculation number");
             matricNum = sc.nextLine();
@@ -57,11 +58,11 @@ public class AdminInterface extends UserInterface {
         }
 
         do {
-            System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0], accessTime[1]);
-            System.out.println("Enter new access start date: ");
-            newStart = sc.next();
-            System.out.println("Enter new access end date: ");
-            newEnd = sc.next();
+            System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(formatter), accessTime[1].format(formatter));
+            System.out.print("Enter new access start date: ");
+            newStart = sc.nextLine();
+            System.out.print("Enter new access end date: ");
+            newEnd = sc.nextLine();
         } while(!adHandler.editAccessPeriod(matricNum, newStart, newEnd));
         System.out.println("Access time successfully changed");
     }
@@ -152,7 +153,7 @@ public class AdminInterface extends UserInterface {
         String nationality;
         String userid;
         String password;
-        String major
+        String major;
         int maxAUs;
 
         do {
