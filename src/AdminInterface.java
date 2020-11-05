@@ -30,7 +30,8 @@ public class AdminInterface extends UserInterface {
             System.out.println("5. Print student list by index number");
             System.out.println("6. Print student list by course (all students registered for the selected course)");
             System.out.println("7. Update a course");
-            System.out.println("8. Log out");
+            System.out.println("8. Update a student");
+            System.out.println("9. Log out");
             choice = Integer.parseInt(sc.nextLine());
 
             switch(choice){
@@ -41,9 +42,10 @@ public class AdminInterface extends UserInterface {
                 case (5)-> printByIndex();
                 case (6)-> printByCourse();
                 case (7)-> updateCourse();
-                case (8)-> logout();
+                case (8)-> updateStudent();
+                case (9)-> logout();
             }
-        } while (choice != 8);
+        } while (choice != 9);
     }
 
     private void editAccessPeriod() {
@@ -92,6 +94,8 @@ public class AdminInterface extends UserInterface {
             System.out.printf("Creating Index %d:\n", i+1);
             createIndex(courseCode);
         }
+        adHandler.finalizeCourse();
+        System.out.println("Course successfully added");
     }
 
     private void createIndex(String courseCode) {
@@ -226,8 +230,242 @@ public class AdminInterface extends UserInterface {
         }
     }
 
-    private void updateCourse(Course courseCode) {
+    private void updateCourse() {
+        String courseCode;
+        String changedValue;
+        int choice;
+        do {
+            System.out.println("Enter course to edit:");
+            courseCode = sc.nextLine();
+        } while (!adHandler.checkCourseExists(courseCode));
 
+        do {
+            System.out.println("Choose attribute to edit:");
+            System.out.println("1: courseCode\n" +
+                    "2: courseName\n" +
+                    "3: courseType\n" +
+                    "4: academicUnits\n" +
+                    "5: school\n" +
+                    "6: indexes\n" +
+                    "7: exit");
+            choice = Integer.parseInt(sc.nextLine());
+            switch(choice){
+                // waiting for input validation to change these cases
+                case(1)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(2)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(3)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(4)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(5)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(6)-> editIndex(courseCode);
+
+            }
+        } while (choice != 7);
+    }
+
+    private void editIndex(String courseCode) {
+        String changedValue;
+        String indexNum;
+        int choice;
+        System.out.println("Indexes:");
+        for (Index idx: adHandler.getTempIndexes()) {
+            System.out.println(idx);
+        }
+        do {
+            System.out.println("Enter index to edit:");
+            indexNum = sc.nextLine();
+        } while(!adHandler.checkIndexExists(indexNum));
+
+        do {
+            System.out.println("Choose attribute to edit:");
+            System.out.println("1: indexNum\n" +
+                    "2: indexVacancy\n" +
+                    "3: lessons\n" +
+                    "4: exit");
+            choice = Integer.parseInt(sc.nextLine());
+            switch(choice){
+                // waiting for input validation to change these cases
+                case(1)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(2)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(3)-> editLesson(courseCode, indexNum);
+            }
+        } while (choice != 4);
+    }
+
+    private void editLesson(String courseCode, String indexNum) {
+        String changedValue;
+        String lessonGroup;
+        int choice;
+        System.out.println("Lessons:");
+        for (Index idx: adHandler.getTempIndexes()) {
+            for (Lesson lsn: idx.getLessons()){
+                System.out.println(lsn);
+            }
+        }
+        do {
+            System.out.println("Enter lesson group to edit:");
+            lessonGroup = sc.nextLine();
+        } while(!adHandler.checkLessonExists(courseCode, indexNum, lessonGroup));
+
+        do {
+            System.out.println("Choose attribute to edit:");
+            System.out.println("1: lessonType\n" +
+                    "2: group\n" +
+                    "3: day\n" +
+                    "4: startTime\n" +
+                    "5: endTime\n" +
+                    "6: venue\n" +
+                    "7: exit");
+            choice = Integer.parseInt(sc.nextLine());
+            switch(choice){
+                // waiting for input validation to change these cases
+                case(1)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(2)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(3)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(4)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(5)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+                case(6)-> {
+                    do {
+                        changedValue = sc.nextLine();
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                    System.out.println("Successfully changed");
+                }
+            }
+        } while (choice != 7);
+    }
+
+    /**
+     * todo bring in update access time
+     */
+    private void editStudent(){
+        String matric;
+        String updatedValue;
+        int choice;
+        do {
+            System.out.println("Enter Matriculation Number of Student: ");
+            matric = sc.nextLine();
+        } while(!adHandler.checkStudentExists(matric));
+
+        do {
+            System.out.println("Choose attribute to edit: ");
+            System.out.println(" 1: userID\n" +
+                    " 2: Password\n" +
+                    " 3: Name\n" +
+                    " 4: matricNum\n" +
+                    " 5: email\n" +
+                    " 6: gender\n" +
+                    " 7: nationality\n" +
+                    " 8: major\n" +
+                    " 9: maxAUs\n" +
+                    "10: exit");
+            choice = Integer.parseInt(sc.nextLine());
+            switch(choice){
+                case(1)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(2)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(3)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(4)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(5)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(6)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(7)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(8)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+                case(9)-> {
+                    do {
+                        updatedValue = sc.nextLine();
+                    } while (!adHandler.editStudent(matric, updatedValue, choice));
+                }
+            }
+        } while (choice != 10);
     }
 
     private void logout() {

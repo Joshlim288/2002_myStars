@@ -139,7 +139,7 @@ public class Course {
     public Index getIndex(String indexCode) {
         for (Index index : indexes)
         {
-            if (index.getIndexNum()==(indexCode))
+            if (index.getIndexNum().equals(indexCode))
             {
                 return index;
             }
