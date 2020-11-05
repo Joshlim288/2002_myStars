@@ -25,10 +25,11 @@ public class AdminInterface extends UserInterface {
             System.out.println("Choose an action: ");
             System.out.println("1. Edit student access period");
             System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
-            System.out.println("3. Add/Update a course (course code, school, its index numbers and vacancy)");
+            System.out.println("3. Add a course (course code, school, its index numbers and vacancy)");
             System.out.println("4. Check available slot for an index number (vacancy in a class)");
             System.out.println("5. Print student list by index number");
             System.out.println("6. Print student list by course (all students registered for the selected course)");
+            System.out.println("7. Update a course");
             System.out.println("7. Log out");
             choice = Integer.parseInt(sc.nextLine());
 

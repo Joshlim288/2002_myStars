@@ -1,3 +1,8 @@
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -14,13 +19,14 @@ public abstract class UserInterface {
 
     /**
      * Gets input from user that matches the given regex
+     * @param message Prompt to user to enter input, specify what you are looking for
      * @param regex Expression to be matched to
      * @return String that matches regex expression
      * @throws EscapeException Used to abort function and return to main menu
      */
-    public String getString(String regex) throws EscapeException{
+    public String getString(String message, String regex) throws EscapeException{
         String input;
-        System.out.println("Enter string: (\"~\" to abort)");
+        System.out.println(message);
         while (true) {
             input = sc.nextLine();
             if (input.equals("~")) {
@@ -39,13 +45,7 @@ public abstract class UserInterface {
      * @throws EscapeException Used to abort function and return to main menu
      */
     public String getString() throws EscapeException{
-        String input;
-        System.out.println("Enter string: (\"~\" to abort)");
-        input = sc.nextLine();
-        if (input.equals("~")) {
-            throw new EscapeException("Exiting to main menu");
-        }
-        return input;
+        return getString("Enter a string: ", "");
     }
 
     /**
@@ -58,12 +58,39 @@ public abstract class UserInterface {
     public int getInt(int startInt, int endInt) throws EscapeException {
         int input;
         while(true) {
-            System.out.println("Enter number: (\"~\" to abort)");
-            input = Integer.parseInt(getString("^[0-9]*$"));
+            input = Integer.parseInt(getString("Enter number: ", "^[0-9]*$"));
             if (input < startInt && input > endInt) {
                 return input;
             }
-            System.out.println("Number out of range, try again or enter \"~\" to exit");
+            System.out.printf("Number must be between %d and %d, try again or enter \"~\" to exit\n", startInt, endInt);
+        }
+    }
+
+    public LocalDateTime getLocalDateTime() throws EscapeException{
+        String input;
+        while(true) {
+            input = sc.nextLine();
+            if (input.equals("~")) throw new EscapeException("Exiting to main menu");
+            try {
+                return LocalDateTime.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            } catch (DateTimeParseException e) {
+                System.out.println("datetime must be entered in format yyyy-MM-dd HH:mm, " +
+                        "try again or enter \"~\" to exit\n");
+            }
+        }
+    }
+
+    public LocalTime getLocalTime() throws EscapeException{
+        String input;
+        while(true) {
+            input = sc.nextLine();
+            if (input.equals("~")) throw new EscapeException("Exiting to main menu");
+            try {
+                return LocalTime.parse(input, DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (DateTimeParseException e) {
+                System.out.println("datetime must be entered in format HH:mm, " +
+                        "try again or enter \"~\" to exit\n");
+            }
         }
     }
 }
