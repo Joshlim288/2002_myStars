@@ -25,11 +25,12 @@ public class AdminInterface extends UserInterface {
             System.out.println("Choose an action: ");
             System.out.println("1. Edit student access period");
             System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
-            System.out.println("3. Add/Update a course (course code, school, its index numbers and vacancy)");
+            System.out.println("3. Add a course (course code, school, its index numbers and vacancy)");
             System.out.println("4. Check available slot for an index number (vacancy in a class)");
             System.out.println("5. Print student list by index number");
             System.out.println("6. Print student list by course (all students registered for the selected course)");
-            System.out.println("7. Log out");
+            System.out.println("7. Update a course");
+            System.out.println("8. Log out");
             choice = Integer.parseInt(sc.nextLine());
 
             switch(choice){
@@ -39,9 +40,10 @@ public class AdminInterface extends UserInterface {
                 case (4)-> checkIndex();
                 case (5)-> printByIndex();
                 case (6)-> printByCourse();
-                case (7)-> logout();
+                case (7)-> updateCourse();
+                case (8)-> logout();
             }
-        } while (choice != 7);
+        } while (choice != 8);
     }
 
     private void editAccessPeriod() {
@@ -224,11 +226,17 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    private void updateCourse(courseCode) {
+
+    }
+
     private void logout() {
         System.out.println("Saving data...");
         adHandler.close();
         System.out.println("Thank you for using MyStars!");
         System.out.println("Goodbye!");
     }
+
+
 
 }
