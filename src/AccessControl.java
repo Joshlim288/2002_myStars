@@ -7,7 +7,11 @@ import java.util.ArrayList;
  * @since 2020-10-24
  */
 public class AccessControl {
-
+    private static UserDataManager udm;
+    public static void initialize() {
+        udm = new UserDataManager();
+        udm.load();
+    }
     /**
      * Used to validate user credentials.
      * Retrieves the list of users for the system, and checks if the given credentials match any of them.
@@ -17,9 +21,9 @@ public class AccessControl {
      * @return a User object if a matching account is found, null if not
      */
     public static User validate(String userId, String password) throws AccessDeniedException{
-        ArrayList<User> userList = FileHandler.getUserList();
+        ArrayList<User> userList = udm.getUserList();
         for (User account : userList) {
-            if (account.validate(userId, password))
+            if (account.validateLogin(userId, password))
                 return account;
         }
         throw new AccessDeniedException("Invalid UserID or password");

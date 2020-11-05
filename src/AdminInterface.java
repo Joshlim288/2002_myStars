@@ -1,15 +1,16 @@
 import java.util.Scanner;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class AdminInterface {
+public class AdminInterface extends UserInterface {
 
-    private AdminHandler adHandler;
-    Scanner sc = new Scanner(System.in);
+    private final AdminHandler adHandler;
+
     public AdminInterface (User currentUser, Scanner sc) {
+        super(sc);
         adHandler = new AdminHandler((Admin)currentUser);
-        this.sc = sc;
     }
 
     /**
@@ -17,122 +18,217 @@ public class AdminInterface {
      */
     public void start() {
         int choice;
+
         do{
-            System.out.println("Welcome Admin ");
-            System.out.println("Enter your choice: ");
+            System.out.println("Welcome, Admin " + adHandler.currentAdmin.getAdminName()
+                    + ", " + adHandler.currentAdmin.getStaffNum() + "!");
+            System.out.println("Choose an action: ");
             System.out.println("1. Edit student access period");
             System.out.println("2. Add a student (name, matric number, gender, nationality, etc)");
             System.out.println("3. Add/Update a course (course code, school, its index numbers and vacancy)");
             System.out.println("4. Check available slot for an index number (vacancy in a class)");
             System.out.println("5. Print student list by index number");
             System.out.println("6. Print student list by course (all students registered for the selected course)");
-            System.out.println("7. Back to main menu");
-            choice = sc.nextInt();
+            System.out.println("7. Log out");
+            choice = Integer.parseInt(sc.nextLine());
+
             switch(choice){
-                case 1:
-                    System.out.println("Enter student matriculation number");
-                    String matricnum = sc.next();
-                    Student student=FileHandler.getStudent(matricnum);
-                    System.out.println("Student " + matricnum +" current access period is from: "+ student.getAccessTime());
-                    System.out.println("Enter new access start date: ");
-                    String strnewstartdate = sc.next();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM d, yyyy hh:mm:ss a");
-                    LocalDateTime newstartdate = LocalDateTime.parse(strnewstartdate, formatter);
-                    System.out.println("Enter new access end date: ");
-                    String strnewenddate = sc.next();
-                    LocalDateTime newenddate = LocalDateTime.parse(strnewenddate, formatter);
-                    adHandler.editAccessPeriod(matricnum,newstartdate,newenddate);
-                    System.out.println("Success! Student "+ matricnum +" new access period is from" + student.getAccessTime());
-                    break;
-                case 2:
-                    System.out.println("Enter student name: ");
-                    String studentname = sc.next();
-                    System.out.println("Enter matriculation number: ");
-                    String studentmatric = sc.next();
-                    if (adHandler.checkmatricexist(studentmatric))
-                        System.out.println("Matriculation number already exist.");
-                        break;
-                    System.out.println("Enter gender: ");
-                    String studentgender = sc.next();
-                    System.out.println("Enter nationality: ");
-                    String studentnationality = sc.next();
-                    System.out.println("Enter userID: ");
-                    String userid = sc.next();
-                    System.out.println("Enter password: ");
-                    String password = sc.next();
-                    System.out.println("Enter maxAUs: ");
-                    int maxaus = sc.nextInt();
-                    System.out.println("Enter major: ");
-                    String major = sc.next();
-                    Student newstudent = new Student(userid,password,studentname,studentmatric,maxaus,major);
-                    adHandler.addStudent(newstudent);
-                    System.out.println("Student "+studentmatric+" has been added successfully!");
-                    break;
-                case 3: /*need help w index as it currently requires 7 additional arguments to instantiate*/
-                    System.out.println("Enter course code: ");
-                    String coursecode = sc.next();
-                    System.out.println("Enter school: ");
-                    String school = sc.next();
-                    System.out.println("Enter course name: ");
-                    String coursename = sc.next();
-                    System.out.println("Enter number for course type: (CORE-1, MPE-2, GER-3, UE-4)");
-                    int useropt = sc.nextInt();
-                    typeOfCourse newcoursetype = adHandler.choosecoursetype(useropt);
-                    System.out.println("Enter academic units: ");
-                    int aus = sc.nextInt();
-                    ArrayList<Index> index = new ArrayList<Index>();
-                    System.out.println("Enter number of indexes: ");
-                    int indexlength = sc.nextInt();
-                    for (int i=0; i<indexlength; i++){
-                        System.out.println("Enter index number" + (indexlength+1) + ": ");
-                        int indexnum = sc.nextInt();
-                        Index indexnewnum = new Index();
-                        index.get(i).set(indexnewnum);
-                                                    }
-                    if (FileHandler.getCourse(coursecode)!=null){
-                        adHandler.editCourse(coursecode, coursename,newcoursetype, aus,  school, index);}
-                    else
-
-                        adHandler.addCourse(coursecode, coursename,newcoursetype, aus,  school, index);
-                    break;
-                case 4:
-                    System.out.println("Enter course code: ");
-                    String course = sc.next();
-                    System.out.println("Enter index number: ");
-                    int indexno = sc.nextInt();
-                    adHandler.checkSlot(course, indexno);
-                    if(FileHandler.getCourse(course).searchIndex(indexno)!=null){
-                        System.out.println("The vacancy for"+ indexno +"is: "+ adHandler.checkSlot(course, indexno));
-                    }else{
-                        System.out.println("Index not found!");
-                    }
-                    break;
-                case 5:
-                    System.out.println("Enter course code: ");
-                    String printstudentcourse = sc.next();
-                    System.out.println("Enter index number: ");
-                    int printstudentindex = sc.nextInt();
-                    System.out.println("The student list for index " +printstudentindex+ " is:");
-                    System.out.println(adHandler.printStudentListbyIndex(printstudentcourse, printstudentindex));
-                    break;
-                case 6:
-                    System.out.println("Enter course code: ");
-                    String printstudentcourse2 = sc.next();
-                    System.out.println("The student list for course " +printstudentcourse2+ " is:");
-                    System.out.println(adHandler.printStudentListbyCourse(printstudentcourse2));
-                    break;
-                case 7:
-                    break;
-
-
-
+                case (1)-> editAccessPeriod();
+                case (2)-> createStudent();
+                case (3)-> createCourse();
+                case (4)-> checkIndex();
+                case (5)-> printByIndex();
+                case (6)-> printByCourse();
+                case (7)-> logout();
             }
         } while (choice != 7);
+    }
 
+    private void editAccessPeriod() {
+        LocalDateTime[] accessTime = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String newStart;
+        String newEnd;
+        String matricNum = null;
+        while (accessTime == null){
+            System.out.println("Enter student matriculation number");
+            matricNum = sc.nextLine();
+            accessTime = adHandler.getAccessPeriod(matricNum);
+        }
+
+        do {
+            System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(formatter), accessTime[1].format(formatter));
+            System.out.print("Enter new access start date: ");
+            newStart = sc.nextLine();
+            System.out.print("Enter new access end date: ");
+            newEnd = sc.nextLine();
+        } while(!adHandler.editAccessPeriod(matricNum, newStart, newEnd));
+        System.out.println("Access time successfully changed");
+    }
+
+    private void createCourse() {
+        String courseCode;
+        String school;
+        String courseName;
+        String courseType;
+        int aus;
+        do {
+            System.out.println("Enter course code: ");
+            courseCode = sc.next();
+            System.out.println("Enter school: ");
+            school = sc.next();
+            System.out.println("Enter course name: ");
+            courseName = sc.next();
+            System.out.println("Enter number for course type: (CORE, MPE, GER, UE)");
+            courseType = sc.next();
+            System.out.println("Enter academic units: ");
+            aus = sc.nextInt();
+        } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school));
+        System.out.println("Enter number of indexes: ");
+        int numIndexes = sc.nextInt();
+        for (int i=0; i<numIndexes; i++) {
+            System.out.printf("Creating Index %d:\n", i+1);
+            createIndex(courseCode);
+        }
+    }
+
+    private void createIndex(String courseCode) {
+        int indexNum;
+        int indexVacancies;
+        int numLessons;
+        do {
+            System.out.print("Enter index number: ");
+            indexNum = sc.nextInt();
+            System.out.print("Enter number of vacancies: ");
+            indexVacancies = sc.nextInt();
+        } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies));
+        System.out.print("Enter number of Lessons: ");
+        numLessons = sc.nextInt();
+        for (int i = 0; i < numLessons; i++) {
+            System.out.printf("Creating Lesson %d:\n", i + 1);
+            createLesson(courseCode, indexNum);
+        }
+    }
+
+    private void createLesson(String courseCode, int indexNum) {
+        String lessonType;
+        String group;
+        String day;
+        LocalTime startTime;
+        LocalTime endTime;
+        String venue;
+        String[] inputWeeks;
+        ArrayList<Integer> teachingWeeks;
+        do {
+            System.out.println("Enter course type: LEC, TUT, LAB, DES, PRJ, SEM");
+            lessonType = sc.next();
+            System.out.print("Enter group: ");
+            group = sc.next();
+            System.out.print("Enter day of week: (First 3 letters of day)");
+            day = sc.next();
+            System.out.println("Enter start time (HH:MM)");
+            startTime = LocalTime.parse(sc.next());
+            System.out.println("Enter end time (HH:MM)");
+            endTime = LocalTime.parse(sc.next());
+            System.out.println("Enter venue");
+            venue = sc.next();
+            System.out.println("Enter teaching weeks, separated with a comma (1-13)");
+            inputWeeks = sc.next().split(",");
+            teachingWeeks = new ArrayList<>();
+            for (String week : inputWeeks) {
+                if (Integer.parseInt(week) < 13 && Integer.parseInt(week) > 0) {
+                    teachingWeeks.add(Integer.parseInt(week));
+                }
+            }
+        }  while(!adHandler.addLesson(courseCode, indexNum, lessonType, group, day, startTime, endTime,
+                    venue, teachingWeeks));
+    }
+
+    private void createStudent() {
+        String studentName;
+        String studentMatric;
+        String email;
+        String gender;
+        String nationality;
+        String userid;
+        String password;
+        String major
+        int maxAUs;
+
+        do {
+            System.out.println("Enter matriculation number: ");
+            studentMatric = sc.next();
+            System.out.println("Enter student name: ");
+            studentName = sc.next();
+            System.out.println("Enter email: ");
+            email = sc.next();
+            System.out.println("Enter gender: ");
+            gender = sc.next();
+            System.out.println("Enter nationality: ");
+            nationality = sc.next();
+            System.out.println("Enter userID: ");
+            userid = sc.next();
+            System.out.println("Enter password: ");
+            password = sc.next();
+            System.out.println("Enter major: ");
+            major = sc.next();
+            System.out.println("Enter maxAUs: ");
+            maxAUs = sc.nextInt();
+        }while(!adHandler.addStudent(userid, password, studentName, studentMatric, email,
+                gender, nationality, major, maxAUs));
 
     }
 
+    private void checkIndex() {
+        String course;
+        int indexNum;
+        int vacancies = -1;
+        do {
+            System.out.println("Enter course code: ");
+            course = sc.next();
+            System.out.println("Enter index number: ");
+            indexNum = sc.nextInt();
+            vacancies = adHandler.checkSlot(course, indexNum);
+        } while(vacancies == -1);
+        System.out.println("The vacancy for"+ indexNum +"is: "+ vacancies);
+    }
 
+    private void printByIndex() {
+        String courseCode;
+        int indexNum;
+        ArrayList<Student> studentList;
+        do {
+            System.out.println("Enter course code: ");
+            courseCode = sc.next();
+            System.out.println("Enter index number: ");
+            indexNum = sc.nextInt();
+            studentList = adHandler.getStudentListByIndex(courseCode, indexNum);
+        } while(studentList == null);
 
+        for (Student stud: studentList) {
+            System.out.println(stud);
+        }
+    }
+
+    private void printByCourse() {
+        String courseCode;
+        ArrayList<Student> studentList;
+        do {
+            System.out.println("Enter course code: ");
+            courseCode = sc.next();
+            studentList = adHandler.getStudentListByCourse(courseCode);
+        } while (studentList == null);
+
+        for (Student stud: studentList) {
+            System.out.println(stud);
+        }
+    }
+
+    private void logout() {
+        System.out.println("Saving data...");
+        adHandler.close();
+        System.out.println("Thank you for using MyStars!");
+        System.out.println("Goodbye!");
+    }
 
 }

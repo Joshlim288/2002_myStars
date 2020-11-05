@@ -10,115 +10,144 @@
  *
  * Try to add JavaDocs as you go
  */
+import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class StudentHandler {
     Student currentStudent;
+    StudentDataManager sdm;
+    CourseDataManager cdm;
 
     public StudentHandler(Student currentStudent) {
         this.currentStudent = currentStudent;
+        this.sdm = new StudentDataManager();
+        this.cdm = new CourseDataManager();
+        sdm.load();
+        cdm.load();
     }
 
-
-    /**
-     * Method to add a course for current student.
-     * Retrieves indexes under the course and prompts for student's choice
-     * Includes checking of index capacity and clashes with student's current timetable
-     * Adds student to waitlist if chosen index is full
-     * Exception handling if waitlist is already empty
-     * @param course Course to be added
-     */
     //TODO: Improve input validation
     //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
-    //TODO: checkTimetableClash()
 
-    public bool getResponse(char input)
-    {
-        while(true)
-        {
-            if (input == 'y' || input == 'Y')
-                return True;
-            else if (input == 'n' || input == 'N')
-                return False;
-        }
-    }
-    public void addCourse(Course course, Index index)
-    {
-        if (!index.isAtMaxCapacity())
-        {
-            index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-            currentStudent.setCurrentAUs(currentStudent.getCurrentAUs()+course.getAcademicUnits());
-        }
-        else
-            {
-            System.out.println("You have selected an index with no more vacancy.");
-            System.out.println("Do you want to be added to waitlist? (Y/N)");
-            char ch = sc.next().charAt(0);
-            if(ch=='y')
-            {
-                System.out.println("You have been added to waitlist for Index "+ index);
-                index.addToWaitlist(index.getWaitlist(), this.currentStudent);
-                // there should be more stuffs happening when added to wait list
+    public boolean getResponse(char input) {
+        boolean answer;
+        while(true) {
+            if (input == 'y' || input == 'Y'){
+                answer = true;
+                break;
             }
-            else if(ch=='n')
-                System.out.println("Returning to main menu..");
-            else
-                System.out.println("You have entered an invalid choice. Returning to main menu..");
+            else if (input == 'n' || input == 'N') {
+                answer = false;
+                break;
+            }
+        }
+        return answer;
+    }
+
+    public void updateWaitList(Index index)
+    {
+            index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+            // there should be more stuffs happening when added to wait list
+    }
+
+    public void askForWaitList(Course course, Index index,boolean ans)
+    {
+        if(ans==true)
+        {
+            index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+            // there should be more stuffs happening when added to wait list
         }
     }
 
+    //Return true if there is clash and false otherwise
+    //TODO: First draft, to improve
+    private boolean hasClash(Index indexToAdd, HashMap<Course,Index> coursesRegistered){
+        //Retrieve lessons to be added for new index
+        ArrayList<Lesson> lessonsToCheck = indexToAdd.getLessons();
 
-    public void dropCourse(Course course)
+        // Initialise list of existing lessons to check against
+        // Iterate through coursesRegistered to add lessons for each index
+        ArrayList<Lesson> timetable = new ArrayList<Lesson>();
+        coursesRegistered.forEach((course, index) -> timetable.addAll(index.getLessons()));
+
+        // For all lessons in timetable, check against each lesson to be added for clashes
+        for (Lesson existingLesson : timetable){
+            for (Lesson newLesson : lessonsToCheck) {
+                LocalTime startTime = newLesson.getStartTime();
+                LocalTime endTime = newLesson.getEndTime();
+
+                if (startTime.isBefore(existingLesson.getEndTime()) &&
+                        startTime.isAfter(existingLesson.getStartTime()))
+                    return true;
+
+                if (endTime.isBefore(existingLesson.getEndTime()) &&
+                        endTime.isAfter(existingLesson.getStartTime()))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    // Returns true if addCourse() was successful
+    // Calls the private hasClash() method
+    // Returns false if there was a clash in timetable
+    public boolean addCourse(Course course, Index index)
     {
-        if(course==null)
-            System.out.println("Course does not exist!");
+            if(!hasClash(index, currentStudent.getCoursesRegistered()) || !hasClash(index, currentStudent.getWaitList())) {
+                index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
+                //TODO: Fix updating current AUs
+                //currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());
+                return true;
+            }
+            else
+                return false;
+    }
 
-        else if (!currentStudent.getCoursesRegistered().containsKey(course))
-            System.out.println("You are not enrolled in this course!");
-
-        else{
-            String cCode = course.getCourseCode();
-            String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
-            System.out.println("You have selected to drop : ");
-            System.out.println("Course Code: " + cCode);
-            System.out.println("Course Name: " + cName);
-            System.out.println("Index Number: " + cIndex.getIndexNum());
-
+    public void dropCourse(Course course,Index cIndex)
+    {
             //Remove student from list of enrolled students in index
             cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
 
             //Remove course from student's registered courses
             currentStudent.removeCourse(course);
-            System.out.println("You have successfully dropped "+cIndex+"!");
 
             //If there are students in waitlist, register them for the index
             if(!cIndex.getWaitlist().isEmpty()) {
                 cIndex.removeFromWaitlist(cIndex.getWaitlist());
                 //TODO: Notify the student who has been added to index from waitlist
             }
-        }
     }
 
-    public void checkRegistered()
+    public String getRegisteredCourses()
     {
+        //Get list of courses student is registered in.
         HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
 
-        //Iterate through coursesRegistered HashMap and print out information
-        //TODO: Initial implementation placed here. Consider implementing this method in Student class instead.
-        //TODO: Decide on how much information to show when printing out courses and index
-        coursesRegistered.forEach((course, index) -> System.out.println(course.getCourseName() + " " +
+        //Use StringBuilder to create required output and return to StudentInterface
+        StringBuilder stringBuilder = new StringBuilder();
+        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseName() + " " +
                 course.getCourseName() + ": Index" + index.getIndexNum()));
+        return stringBuilder.toString();
     }
 
-    public int checkVacancies(String course, int index)
-    {
-        return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
 
+    public String getIndexVacancies(String course){
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Index> indexes= FileHandler.getCourse(course).getIndexes();
+        indexes.forEach((index) -> stringBuilder.append("Index " + index.getIndexNum() + ": " +
+                        index.getCurrentVacancy() + "/" + index.getIndexVacancy()));
+        return stringBuilder.toString();
     }
+
+    //Retired for now unless method is needed in the future
+    //public int checkVacancies(String course, int index)
+    //{
+        //return FileHandler.getCourse(course).searchIndex(index).getCurrentVacancy();
+
+    //}
 
     public void changeIndex(Course course)
     {
@@ -136,7 +165,7 @@ public class StudentHandler {
 
             String cCode = course.getCourseCode();
             String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
+            Index cIndex= this.currentStudent.retrieveIndex(course);
             System.out.println("You have selected to swap index for the following : ");
             System.out.println("Course Code: " + cCode);
             System.out.println("Course Name: " + cName);
@@ -155,7 +184,7 @@ public class StudentHandler {
             Index nIndex = course.searchIndex(input);
             if (course.getIndexes().contains(nIndex))
             {
-                if (checkVacancies(nIndex) > 0)
+                if (!cIndex.isAtMaxCapacity())
                 {
                     // There might be more things required to be changed when changing index
                     System.out.println("Index available ");
@@ -214,7 +243,7 @@ public class StudentHandler {
         {
             String cCode = course.getCourseCode();
             String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(cCode);
+            Index cIndex= this.currentStudent.retrieveIndex(course);
             System.out.println("You have selected to swap : ");
             System.out.println("Course Code: " + cCode);
             System.out.println("Course Name: " + cName);
@@ -241,5 +270,10 @@ public class StudentHandler {
              */
         }
 
+    }
+
+    public void close() {
+        sdm.save();
+        cdm.save();
     }
 }

@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class MyStars {
     public static void main(String[] args){
         String menuChoice;
-        FileHandler.initialize();
+        AccessControl.initialize();
         Scanner sc = new Scanner(System.in);
         do {
             System.out.println( "Welcome to MyStars\n" +
@@ -32,7 +32,6 @@ public class MyStars {
                     }
                     case(2) -> {
                         System.out.println("Exiting MyStars");
-                        quit();
                     }
 
                     default -> System.out.println("Enter a valid menu choice");
@@ -55,15 +54,5 @@ public class MyStars {
         System.out.println("Enter password: ");
         password = Arrays.toString(System.console().readPassword());
         return AccessControl.validate(userId, password);
-    }
-
-    /**
-     * Data is only written back to files when this is called.
-     * Ensure to always quit via the menu option if you want
-     * data to be saved
-     * Needs to close fileIO and write back all updated data
-     */
-    public static void quit() {
-        FileHandler.close();
     }
 }

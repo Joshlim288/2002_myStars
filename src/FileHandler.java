@@ -3,10 +3,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 //Feels too much like functional programming but we can discuss later
 //TODO: add validations and error messages
+//TODO: split into smaller dataManagers
 /**
  * FileHandler simulates a database by reading in all data stored.<br>
  * Objects can call FileHandler methods to retrieve their desired data.
- *
+ * @deprecated
  * @author Jun Wei
  * @version 1.0
  * @since 2020-10-17
@@ -14,6 +15,7 @@ import java.util.Scanner;
 public class FileHandler {
     /**
      * ArrayList holding all course objects.
+     * DONE
      */
     private static ArrayList<Course> courseList;
 
@@ -33,7 +35,7 @@ public class FileHandler {
      */
     private static ArrayList<User> userList;
 
-/**
+    /**
      * Load all saved objects
      */
     public static void initialize(){
@@ -51,6 +53,7 @@ public class FileHandler {
 
     /**
      * Load courseList from data/courseData.dat
+     * DONE
      */
     private static void loadCourses() {
         try {
@@ -71,6 +74,7 @@ public class FileHandler {
 
     /**
      * Load studentList from data/studentData.dat
+     * DONE
      */
     private static void loadStudents() {
         try {
@@ -91,6 +95,7 @@ public class FileHandler {
 
     /**
      * Load adminList from data/adminData.dat
+     * DONE
      */
     private static void loadAdmins() {
         try {
@@ -111,6 +116,7 @@ public class FileHandler {
 
     /**
      * Load userList from data/userData.dat
+     * DONE
      */
     private static void loadUsers() {
         try {
@@ -142,6 +148,7 @@ public class FileHandler {
 
     /**
      * Save courseList to data/courseData.dat
+     * DONE
      */
     private static void saveCourses() {
         try {
@@ -158,10 +165,11 @@ public class FileHandler {
 
     /**
      * Save studentList to data/studentData.dat
+     * DONE
      */
     private static void saveStudents() {
         try {
-            FileOutputStream fileOut = new FileOutputStream("data/studentData.dat");
+            FileOutputStream fileOut = new FileOutputStream("data/users/studentData.dat");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(studentList);
             out.close();
@@ -174,6 +182,7 @@ public class FileHandler {
 
     /**
      * Save adminList to data/adminData.dat
+     * DONE
      */
     private static void saveAdmins() {
         try {
@@ -190,6 +199,7 @@ public class FileHandler {
 
     /**
      * Save userList to data/userData.dat
+     * DONE
      */
     private static void saveUsers() {
         try {
@@ -208,6 +218,7 @@ public class FileHandler {
      * Retrieves a student object from studentList based on matriculation number.
      * @param matricNum The matriculation number of the student we are retrieving.
      * @return the student if the matriculation number exists; null otherwise
+     * DONE
      */
     public static Student getStudent(String matricNum) {
         for (Student student : studentList) {
@@ -222,6 +233,7 @@ public class FileHandler {
      * Removes a student from studentList based on matriculation number.
      * @param matricNum The matriculation number of the student we are removing.
      * @return true if removal is successful
+     * DONE
      */
     public static boolean removeStudent(String matricNum) {
         Student studentToRemove = getStudent(matricNum);
@@ -232,6 +244,7 @@ public class FileHandler {
      * Adds a new student into studentList.
      * @param newStud The student object to be added.
      * @return true if addition is successful.
+     * DONE
      */
     public static boolean addStudent(Student newStud) {
         // check if student with identical matriculation number already exists in the list
@@ -242,7 +255,7 @@ public class FileHandler {
         studentList.add(newStud);
         return true;
     }
-
+    //DONE
     public static ArrayList<Student> getStudentList(){
         return studentList;
     }
@@ -251,6 +264,7 @@ public class FileHandler {
      * Retrieves an admin object from adminList based on staff number.
      * @param staffNum The staff number of the admin we are retrieving.
      * @return the admin if the staff number exists; null otherwise
+     * DONE
      */
     public static Admin getAdmin(String staffNum) {
         for (Admin admin : adminList) {
@@ -265,6 +279,7 @@ public class FileHandler {
      * Removes an admin from adminList based on staff number.
      * @param staffNum The staff number of the admin we are removing.
      * @return true if removal is successful
+     * DONE
      */
     public static boolean removeAdmin(String staffNum) {
         Admin adminToRemove = getAdmin(staffNum);
@@ -275,6 +290,7 @@ public class FileHandler {
      * Adds a new admin into adminList.
      * @param newAdmin The admin object to be added.
      * @return true if addition is successful.
+     * DONE
      */
     public static boolean addAdmin(Admin newAdmin) {
         // check if admin with identical staff number already exists in the list
@@ -286,6 +302,7 @@ public class FileHandler {
         return true;
     }
 
+    //DONE
     public static ArrayList<Admin> getAdminList(){
         return adminList;
     }
@@ -294,6 +311,7 @@ public class FileHandler {
      * Retrieves a course object from courseList based on course code.
      * @param courseCode The course code of the course we are retrieving.
      * @return the course if the course code exists; null otherwise
+     * DONE
      */
     public static Course getCourse(String courseCode) {
         for (Course course : courseList) {
@@ -308,6 +326,7 @@ public class FileHandler {
      * Removes a course from courseList based on course code.
      * @param courseCode The course code of the course we are removing.
      * @return true if removal is successful
+     * DONE
      */
     public static boolean removeCourse(String courseCode) {
         Course courseToRemove = getCourse(courseCode);
@@ -318,6 +337,7 @@ public class FileHandler {
      * Adds a new course into courseList.
      * @param newCourse The course object to be added.
      * @return true if addition is successful.
+     * DONE
      */
     public static boolean addCourse(Course newCourse) {
         // check if course with identical course code already exists in the list
@@ -328,7 +348,7 @@ public class FileHandler {
         courseList.add(newCourse);
         return true;
     }
-
+     //DONE
     public static ArrayList<Course> getCourseList(){
         return courseList;
     }
@@ -337,6 +357,7 @@ public class FileHandler {
      * Retrieves a user object from userList based on userID.
      * @param userID The user ID of the user we are retrieving.
      * @return the user if the user ID exists; null otherwise
+     * DONE
      */
     public static User getUser(String userID) {
         for (User user : userList) {
@@ -351,6 +372,7 @@ public class FileHandler {
      * Removes a user from userList based on user ID.
      * @param userID The user ID of the user we are removing.
      * @return true if removal is successful
+     * DONE
      */
     public static boolean removeUser(String userID) {
         User userToRemove = getUser(userID);
@@ -371,7 +393,7 @@ public class FileHandler {
         userList.add(newUser);
         return true;
     }
-
+    //DONE
     public static ArrayList<User> getUserList(){
         return userList;
     }
