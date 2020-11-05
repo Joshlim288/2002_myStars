@@ -21,7 +21,7 @@ public class StudentInterface extends UserInterface{
 
         do
         {
-            System.out.println("Welcome, Student " + studHandler.currentStudent.getStudentName()
+            System.out.println("Welcome, Student " + studHandler.currentStudent.getName()
                                 + ", " + studHandler.currentStudent.getMatricNum() + "!");
             System.out.println("Choose an action: ");
             System.out.println("1. Add Course");
@@ -219,10 +219,10 @@ public class StudentInterface extends UserInterface{
 //                        Check if student2's info is correct and exist in database
 //                        Check if both students have indicated " willing to swap "  for the indexes
 
-                        if(index==null)
-                            System.out.println("Index does not exist!");
-                        else
-                                System.out.println("You did not choose a valid index!");
+//                        if(index==null)
+//                            System.out.println("Index does not exist!");
+//                        else
+//                                System.out.println("You did not choose a valid index!");
 
                     }
                     break;

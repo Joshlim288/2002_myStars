@@ -72,7 +72,7 @@ public class Student extends User {
      * @param major This student's major.
      */
     public Student(String userID, String hashedPassword, String studentName, String matricNum, String email,
-                   String gender, String nationality, int maxAUs, String major) throws ObjectCreationException {
+                   String gender, String nationality, String major, int maxAUs) throws ObjectCreationException {
         super(userID, hashedPassword, "Student", studentName, email);
         if (validateMatricNum(matricNum) && validateGender(gender) &&
             validateNationality(nationality) && validateMaxAUs(maxAUs) && validateMajor(major)) {

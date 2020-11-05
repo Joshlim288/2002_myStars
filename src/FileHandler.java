@@ -169,7 +169,7 @@ public class FileHandler {
      */
     private static void saveStudents() {
         try {
-            FileOutputStream fileOut = new FileOutputStream("data/studentData.dat");
+            FileOutputStream fileOut = new FileOutputStream("data/users/studentData.dat");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(studentList);
             out.close();

@@ -32,7 +32,7 @@ public class AdminDataManager implements DataManager{
      */
     public void save() {
         try {
-            FileOutputStream fileOut = new FileOutputStream("data/adminData.dat");
+            FileOutputStream fileOut = new FileOutputStream("data/users/adminData.dat");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(adminList);
             out.close();

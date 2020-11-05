@@ -55,6 +55,7 @@ public class Course {
 
     /**
      * Constructor for <code>Course</code>.
+     * TODO maybe change exception throwing to static method getter for String version of enums. Can use contains()
      * @param courseCode Unique identifier for this course.
      * @param courseName This course's name.
      * @param courseType This course's type. Represented with <code>typeOfCourse</code> enumeration.
@@ -146,7 +147,7 @@ public class Course {
         return other.getCourseCode() == courseCode;
     }
 
-    public Index searchIndex(int indexCode) {
+    public Index getIndex(int indexCode) {
         for (Index index : indexes)
         {
             if (index.getIndexNum()==(indexCode))
