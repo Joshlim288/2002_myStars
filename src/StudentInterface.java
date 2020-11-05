@@ -45,11 +45,10 @@ public class StudentInterface extends UserInterface {
     }
 
     private ArrayList<Index> displayIndexesFromCourseInput(Course courseSelected){
-        String cCode = courseSelected.getCourseCode();
-        String cName = courseSelected.getCourseName();
+
         ArrayList<Index> indexList = courseSelected.getIndexes();
 
-        System.out.println("You have selected: " + cName + ", " + cCode + ".\n" +
+        System.out.println("You have selected: " + courseSelected.getCourseName() + ", " + courseSelected.getCourseCode() + ".\n" +
                 "Indexes available:" +
                 "Index Number | Remaining Vacancies" +
                 "----------------------------------");
@@ -61,15 +60,13 @@ public class StudentInterface extends UserInterface {
     }
 
     private void addCourse() {
-        String courseCodeInput;
-        Course courseSelected;
 
         System.out.println("You have selected to add Course\n" +
                 "Enter Course Code (e.g. CZ2002):\n" +
                 "Press ~ to return to main menu.");
 
-        courseCodeInput = getString("[A-Z]{2}[0-9]{4}");
-        courseSelected = studHandler.cdm.getCourse(courseCodeInput);
+        String courseCodeInput = getString("[A-Z]{2}[0-9]{4}");
+        Course courseSelected = studHandler.cdm.getCourse(courseCodeInput);
 
         if (courseSelected != null) {
 
@@ -106,8 +103,8 @@ public class StudentInterface extends UserInterface {
 
     private void dropCourse() {
         System.out.println("You have selected to drop Course\n" +
-                          "---------------------------------" +
-                          "Enter Course Code: ");
+                "Enter Course Code (e.g. CZ2002):\n" +
+                "Press ~ to return to main menu.");
         Course courseSelected = studHandler.cdm.getCourse(sc.nextLine());
         if (courseSelected == null)
             System.out.println("Course does not exist!");
@@ -140,15 +137,12 @@ public class StudentInterface extends UserInterface {
     };
 
     private void changeIndex(){
-        String courseCodeInput;
-        Course courseSelected;
-
         System.out.println("You have selected to add Course\n" +
                 "Enter Course Code (e.g. CZ2002):\n" +
                 "Press ~ to return to main menu.");
 
-        courseCodeInput = getString("[A-Z]{2}[0-9]{4}");
-        courseSelected = studHandler.cdm.getCourse(courseCodeInput);
+        String courseCodeInput = getString("[A-Z]{2}[0-9]{4}");
+        Course courseSelected = studHandler.cdm.getCourse(courseCodeInput);
 
         if (courseSelected != null) {
 
