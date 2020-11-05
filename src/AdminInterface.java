@@ -226,7 +226,7 @@ public class AdminInterface extends UserInterface {
         }
     }
 
-    private void updateCourse(courseCode) {
+    private void updateCourse(Course courseCode) {
 
     }
 
