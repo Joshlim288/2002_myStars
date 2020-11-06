@@ -245,7 +245,7 @@ public class AdminHandler{
     /**
      * Check the number of available slot for an index number
      * @param  course, indexnum
-     * @return int number of vacancys
+     * @return int number of vacancies
      */
     public int checkSlot(String course, String indexnum){
         Index index = cdm.getCourse(course).getIndex(indexnum);
@@ -317,7 +317,7 @@ public class AdminHandler{
             sdm.getStudentList().add(newStudent);
             System.out.println("Student "+studentName+" has been added successfully!");
             return true;
-        } catch (ObjectCreationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }

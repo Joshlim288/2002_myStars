@@ -14,7 +14,7 @@ public class UserValidator extends Validator {
     }
 
     public boolean validateEmail(String email) {
-        if (email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+        if (email.matches("^[\\w-\\.]+@e.ntu.edu.sg")) { //old: ^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$
             return true;
         }
         System.out.println("ERROR: Wrong email format.");
