@@ -203,6 +203,7 @@ public class AdminHandler{
                 tempStudent.setMaxAUs(Integer.parseInt(updatedValue));
             }
         }
+        return true;
     }
 
     public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school){
@@ -231,7 +232,7 @@ public class AdminHandler{
         try {
             tempCourse.getIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue, teachingWeeks);
             return true;
-        } catch (ObjectCreationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }

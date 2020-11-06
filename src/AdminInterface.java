@@ -33,7 +33,13 @@ public class AdminInterface extends UserInterface {
             System.out.println("7. Update a course");
             System.out.println("8. Update a student");
             System.out.println("9. Log out");
-            choice = Integer.parseInt(getInput());
+            while (true) {
+                tempString = sc.nextLine();
+                if (userValidator.validateInt(tempString)) {
+                    choice = Integer.parseInt(tempString);
+                    break;
+                }
+            }
 
             switch(choice){
                 case (1)-> editAccessPeriod();
