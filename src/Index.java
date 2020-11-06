@@ -188,5 +188,17 @@ public class Index {
         return stringBuilder.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Index)) {
+            return false;
+        }
+        Index other = (Index) o;
+        return other.getIndexNum() == indexNum;
+    }
+
 
 }

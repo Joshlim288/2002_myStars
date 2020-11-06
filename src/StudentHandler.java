@@ -14,14 +14,17 @@ import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class StudentHandler {
     Student currentStudent;
+    Student otherStudent;
     StudentDataManager sdm;
     CourseDataManager cdm;
 
     public StudentHandler(Student currentStudent) {
         this.currentStudent = currentStudent;
+        this.otherStudent = null;
         this.sdm = new StudentDataManager();
         this.cdm = new CourseDataManager();
         sdm.load();
@@ -31,97 +34,96 @@ public class StudentHandler {
     //TODO: Improve input validation
     //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
 
-    public boolean getResponse(char input) {
-        boolean answer;
-        while(true) {
-            if (input == 'y' || input == 'Y'){
-                answer = true;
-                break;
-            }
-            else if (input == 'n' || input == 'N') {
-                answer = false;
-                break;
-            }
-        }
-        return answer;
-    }
-
-    public void updateWaitList(Index index)
+    private void updateWaitList(Course course, Index index)
     {
             index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+            currentStudent.addCourseToWaitList(course, index);
             // there should be more stuffs happening when added to wait list
     }
 
-    public void askForWaitList(Course course, Index index,boolean ans)
-    {
-        if(ans==true)
-        {
-            index.addToWaitlist(index.getWaitlist(), this.currentStudent);
-            // there should be more stuffs happening when added to wait list
-        }
-    }
-
-    //Return true if there is clash and false otherwise
-    //TODO: First draft, to improve
-    private boolean hasClash(Index indexToAdd, HashMap<Course,Index> coursesRegistered){
+    //Return the index if there is a clash and null otherwise
+    private Index hasClash(Index indexToAdd, HashMap<Course,Index> coursesRegistered) {
         //Retrieve lessons to be added for new index
         ArrayList<Lesson> lessonsToCheck = indexToAdd.getLessons();
 
-        // Initialise list of existing lessons to check against
-        // Iterate through coursesRegistered to add lessons for each index
-        ArrayList<Lesson> timetable = new ArrayList<Lesson>();
-        coursesRegistered.forEach((course, index) -> timetable.addAll(index.getLessons()));
+        // For all indexes registered for the student
+        for (Map.Entry<Course, Index> entry : coursesRegistered.entrySet()) {
+            //For each lesson in index to check against
+            for (Lesson existingLesson : entry.getValue().getLessons()) {
+                //For each lesson in new index
+                for (Lesson newLesson : lessonsToCheck) {
+                    LocalTime startTime = newLesson.getStartTime();
+                    LocalTime endTime = newLesson.getEndTime();
 
-        // For all lessons in timetable, check against each lesson to be added for clashes
-        for (Lesson existingLesson : timetable){
-            for (Lesson newLesson : lessonsToCheck) {
-                LocalTime startTime = newLesson.getStartTime();
-                LocalTime endTime = newLesson.getEndTime();
+                    //Return clashing index and break if found
+                    if (startTime.isBefore(existingLesson.getEndTime()) &&
+                            startTime.isAfter(existingLesson.getStartTime()))
+                        return entry.getValue();
 
-                if (startTime.isBefore(existingLesson.getEndTime()) &&
-                        startTime.isAfter(existingLesson.getStartTime()))
-                    return true;
-
-                if (endTime.isBefore(existingLesson.getEndTime()) &&
-                        endTime.isAfter(existingLesson.getStartTime()))
-                    return true;
+                    //Return clashing index and break if found
+                    if (endTime.isBefore(existingLesson.getEndTime()) &&
+                            endTime.isAfter(existingLesson.getStartTime()))
+                        return entry.getValue();
+                }
             }
         }
-        return false;
+        return null;
     }
 
-    // Returns true if addCourse() was successful
-    // Calls the private hasClash() method
-    // Returns false if there was a clash in timetable
-    public boolean addCourse(Course course, Index index)
+    public boolean willGoOverMaxAU(Course courseSelected) {
+        return currentStudent.getCurrentAUs() + courseSelected.getAcademicUnits() > currentStudent.getMaxAUs();
+    }
+
+    // Used for both changing/swapping index and adding new course
+    // For changing/swapping index, indexToDrop will be the one to drop
+    // For adding new course, indexToDrop will be null
+    // If clash found, returns the index new course clashed with through
+    // Converts course index as integer first for switch statement of printStatusOfAddCourse
+    //TODO: To improve, feels like it can be done better
+    public int addCourse(Student student, Course course, Index index, Index indexToDrop)
     {
-            if(!hasClash(index, currentStudent.getCoursesRegistered()) || !hasClash(index, currentStudent.getWaitList())) {
-                index.addToEnrolledStudents(index.getEnrolledStudents(), this.currentStudent);
-                //TODO: Fix updating current AUs and checking max AU overshot?
-                //currentStudent.setCurrentAUs(currentStudent.getCurrentAUs() + course.getAcademicUnits());
-                return true;
+            Index clashWithRegistered = hasClash(index, student.getCoursesRegistered());
+            Index clashWithWaitList = hasClash(index, student.getWaitList());
+
+            if(clashWithRegistered != null)
+                return Integer.parseInt(clashWithRegistered.getIndexNum());
+            if(clashWithWaitList != null)
+                return Integer.parseInt(clashWithWaitList.getIndexNum());
+
+            else if (index.isAtMaxCapacity()) {
+                if (indexToDrop != null) dropCourse(course, indexToDrop);
+                updateWaitList(course, index);
+                return 1;
+            } else{
+                if (indexToDrop != null) dropCourse(course, indexToDrop);
+                index.addToEnrolledStudents(index.getEnrolledStudents(), student);
+                student.addCourse(course, index);
+                return 2;
             }
-            else
-                return false;
     }
 
-    public void dropCourse(Course course,Index cIndex)
-    {
+    public void dropCourse(Course course,Index cIndex) {
             //Remove student from list of enrolled students in index
             cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
 
             //Remove course from student's registered courses
             currentStudent.removeCourse(course);
 
-            //If there are students in waitlist, register them for the index
+            //Register student at start of waitlist for the course
             if(!cIndex.getWaitlist().isEmpty()) {
-                cIndex.removeFromWaitlist(cIndex.getWaitlist());
-                //TODO: Notify the student who has been added to index from waitlist
+                Student studentRemoved = cIndex.removeFromWaitlist(cIndex.getWaitlist());
+                studentRemoved.removeCourseFromWaitList(course);
+                studentRemoved.addCourse(course, cIndex);
+
+                //Create a MailHandler object to send an email to student removed from wait-list
+                MailHandler mailHandler = new MailHandler();
+                mailHandler.sendMail(studentRemoved.getEmail(),
+                                    "You have been removed from a wait-list!",
+                                    "Successful Registration of Course");
             }
     }
 
-    public String getRegisteredCourses()
-    {
+    public String getRegisteredCourses() {
         //Get list of courses student is registered in.
         HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
 
@@ -132,62 +134,22 @@ public class StudentHandler {
         return stringBuilder.toString();
     }
 
-
-    public String getIndexVacancies(String course){
-
-        StringBuilder stringBuilder = new StringBuilder();
-        ArrayList<Index> indexes= FileHandler.getCourse(course).getIndexes();
-        indexes.forEach((index) -> stringBuilder.append("Index " + index.getIndexNum() + ": " +
-                        index.getCurrentVacancy() + "/" + index.getIndexVacancy()));
-        return stringBuilder.toString();
+    public void retrieveOtherStudent(Scanner sc) {
+        User targetUser = MyStars.login(sc);
+        if (targetUser.equals(currentStudent))
+            otherStudent = sdm.getStudent(((Student)targetUser).getMatricNum());
+        else
+            System.out.println("Error! You have chosen yourself.");
     }
 
-
-    public void swapIndex(Course course)
-    {
-
-        Scanner sc = new Scanner(System.in);
-
-        if(course==null)
-        {
-            System.out.println("Course does not exist!");
-
-        }
-//        else if()
-//        {
-//            System.out.println("You are not enrolled in this course!");
-//        }
-        else
-        {
-            String cCode = course.getCourseCode();
-            String cName = course.getCourseName();
-            Index cIndex= this.currentStudent.retrieveIndex(course);
-            System.out.println("You have selected to swap : ");
-            System.out.println("Course Code: " + cCode);
-            System.out.println("Course Name: " + cName);
-            System.out.println("Index Number: " + cIndex.getIndexNum());
-
-            System.out.println("Please enter the student's matriculation number whom you would like to swap with:");
-
-
-            /*
-            Request for student2's particulars i.e ( full name / matric no. / password )
-
-            Check if student2's info is correct and exist in database
-
-            Check if both students have indicated " willing to swap "  for the indexes
-
-            Check for TT clashes
-
-            if both is true
-                update student 1 index
-                update student 2 index
-
-            else
-                output error msg
-             */
-        }
-
+    //Send email to other student if a swap has been performed successfully
+    public void updateOtherStudent(Course courseSelected, Index oldIndex, Index newIndex){
+        MailHandler mailHandler = new MailHandler();
+        mailHandler.sendMail(otherStudent.getEmail(),
+                  currentStudent.getName() + "has swapped indexes for " +
+                             courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
+                             "is now " + newIndex.getIndexNum() + ".",
+                      "Successful Swap of Indexes for " + courseSelected.getCourseName());
     }
 
     public void close() {
