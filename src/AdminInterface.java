@@ -49,107 +49,224 @@ public class AdminInterface extends UserInterface {
     }
 
     private void editAccessPeriod() {
-        LocalDateTime[] accessTime = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String newStart;
-        String newEnd;
-        String matricNum = null;
-        while (accessTime == null){
-            System.out.println("Enter student matriculation number");
-            matricNum = sc.nextLine();
-            accessTime = adHandler.getAccessPeriod(matricNum);
-        }
+        try {
+            LocalDateTime[] accessTime = null;
+            String newStart;
+            String newEnd;
+            String matricNum = null;
+            while (true) {
+                System.out.print("Enter student matriculation number: ");
+                matricNum = getInput();
+                if (userValidator.validateMatricNum(matricNum)) {
+                    accessTime = adHandler.getAccessPeriod(matricNum);
+                    if (accessTime != null)
+                        break;
+                }
+            }
 
-        do {
-            System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(formatter), accessTime[1].format(formatter));
-            System.out.print("Enter new access start date: ");
-            newStart = sc.nextLine();
-            System.out.print("Enter new access end date: ");
-            newEnd = sc.nextLine();
-        } while(!adHandler.editAccessPeriod(matricNum, newStart, newEnd));
-        System.out.println("Access time successfully changed");
+            do {
+                System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(dateTimeFormatter), accessTime[1].format(dateTimeFormatter));
+                while (true) {
+                    System.out.print("Enter new access start date: ");
+                    newStart = sc.nextLine();
+                    if (userValidator.validateDateTime(newStart)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.print("Enter new access end date: ");
+                    newEnd = sc.nextLine();
+                    if (userValidator.validateDateTime(newEnd)) {
+                        break;
+                    }
+                }
+            } while (!adHandler.editAccessPeriod(matricNum, LocalDateTime.parse(newStart, dateTimeFormatter), LocalDateTime.parse(newEnd, dateTimeFormatter)));
+            System.out.println("Access time successfully changed");
+        } catch (EscapeException e) {
+            return;
+        }
     }
 
     private void createCourse() {
-        String courseCode;
-        String school;
-        String courseName;
-        String courseType;
-        int aus;
-        do {
-            System.out.println("Enter course code: ");
-            courseCode = sc.next();
-            System.out.println("Enter school: ");
-            school = sc.next();
-            System.out.println("Enter course name: ");
-            courseName = sc.next();
-            System.out.println("Enter number for course type: (CORE, MPE, GER, UE)");
-            courseType = sc.next();
-            System.out.println("Enter academic units: ");
-            aus = sc.nextInt();
-        } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school));
-        System.out.println("Enter number of indexes: ");
-        int numIndexes = sc.nextInt();
-        for (int i=0; i<numIndexes; i++) {
-            System.out.printf("Creating Index %d:\n", i+1);
-            createIndex(courseCode);
+        try {
+            String courseCode;
+            String school;
+            String courseName;
+            String courseType;
+            int aus;
+            do {
+                while (true) {
+                    System.out.println("Enter course code: ");
+                    courseCode = getInput();
+                    if (courseValidator.validateCourseCode(courseCode)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.println("Enter school: ");
+                    school = getInput();
+                    if (courseValidator.validateName(school)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.println("Enter course name: ");
+                    courseName = getInput();
+                    if (courseValidator.validateName(courseName)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.println("Enter number for course type: (CORE, MPE, GER, UE)");
+                    courseType = getInput();
+                    if (courseValidator.validateCourseType(courseType)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.println("Enter academic units: ");
+                    tempString = getInput();
+                    if (courseValidator.validateInt(tempString)) {
+                        aus = Integer.parseInt(tempString);
+                        break;
+                    }
+                }
+            } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school));
+            
+            int numIndexes;
+            while (true) {
+                System.out.println("Enter number of indexes: ");
+                tempString = getInput();
+                if (courseValidator.validateInt(tempString)) {
+                    numIndexes = Integer.parseInt(tempString);
+                    break;
+                }
+            }
+            for (int i = 0; i < numIndexes; i++) {
+                System.out.printf("Creating Index %d:\n", i + 1);
+                createIndex(courseCode);
+            }
+            adHandler.finalizeCourse();
+            System.out.println("Course successfully added");
+        } catch (EscapeException e) {
+            return;
         }
-        adHandler.finalizeCourse();
-        System.out.println("Course successfully added");
     }
 
     private void createIndex(String courseCode) {
-        String indexNum;
-        int indexVacancies;
-        int numLessons;
-        do {
-            System.out.print("Enter index number: ");
-            indexNum = sc.nextLine();
-            System.out.print("Enter number of vacancies: ");
-            indexVacancies = sc.nextInt();
-        } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies));
-        System.out.print("Enter number of Lessons: ");
-        numLessons = sc.nextInt();
-        for (int i = 0; i < numLessons; i++) {
-            System.out.printf("Creating Lesson %d:\n", i + 1);
-            createLesson(courseCode, indexNum);
+        try {
+            String indexNum;
+            int indexVacancies;
+            int numLessons;
+            do {
+                while (true) {
+                    System.out.print("Enter index number: ");
+                    indexNum = getInput();
+                    if (courseValidator.validateIndexNum(indexNum)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.print("Enter number of vacancies: ");
+                    tempString = getInput();
+                    if (courseValidator.validateInt(tempString)) {
+                        indexVacancies = Integer.parseInt(tempString);
+                        break;
+                    }
+                }
+            } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies));
+            
+            while (true) {
+                System.out.print("Enter number of Lessons: ");
+                tempString = getInput();
+                if (courseValidator.validateInt(tempString)) {
+                    numLessons = Integer.parseInt(tempString);
+                    break;
+                }
+            }
+            for (int i = 0; i < numLessons; i++) {
+                System.out.printf("Creating Lesson %d:\n", i + 1);
+                createLesson(courseCode, indexNum);
+            }
+        } catch (EscapeException e) {
+            return;
         }
     }
 
     private void createLesson(String courseCode, String indexNum) {
-        String lessonType;
-        String group;
-        String day;
-        LocalTime startTime;
-        LocalTime endTime;
-        String venue;
-        String[] inputWeeks;
-        ArrayList<Integer> teachingWeeks;
-        do {
-            System.out.println("Enter course type: LEC, TUT, LAB, DES, PRJ, SEM");
-            lessonType = sc.next();
-            System.out.print("Enter group: ");
-            group = sc.next();
-            System.out.print("Enter day of week: (First 3 letters of day)");
-            day = sc.next();
-            System.out.println("Enter start time (HH:MM)");
-            startTime = LocalTime.parse(sc.next());
-            System.out.println("Enter end time (HH:MM)");
-            endTime = LocalTime.parse(sc.next());
-            System.out.println("Enter venue");
-            venue = sc.next();
-            System.out.println("Enter teaching weeks, separated with a comma (1-13)");
-            inputWeeks = sc.next().split(",");
-            teachingWeeks = new ArrayList<>();
-            for (String week : inputWeeks) {
-                if (Integer.parseInt(week) < 13 && Integer.parseInt(week) > 0) {
-                    teachingWeeks.add(Integer.parseInt(week));
+        try {
+            String lessonType;
+            String group;
+            String day;
+            LocalTime startTime;
+            LocalTime endTime;
+            String venue;
+            String[] inputWeeks;
+            ArrayList<Integer> teachingWeeks;
+            do {
+                while (true) {
+                    System.out.println("Enter course type: LEC, TUT, LAB, DES, PRJ, SEM");
+                    lessonType = getInput();
+                    if (courseValidator.validateLessonType(lessonType)) {
+                        break;
+                    }
                 }
-            }
-        }  while(!adHandler.addLesson(courseCode, indexNum, lessonType, group, day, startTime, endTime,
-                    venue, teachingWeeks));
-    }
+                while (true) {
+                    System.out.print("Enter group: ");
+                    group = getInput();
+                    if (courseValidator.validateGroupName(group)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.print("Enter day of week: (First 3 letters of day)");
+                    day = getInput();
+                    if (courseValidator.validateDay(day)) {
+                        break;
+                    }
+                }
+                while (true) {
+                    System.out.print("Enter start time (HH:MM)");
+                    tempString = getInput();
+                    if (courseValidator.validateTime(tempString)) {
+                        startTime = LocalTime.parse(tempString, timeFormatter);
+                        break;
+                    }
 
+                }
+                while (true) {
+                    System.out.println("Enter end time (HH:MM)");
+                    tempString = getInput();
+                    if (courseValidator.validateTime(tempString)) {
+                        endTime = LocalTime.parse(tempString, timeFormatter);
+                        break;
+                    }
+                }
+                System.out.println("Enter venue");
+                venue = sc.next();
+                while (true) {
+                    System.out.println("Enter teaching weeks, separated with a comma (1-13)");
+                    inputWeeks = getInput().split(",");
+                    teachingWeeks = new ArrayList<>();
+                    for (String week : inputWeeks) {
+                        if (courseValidator.validateInt(week) && Integer.parseInt(week) < 13 && Integer.parseInt(week) > 0) {
+                            teachingWeeks.add(Integer.parseInt(week));
+                        } else {
+                            System.out.println("ERROR: Invalid week entered.");
+                            break;
+                        }
+                    }
+                    if (inputWeeks.length == teachingWeeks.size()) {
+                        break;
+                    }
+                }
+            } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
+                    venue, teachingWeeks));
+        } catch (EscapeException e) {
+            return;
+        }
+    }
+    //TODO: Validation from this point on
     private void createStudent() {
         String studentName;
         String studentMatric;
@@ -396,7 +513,7 @@ public class AdminInterface extends UserInterface {
     /**
      * todo bring in update access time
      */
-    private void editStudent(){
+    private void updateStudent(){
         String matric;
         String updatedValue;
         int choice;

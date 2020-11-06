@@ -1,9 +1,15 @@
+/**
+ * UserValidator extends the Validator class and adds additional validation methods specialized for handling users
+ * in the system.
+ * Assumes user knows what the input formats are (through a guide, manual, etc).
+ */
+
 public class UserValidator extends Validator {
 
     public boolean validateUserID(String userID) {
         if (userID.matches("^[A-Za-z0-9]+$"))
             return true;
-        System.out.println("ERROR: User ID can only contain alphabets and digits.");
+        System.out.println("ERROR: User ID can only contain letters and digits.");
         return false;
     }
 

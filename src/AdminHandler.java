@@ -165,7 +165,7 @@ public class AdminHandler{
         return true;
     }
 
-    public boolean addStudent(String matricNum, String updatedValue, int choice){
+    public boolean editStudent(String matricNum, String updatedValue, int choice){
         Student tempStudent = sdm.getStudent(matricNum);
         switch(choice){
             case(1)-> {
@@ -209,7 +209,7 @@ public class AdminHandler{
         try {
             tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school);
             return true;
-        } catch (ObjectCreationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
@@ -220,7 +220,7 @@ public class AdminHandler{
         try {
             tempCourse.addIndex(indexNum, indexVacancies);
             return true;
-        } catch (ObjectCreationException e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
@@ -293,13 +293,20 @@ public class AdminHandler{
     }
 
     public LocalDateTime[] getAccessPeriod(String matricNum){
-        return sdm.getStudent(matricNum).getAccessTime();
+        Student student = sdm.getStudent(matricNum);
+        if (student != null)
+            return sdm.getStudent(matricNum).getAccessTime();
+        return null;
     }
 
-    public boolean editAccessPeriod(String matricNum, String start, String end){
+    public boolean editAccessPeriod(String matricNum, LocalDateTime start, LocalDateTime end){
         // check start time < end time
-        sdm.getStudent(matricNum).setAccessTime(start, end);
-        return true;
+        if (end.compareTo(start) > 0) {
+            sdm.getStudent(matricNum).setAccessTime(start, end);
+            return true;
+        }
+        System.out.println("ERROR: End of access period cannot be earlier or same as start of access period.");
+        return false;
     }
 
     public boolean addStudent(String userid, String password, String studentName, String studentMatric, String email,
