@@ -11,6 +11,8 @@ public class DataGenerator {
         Course newcourse2 = new Course("CZ2002","OODP", "CORE",3,"SCSE");
         Course newcourse3 = new Course("CZ2003","CGV", "CORE",3,"SCSE");
         cdm.addCourse(newcourse1);
+        cdm.addCourse(newcourse2);
+        cdm.addCourse(newcourse3);
 
         Index index1 = new Index("10202",50);
         Index index2 = new Index("10203", 50);
@@ -20,16 +22,16 @@ public class DataGenerator {
         Index index6 = new Index("10207",50);
 
         ArrayList<Integer> allweeks = new ArrayList<Integer>();
-        for (int i=0;i<13;i++)
+        for (int i=1;i<=13;i++)
             allweeks.add(i);
         ArrayList<Integer> oddweeks = new ArrayList<Integer>();
-        for (int i=0;i<13;i++)
+        for (int i=1;i<=13;i++)
             if (i%2==1)
-            allweeks.add(i);
+                oddweeks.add(i);
         ArrayList<Integer> evenweeks = new ArrayList<Integer>();
-        for (int i=0;i<13;i++)
+        for (int i=1;i<=13;i++)
             if (i%2==0)
-            allweeks.add(i);
+                evenweeks.add(i);
 
         Lesson lesson1 = new Lesson("LEC","CS2","TUE",LocalTime.parse("09:30"),LocalTime.parse("10:30"),"Online", allweeks);
         Lesson lesson2 = new Lesson("LEC","CS2","FRI",LocalTime.parse("11:30"),LocalTime.parse("12:30"),"Online", allweeks);
@@ -43,8 +45,8 @@ public class DataGenerator {
         Admin admin2 = new Admin("ang0001",BCrypt.hashpw("12345", BCrypt.gensalt()),"Lionel Ang","SCSE","A156","ang0001@e.ntu.edu.sg");
 
         index1.addLesson("LEC","CS2","TUES", LocalTime.parse("09:30:00"),LocalTime.parse("10:30:00"),"Online", allweeks);
-        index1.addToEnrolledStudents(enrolledStudents, student1);
-        index1.addToWaitlist(waitlist, student2);
+        index1.addToEnrolledStudents(index1.getEnrolledStudents(), student1);
+        index1.addToWaitlist(index1.getWaitlist(), student2);
 
     }
 
