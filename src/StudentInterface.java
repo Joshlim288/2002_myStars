@@ -31,7 +31,13 @@ public class StudentInterface extends UserInterface {
             System.out.println("5. Change Index");
             System.out.println("6. Swap Index");
             System.out.println("7. Back to main menu");
-            choice = Integer.parseInt(sc.nextLine());
+            while (true) {
+                tempString = sc.nextLine();
+                if (userValidator.validateInt(tempString)) {
+                    choice = Integer.parseInt(tempString);
+                    break;
+                }
+            }
 
             switch (choice) {
                 case (1) -> addCourse();
@@ -63,8 +69,8 @@ public class StudentInterface extends UserInterface {
     }
 
     //Used in adding of course, dropping of course, changing and swapping index
-    private Course getCourseInputAndCheck(){
-        Course courseSelected = studHandler.cdm.getCourse(getInput());
+    private Course getCourseInputAndCheck(String courseCode){
+        Course courseSelected = studHandler.cdm.getCourse(courseCode);
 
         //TODO: Fix return
         if (courseSelected == null) {
@@ -76,8 +82,8 @@ public class StudentInterface extends UserInterface {
     }
 
     //Used in adding of course, changing index and swapping index
-    private Index getIndexInputAndCheck(Course courseSelected, ArrayList<Index> indexList){
-        Index indexSelected = courseSelected.getIndex(sc.nextLine());
+    private Index getIndexInputAndCheck(Course courseSelected, String indexNum, ArrayList<Index> indexList){
+        Index indexSelected = courseSelected.getIndex(indexNum);
 
         if (indexSelected == null){
             System.out.println("Index does not exist in this course!");
@@ -97,44 +103,71 @@ public class StudentInterface extends UserInterface {
     }
 
     private void addCourse() {
+        String courseCode;
+        String indexNum;
+        try {
+            while (true) {
+                System.out.print("Enter course to add (e.g. CZ2002):");
+                courseCode = getInput();
+                if (courseValidator.validateCourseCode(courseCode)) {
+                    break;
+                }
+            }
+            Course courseSelected = getCourseInputAndCheck(courseCode);
 
-        System.out.println("Enter course to add (e.g. CZ2002):");
-        Course courseSelected = getCourseInputAndCheck();
+            if (studHandler.willGoOverMaxAU(courseSelected)) {
+                System.out.println("Cannot register for course, will exceed maximum AUs!");
+                break;
+            }
 
-        if (studHandler.willGoOverMaxAU(courseSelected)){
-            System.out.println("Cannot register for course, will exceed maximum AUs!");
-            break;
+            ArrayList<Index> indexList = getIndexesInCourse(courseSelected);
+            while (true) {
+                System.out.println("Enter the index you would like to enroll in.\n" +
+                        "You will be added to wait-list if you choose an index with no vacancies:");
+                indexNum = getInput();
+                if (courseValidator.validateIndexNum(indexNum)) {
+                    break;
+                }
+            }
+            Index indexSelected = getIndexInputAndCheck(courseSelected, indexNum, indexList);
+
+            System.out.println("You have selected to add : \n" +
+                    courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
+                    "Index Number: " + indexSelected.getIndexNum());
+
+            int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null);
+            printStatusOfAddCourse(status, indexSelected);
+        } catch (EscapeException e) {
+            return;
         }
-
-        ArrayList<Index> indexList = getIndexesInCourse(courseSelected);
-        System.out.println("Enter the index you would like to enroll in:\n" +
-                           "You will be added to wait-list if you choose an index with no vacancies.");
-        Index indexSelected = getIndexInputAndCheck(courseSelected, indexList);
-
-        System.out.println("You have selected to add : \n" +
-                           courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
-                           "Index Number: " + indexSelected.getIndexNum());
-
-
-        int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null);
-        printStatusOfAddCourse(status, indexSelected);
     };
 
     private void dropCourse() {
-        System.out.println("Enter course to drop (e.g. CZ2002):");
-        Course courseSelected = getCourseInputAndCheck();
+        String courseCode;
+        try {
+            while (true) {
+                System.out.print("Enter course to drop (e.g. CZ2002):");
+                courseCode = getInput();
+                if (courseValidator.validateCourseCode(courseCode)) {
+                    break;
+                }
+            }
+            Course courseSelected = getCourseInputAndCheck(courseCode);
 
-        if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
-            System.out.println("You are not enrolled in this course!");
+            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
+                System.out.println("You are not enrolled in this course!");
+                return;
+            }
+
+            Index index = studHandler.currentStudent.retrieveIndex(courseSelected);
+            System.out.println("You have selected to drop: \n" +
+                    courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
+                    "Index Number: " + index.getIndexNum());
+            studHandler.dropCourse(courseSelected, index);
+            System.out.println("Successfully dropped " + index.getIndexNum() + "!");
+        } catch (EscapeException e) {
             return;
         }
-
-        Index index = studHandler.currentStudent.retrieveIndex(courseSelected);
-        System.out.println("You have selected to drop: \n" +
-                           courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
-                           "Index Number: " + index.getIndexNum());
-        studHandler.dropCourse(courseSelected, index);
-        System.out.println("Successfully dropped " + index.getIndexNum() + "!");
     };
 
     private void checkRegisteredCourses(){
@@ -143,94 +176,130 @@ public class StudentInterface extends UserInterface {
     };
 
     private void checkIndexVacancies(){
-        System.out.println("Enter course to check (e.g. CZ2002):");
-        Course courseSelected = studHandler.cdm.getCourse(getInput());
+        try {
+            String courseCode;
+            while (true) {
+                System.out.println("Enter course to check (e.g. CZ2002):");
+                courseCode = getInput();
+                if (courseValidator.validateCourseCode(courseCode)) {
+                    break;
+                }
+            }
+            Course courseSelected = studHandler.cdm.getCourse(courseCode);
 
-        if (courseSelected == null) {
-            System.out.println("Course does not exist!");
+            if (courseSelected == null) {
+                System.out.println("Course does not exist!");
+                return;
+            }
+
+            System.out.println("Here are the vacancies for the indexes in this course:");
+            getIndexesInCourse(courseSelected);
+        } catch (EscapeException e) {
             return;
         }
-
-        System.out.println("Here are the vacancies for the indexes in this course:");
-        getIndexesInCourse(courseSelected);
     };
 
     private void changeIndex() {
-        System.out.println(studHandler.getRegisteredCourses());
-        System.out.println("Choose course for changing of index (e.g. CZ2002):");
+        String courseCode;
+        String indexNum;
+        try {
+            System.out.println(studHandler.getRegisteredCourses());
+            while (true) {
+                System.out.print("Choose course for changing of index (e.g. CZ2002):");
+                courseCode = getInput();
+                if (courseValidator.validateCourseCode(courseCode)) {
+                    break;
+                }
+            }
+            Course courseSelected = getCourseInputAndCheck(courseCode);
 
-        Course courseSelected = getCourseInputAndCheck();
+            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
+                System.out.println("You are not enrolled in this course!");
+                return;
+            }
 
-        if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
-            System.out.println("You are not enrolled in this course!");
+            ArrayList<Index> indexList = getIndexesInCourse(courseSelected);
+            Index indexToDrop = this.studHandler.currentStudent.retrieveIndex(courseSelected);
+
+            while (true) {
+                System.out.println("Enter the index to swap to.\n" +
+                        "You will be dropped from course and added to wait-list if index with no vacancies chosen:");
+                indexNum = getInput();
+                if (courseValidator.validateIndexNum(indexNum)) {
+                    break;
+                }
+            }
+            Index indexSelected = getIndexInputAndCheck(courseSelected, indexNum, indexList);
+
+            if (indexSelected.equals(indexToDrop)) {
+                System.out.println("You have chosen the index you are currently in!");
+                return;
+            }
+
+            int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
+            printStatusOfAddCourse(status, indexSelected);
+        } catch (EscapeException e) {
             return;
         }
-
-        ArrayList<Index> indexList = getIndexesInCourse(courseSelected);
-        Index indexToDrop = this.studHandler.currentStudent.retrieveIndex(courseSelected);
-
-        System.out.println("Enter the index to swap to:\n" +
-                           "You will be dropped from course and added to wait-list if index with no vacancies chosen.");
-
-        Index indexSelected = getIndexInputAndCheck(courseSelected, indexList);
-
-        if (indexSelected.equals(indexToDrop)) {
-            System.out.println("You have chosen the index you are currently in!");
-            return;
-        }
-
-        int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
-        printStatusOfAddCourse(status, indexSelected);
     }
 
-    private void swapIndex(){
+    private void swapIndex() {
+        String courseCode;
+        String indexNum;
+        try {
+            System.out.println(studHandler.getRegisteredCourses());
+            while (true) {
+                System.out.print("Choose course for swapping of index (e.g. CZ2002):");
+                courseCode = getInput();
+                if (courseValidator.validateCourseCode(courseCode)) {
+                    break;
+                }
+            }
+            Course courseSelected = getCourseInputAndCheck(courseCode);
 
-        System.out.println(studHandler.getRegisteredCourses());
-        System.out.println("Choose course for swapping of index (e.g. CZ2002):");
+            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
+                System.out.println("You are not enrolled in this course!");
+                return;
+            }
 
-        Course courseSelected = getCourseInputAndCheck();
+            getIndexesInCourse(courseSelected);
+            Index indexToSwapOut = this.studHandler.currentStudent.retrieveIndex(courseSelected);
 
-        if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
-            System.out.println("You are not enrolled in this course!");
+            System.out.println("Enter the particulars of the student to swap with:");
+            studHandler.retrieveOtherStudent(sc);
+
+            if (!studHandler.otherStudent.getCoursesRegistered().containsKey(courseSelected)) {
+                System.out.println("The other student is not enrolled in this course!");
+                return;
+            }
+
+            Index indexToSwapIn = studHandler.otherStudent.retrieveIndex(courseSelected);
+
+            System.out.println("Summary of Indexes after swap performed:\n" +
+                    courseSelected.getCourseName() + "\n");
+
+            System.out.println(studHandler.currentStudent.getName() + " | " + studHandler.otherStudent.getName() + "\n" +
+                    indexToSwapIn.getIndexNum() + " | " + indexToSwapOut.getIndexNum() + "\n" +
+                    "Confirm to proceed with the swap? Press 'Y/y' to continue and any other key otherwise.");
+
+            char ans = sc.nextLine().toCharArray()[0];
+
+            if (ans == 'Y' || ans == 'y') {
+                //Perform the swap. AddCourse() also drops the current index they were previously in
+                //TODO: To ensure wait-list of indexes not triggered in the middle of swap
+                int status1 = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut);
+                int status2 = studHandler.addCourse(studHandler.otherStudent, courseSelected, indexToSwapOut, indexToSwapIn);
+                System.out.println("For current student: ");
+                printStatusOfAddCourse(status1, indexToSwapIn);
+                System.out.println("\n For other student");
+                printStatusOfAddCourse(status2, indexToSwapOut);
+                studHandler.updateOtherStudent(courseSelected, indexToSwapIn, indexToSwapOut);
+            } else
+                System.out.println("Swap not performed.\n" + "Exiting to main menu...");
+        } catch (EscapeException e) {
             return;
         }
-
-        getIndexesInCourse(courseSelected);
-        Index indexToSwapOut = this.studHandler.currentStudent.retrieveIndex(courseSelected);
-
-        System.out.println("Enter the particulars of the student to swap with:");
-        studHandler.retrieveOtherStudent(sc);
-
-
-        if (!studHandler.otherStudent.getCoursesRegistered().containsKey(courseSelected)) {
-            System.out.println("The other student is not enrolled in this course!");
-            return;
-        }
-
-        Index indexToSwapIn = studHandler.otherStudent.retrieveIndex(courseSelected);
-
-        System.out.println("Summary of Indexes after swap performed:\n" +
-                           courseSelected.getCourseName() + "\n");
-
-        System.out.println(studHandler.currentStudent.getName() + " | " + studHandler.otherStudent.getName() + "\n" +
-                           indexToSwapIn.getIndexNum() + " | " + indexToSwapOut.getIndexNum() + "\n" +
-                           "Confirm to proceed with the swap? Press 'Y/y' to continue and any other key otherwise.");
-
-        char ans = getInput();
-
-        if (ans == 'Y' || ans == 'y'){
-            //Perform the swap. AddCourse() also drops the current index they were previously in
-            //TODO: To ensure wait-list of indexes not triggered in the middle of swap
-            int status1 = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut);
-            int status2 = studHandler.addCourse(studHandler.otherStudent, courseSelected, indexToSwapOut, indexToSwapIn);
-            System.out.println("For current student: ");
-            printStatusOfAddCourse(status1, indexToSwapIn);
-            System.out.println("\n For other student");
-            printStatusOfAddCourse(status2, indexToSwapOut);
-            studHandler.updateOtherStudent(courseSelected, indexToSwapIn, indexToSwapOut);
-        } else
-            System.out.println("Swap not performed.\n" + "Exiting to main menu...");
-    };
+    }
 
     private void logout(){
         System.out.println("Saving Data...");
