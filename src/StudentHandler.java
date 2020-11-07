@@ -32,13 +32,11 @@ public class StudentHandler {
     }
 
     //TODO: Improve input validation
-    //TODO: If all indexes full, skip index selection and jump to asking if waitlist desired
 
     private void updateWaitList(Course course, Index index)
     {
             index.addToWaitlist(index.getWaitlist(), this.currentStudent);
             currentStudent.addCourseToWaitList(course, index);
-            // there should be more stuffs happening when added to wait list
     }
 
     //Return the index if there is a clash and null otherwise
@@ -80,24 +78,24 @@ public class StudentHandler {
     // If clash found, returns the index new course clashed with through
     // Converts course index as integer first for switch statement of printStatusOfAddCourse
     //TODO: To improve, feels like it can be done better
-    public int addCourse(Student student, Course course, Index index, Index indexToDrop)
+    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop)
     {
-            Index clashWithRegistered = hasClash(index, student.getCoursesRegistered());
-            Index clashWithWaitList = hasClash(index, student.getWaitList());
+            Index clashWithRegistered = hasClash(indexToAdd, student.getCoursesRegistered());
+            Index clashWithWaitList = hasClash(indexToAdd, student.getWaitList());
 
             if(clashWithRegistered != null)
                 return Integer.parseInt(clashWithRegistered.getIndexNum());
             if(clashWithWaitList != null)
                 return Integer.parseInt(clashWithWaitList.getIndexNum());
 
-            else if (index.isAtMaxCapacity()) {
+            else if (indexToAdd.isAtMaxCapacity()) {
                 if (indexToDrop != null) dropCourse(course, indexToDrop);
-                updateWaitList(course, index);
+                updateWaitList(course, indexToAdd);
                 return 1;
             } else{
                 if (indexToDrop != null) dropCourse(course, indexToDrop);
-                index.addToEnrolledStudents(index.getEnrolledStudents(), student);
-                student.addCourse(course, index);
+                indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student);
+                student.addCourse(course, indexToAdd);
                 return 2;
             }
     }
@@ -134,12 +132,13 @@ public class StudentHandler {
         return stringBuilder.toString();
     }
 
-    public void retrieveOtherStudent(Scanner sc) {
+    public void retrieveOtherStudent(Scanner sc) throws AccessDeniedException{
         User targetUser = MyStars.login(sc);
-        if (targetUser.equals(currentStudent))
-            otherStudent = sdm.getStudent(((Student)targetUser).getMatricNum());
-        else
+        while (targetUser.equals(currentStudent)){
             System.out.println("Error! You have chosen yourself.");
+            targetUser = MyStars.login(sc);
+        }
+        otherStudent = sdm.getStudent(((Student) targetUser).getMatricNum());
     }
 
     //Send email to other student if a swap has been performed successfully
