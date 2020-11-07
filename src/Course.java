@@ -1,4 +1,3 @@
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -124,6 +123,13 @@ public class Course {
         indexes.add(newIndex);
     }
 
+    public Index getIndex(String indexCode) {
+        for (Index index : indexes)
+            if (index.getIndexNum().equals(indexCode))
+                return index;
+        return null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null) {
@@ -133,18 +139,7 @@ public class Course {
             return false;
         }
         Course other = (Course) o;
-        return other.getCourseCode() == courseCode;
-    }
-
-    public Index getIndex(String indexCode) {
-        for (Index index : indexes)
-        {
-            if (index.getIndexNum().equals(indexCode))
-            {
-                return index;
-            }
-        }
-        return null;
+        return other.getCourseCode().equals(courseCode);
     }
 
     @Override

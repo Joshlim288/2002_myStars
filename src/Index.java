@@ -1,4 +1,3 @@
-import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -197,7 +196,7 @@ public class Index {
             return false;
         }
         Index other = (Index) o;
-        return other.getIndexNum() == indexNum;
+        return other.getIndexNum().equals(indexNum);
     }
 
 
