@@ -4,6 +4,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+enum typeOfInput{
+    NAME, INT, TIME, DATETIME, USERID, EMAIL, MATRIC_NUM, GENDER, STAFF_NUM, COURSE_CODE, COURSE_TYPE, INDEX_NUM, LESSON_TYPE,
+    DAY, GROUP_NAME, STANDARD
+}
+
 /**
  * Abstract class that defines a general userInterface that would show the menu for a particular type of user
  * Also contains input getters that force users to enter correct input, or abort the function with the ~ character
@@ -27,17 +32,66 @@ public abstract class UserInterface {
     public abstract void start();
 
     /**
-     * Gets string input from user
-     * @return String that matches regex expression
+     * Gets string input from user and validates it
+     * @return user input that is valid as String
      * @throws EscapeException Used to abort function and return to main menu
      */
-    public String getInput() throws EscapeException{
+    public String getInput(typeOfInput inputType) throws EscapeException{
         String input;
         input = sc.nextLine();
-        if (input.equals("~")) {
-            throw new EscapeException("Exiting to main menu");
-        } else {
-            return input;
+        while (true) {
+            if (input.equals("~")) {
+                throw new EscapeException("Exiting to main menu");
+            } else {
+                if (validateInput(input, inputType))
+                    return input;
+                System.out.print("Please enter again: ");
+            }
+        }
+    }
+
+    /**
+     * Validates input from user
+     * @param input input to be validated
+     * @param inputType enum representing type of input
+     * @return true if input is valid
+     */
+    private boolean validateInput(String input, typeOfInput inputType) {
+        switch (inputType) {
+            case NAME: // names
+                return userValidator.validateName(input);
+            case INT: // integer inputs
+                return userValidator.validateInt(input);
+            case TIME: // time
+                return userValidator.validateTime(input);
+            case DATETIME: // datetime
+                return userValidator.validateDateTime(input);
+            case USERID: // userID
+                return userValidator.validateUserID(input);
+            case EMAIL: // email
+                return userValidator.validateEmail(input);
+            case MATRIC_NUM: // matricNum
+                return userValidator.validateMatricNum(input);
+            case GENDER: // gender
+                return userValidator.validateGender(input);
+            case STAFF_NUM: // staff num
+                return userValidator.validateStaffNum(input);
+            case COURSE_CODE: // course code
+                return courseValidator.validateCourseCode(input);
+            case COURSE_TYPE: // course type
+                return courseValidator.validateCourseType(input);
+            case INDEX_NUM:  // index num
+                return courseValidator.validateIndexNum(input);
+            case LESSON_TYPE: // lesson type
+                return courseValidator.validateLessonType(input);
+            case DAY: // day
+                return courseValidator.validateDay(input);
+            case GROUP_NAME: // group name
+                return courseValidator.validateGroupName(input);
+            case STANDARD:
+                return true;
+            default:
+                throw new IllegalArgumentException("ERROR: Invalid input type.");
         }
     }
 

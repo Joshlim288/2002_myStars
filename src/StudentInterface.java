@@ -103,14 +103,8 @@ public class StudentInterface extends UserInterface {
         String courseCode;
         String indexNum;
         try {
-            while (true) {
-                System.out.print("Enter course to add (e.g. CZ2002):");
-                courseCode = getInput();
-                if (courseValidator.validateCourseCode(courseCode)) {
-                    break;
-                }
-            }
-
+            System.out.print("Enter course to add (e.g. CZ2002):");
+            courseCode = getInput(typeOfInput.COURSE_CODE);
             Course courseSelected = null;
             while (courseSelected == null)
                 courseSelected = getCourseInputAndCheck(courseCode);
@@ -119,15 +113,9 @@ public class StudentInterface extends UserInterface {
                 System.out.println("Cannot register for course, will exceed maximum AUs!");
                 return;
             }
-
-            while (true) {
-                System.out.println("Enter the index you would like to enroll in.\n" +
-                        "You will be added to wait-list if you choose an index with no vacancies:");
-                indexNum = getInput();
-                if (courseValidator.validateIndexNum(indexNum)) {
-                    break;
-                }
-            }
+            System.out.println("Enter the index you would like to enroll in.\n" +
+                    "You will be added to wait-list if you choose an index with no vacancies:");
+            indexNum = getInput(typeOfInput.INDEX_NUM);
 
             Index indexSelected = null;
             while (indexSelected == null)
@@ -148,13 +136,8 @@ public class StudentInterface extends UserInterface {
         String courseCode;
         checkRegisteredCourses();
         try {
-            while (true) {
-                System.out.print("Enter course to drop (e.g. CZ2002):");
-                courseCode = getInput();
-                if (courseValidator.validateCourseCode(courseCode)) {
-                    break;
-                }
-            }
+            System.out.print("Enter course to drop (e.g. CZ2002):");
+            courseCode = getInput(typeOfInput.COURSE_CODE);
             Course courseSelected = null;
             while (courseSelected == null)
                 courseSelected = getCourseInputAndCheck(courseCode);
@@ -183,13 +166,8 @@ public class StudentInterface extends UserInterface {
     private void checkIndexVacancies(){
         try {
             String courseCode;
-            while (true) {
-                System.out.println("Enter course to check (e.g. CZ2002):");
-                courseCode = getInput();
-                if (courseValidator.validateCourseCode(courseCode)) {
-                    break;
-                }
-            }
+            System.out.println("Enter course to check (e.g. CZ2002):");
+            courseCode = getInput(typeOfInput.COURSE_CODE);
             Course courseSelected = studHandler.cdm.getCourse(courseCode);
 
             if (courseSelected == null) {
@@ -209,13 +187,8 @@ public class StudentInterface extends UserInterface {
         String indexNum;
         try {
             System.out.println(studHandler.getRegisteredCourses());
-            while (true) {
-                System.out.print("Choose course for changing of index (e.g. CZ2002):");
-                courseCode = getInput();
-                if (courseValidator.validateCourseCode(courseCode)) {
-                    break;
-                }
-            }
+            System.out.print("Choose course for changing of index (e.g. CZ2002):");
+            courseCode = getInput(typeOfInput.COURSE_CODE);
 
             Course courseSelected = null;
             while (courseSelected == null)
@@ -227,15 +200,9 @@ public class StudentInterface extends UserInterface {
             }
 
             Index indexToDrop = this.studHandler.currentStudent.retrieveIndex(courseSelected);
-
-            while (true) {
-                System.out.println("Enter the index to swap to.\n" +
-                        "You will be dropped from course and added to wait-list if index with no vacancies chosen:");
-                indexNum = getInput();
-                if (courseValidator.validateIndexNum(indexNum)) {
-                    break;
-                }
-            }
+            System.out.println("Enter the index to swap to.\n" +
+                    "You will be dropped from course and added to wait-list if index with no vacancies chosen:");
+            indexNum = getInput(typeOfInput.INDEX_NUM);
 
             Index indexSelected = null;
             while(indexSelected == null)
@@ -258,13 +225,8 @@ public class StudentInterface extends UserInterface {
         String indexNum;
         try {
             System.out.println(studHandler.getRegisteredCourses());
-            while (true) {
-                System.out.print("Choose course for swapping of index (e.g. CZ2002):");
-                courseCode = getInput();
-                if (courseValidator.validateCourseCode(courseCode)) {
-                    break;
-                }
-            }
+            System.out.print("Choose course for swapping of index (e.g. CZ2002):");
+            courseCode = getInput(typeOfInput.COURSE_CODE);
 
             Course courseSelected = null;
             while (courseSelected == null)
