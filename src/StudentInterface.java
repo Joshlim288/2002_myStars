@@ -52,7 +52,7 @@ public class StudentInterface extends UserInterface {
     }
 
     //Used in adding of course, changing index and swapping index
-    private ArrayList<Index> getIndexesInCourse(Course courseSelected){
+    private void showIndexesInCourse(Course courseSelected){
 
         ArrayList<Index> indexList = courseSelected.getIndexes();
 
@@ -64,11 +64,18 @@ public class StudentInterface extends UserInterface {
 
         for (Index index : indexList)
             System.out.println(index);
-
-        return indexList;
     }
 
-    //Used in adding of course, dropping of course, changing and swapping index
+    //Default when an integer representing clash is returned
+    private void printStatusOfAddCourse(int status, Index indexSelected){
+        switch (status) {
+            case (1) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + "successfully!");
+            case (2) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + "successfully!");
+            default -> System.out.println("Unsuccessful, clash found with Index" + status + "!");
+        }
+    }
+
+    //Used in addCourse(), dropCourse(), changeIndex() and swapIndex()
     private Course getCourseInputAndCheck(String courseCode){
         Course courseSelected = studHandler.cdm.getCourse(courseCode);
 
@@ -79,7 +86,7 @@ public class StudentInterface extends UserInterface {
         return courseSelected;
     }
 
-    //Used in adding of course, changing index and swapping index
+    //Used in addCourse(), changeIndex() and swapIndex()
     private Index getIndexInputAndCheck(Course courseSelected, String indexNum){
         Index indexSelected = courseSelected.getIndex(indexNum);
 
@@ -88,15 +95,6 @@ public class StudentInterface extends UserInterface {
                                "Please re-enter index again.");
 
         return indexSelected;
-    }
-
-    //Default when an integer representing clash is returned
-    private void printStatusOfAddCourse(int status, Index indexSelected){
-        switch (status) {
-            case (1) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + "successfully!");
-            case (2) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + "successfully!");
-            default -> System.out.println("Unsuccessful, clash found with Index" + status + "!");
-        }
     }
 
     private void addCourse() {
@@ -128,9 +126,9 @@ public class StudentInterface extends UserInterface {
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null);
             printStatusOfAddCourse(status, indexSelected);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
-    };
+    }
 
     private void dropCourse() {
         String courseCode;
@@ -154,14 +152,14 @@ public class StudentInterface extends UserInterface {
             studHandler.dropCourse(courseSelected, index);
             System.out.println("Successfully dropped " + index.getIndexNum() + "!");
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
-    };
+    }
 
     private void checkRegisteredCourses(){
         System.out.println("Here are your currently registered courses:");
         System.out.println(studHandler.getRegisteredCourses());
-    };
+    }
 
     private void checkIndexVacancies(){
         try {
@@ -176,11 +174,11 @@ public class StudentInterface extends UserInterface {
             }
 
             System.out.println("Here are the vacancies for the indexes in this course:");
-            getIndexesInCourse(courseSelected);
+            showIndexesInCourse(courseSelected);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
-    };
+    }
 
     private void changeIndex() {
         String courseCode;
@@ -216,13 +214,12 @@ public class StudentInterface extends UserInterface {
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
             printStatusOfAddCourse(status, indexSelected);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
     private void swapIndex() {
         String courseCode;
-        String indexNum;
         try {
             System.out.println(studHandler.getRegisteredCourses());
             System.out.print("Choose course for swapping of index (e.g. CZ2002):");
@@ -237,7 +234,7 @@ public class StudentInterface extends UserInterface {
                 return;
             }
 
-            getIndexesInCourse(courseSelected);
+            showIndexesInCourse(courseSelected);
             Index indexToSwapOut = this.studHandler.currentStudent.retrieveIndex(courseSelected);
 
             boolean validUser = false;
@@ -246,7 +243,9 @@ public class StudentInterface extends UserInterface {
                 try {
                     studHandler.retrieveOtherStudent(sc);
                     validUser = true;
-                } catch (AccessDeniedException e){}
+                } catch (AccessDeniedException e){
+                    System.out.println(e.getMessage());
+                }
             }
 
             if (!studHandler.otherStudent.getCoursesRegistered().containsKey(courseSelected)) {
@@ -277,7 +276,7 @@ public class StudentInterface extends UserInterface {
             } else
                 System.out.println("Swap not performed.\n" + "Exiting to main menu...");
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -286,5 +285,5 @@ public class StudentInterface extends UserInterface {
         studHandler.close();
         System.out.println("Thank you for using MyStars!");
         System.out.println("Goodbye!");
-    };
+    }
 }

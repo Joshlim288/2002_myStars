@@ -1,5 +1,4 @@
-/**
- * Control class for handling student matters
+/** Control class for handling student matters
  * Try not to ask for input here, get input using scanner in AdminInterface
  * Then pass the input as arguments
  *
@@ -33,13 +32,58 @@ public class StudentHandler {
 
     //TODO: Improve input validation
 
-    private void updateWaitList(Course course, Index index)
-    {
-            index.addToWaitlist(index.getWaitlist(), this.currentStudent);
-            currentStudent.addCourseToWaitList(course, index);
+    // Used for both changing/swapping index and adding new course
+    // For changing/swapping index, indexToDrop will be the one to drop
+    // For adding new course, indexToDrop will be null
+    // If clash found, returns the index new course clashed with through
+    // Converts course index as integer first for switch statement of printStatusOfAddCourse
+    //TODO: To improve, feels like it can be done better
+    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop) {
+        Index clashWithRegistered = hasClash(indexToAdd, student.getCoursesRegistered());
+        Index clashWithWaitList = hasClash(indexToAdd, student.getWaitList());
+
+        if(clashWithRegistered != null)
+            return Integer.parseInt(clashWithRegistered.getIndexNum());
+        if(clashWithWaitList != null)
+            return Integer.parseInt(clashWithWaitList.getIndexNum());
+
+        else if (indexToAdd.isAtMaxCapacity()) {
+            if (indexToDrop != null) dropCourse(course, indexToDrop);
+            updateWaitList(course, indexToAdd);
+            return 1;
+        } else{
+            if (indexToDrop != null) dropCourse(course, indexToDrop);
+            indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student);
+            student.addCourse(course, indexToAdd);
+            return 2;
+        }
     }
 
-    //Return the index if there is a clash and null otherwise
+    public void dropCourse(Course course,Index cIndex) {
+        //Remove student from list of enrolled students in index
+        cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
+
+        //Remove course from student's registered courses
+        currentStudent.removeCourse(course);
+
+        //Register student at start of waitlist for the course
+        if(!cIndex.getWaitlist().isEmpty()) {
+            Student studentRemoved = cIndex.removeFromWaitlist(cIndex.getWaitlist());
+            studentRemoved.removeCourseFromWaitList(course);
+            studentRemoved.addCourse(course, cIndex);
+
+            //Create a MailHandler object to send an email to student removed from wait-list
+            MailHandler.sendMail(studentRemoved.getEmail(),
+                      "You have been removed from a wait-list!",
+                          "Successful Registration of Course");
+        }
+    }
+
+    private void updateWaitList(Course course, Index index) {
+        index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+        currentStudent.addCourseToWaitList(course, index);
+    }
+
     private Index hasClash(Index indexToAdd, HashMap<Course,Index> coursesRegistered) {
         //Retrieve lessons to be added for new index
         ArrayList<Lesson> lessonsToCheck = indexToAdd.getLessons();
@@ -72,55 +116,6 @@ public class StudentHandler {
         return currentStudent.getCurrentAUs() + courseSelected.getAcademicUnits() > currentStudent.getMaxAUs();
     }
 
-    // Used for both changing/swapping index and adding new course
-    // For changing/swapping index, indexToDrop will be the one to drop
-    // For adding new course, indexToDrop will be null
-    // If clash found, returns the index new course clashed with through
-    // Converts course index as integer first for switch statement of printStatusOfAddCourse
-    //TODO: To improve, feels like it can be done better
-    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop)
-    {
-            Index clashWithRegistered = hasClash(indexToAdd, student.getCoursesRegistered());
-            Index clashWithWaitList = hasClash(indexToAdd, student.getWaitList());
-
-            if(clashWithRegistered != null)
-                return Integer.parseInt(clashWithRegistered.getIndexNum());
-            if(clashWithWaitList != null)
-                return Integer.parseInt(clashWithWaitList.getIndexNum());
-
-            else if (indexToAdd.isAtMaxCapacity()) {
-                if (indexToDrop != null) dropCourse(course, indexToDrop);
-                updateWaitList(course, indexToAdd);
-                return 1;
-            } else{
-                if (indexToDrop != null) dropCourse(course, indexToDrop);
-                indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student);
-                student.addCourse(course, indexToAdd);
-                return 2;
-            }
-    }
-
-    public void dropCourse(Course course,Index cIndex) {
-            //Remove student from list of enrolled students in index
-            cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
-
-            //Remove course from student's registered courses
-            currentStudent.removeCourse(course);
-
-            //Register student at start of waitlist for the course
-            if(!cIndex.getWaitlist().isEmpty()) {
-                Student studentRemoved = cIndex.removeFromWaitlist(cIndex.getWaitlist());
-                studentRemoved.removeCourseFromWaitList(course);
-                studentRemoved.addCourse(course, cIndex);
-
-                //Create a MailHandler object to send an email to student removed from wait-list
-                MailHandler mailHandler = new MailHandler();
-                mailHandler.sendMail(studentRemoved.getEmail(),
-                                    "You have been removed from a wait-list!",
-                                    "Successful Registration of Course");
-            }
-    }
-
     public String getRegisteredCourses() {
         //Get list of courses student is registered in.
         HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
@@ -143,8 +138,7 @@ public class StudentHandler {
 
     //Send email to other student if a swap has been performed successfully
     public void updateOtherStudent(Course courseSelected, Index oldIndex, Index newIndex){
-        MailHandler mailHandler = new MailHandler();
-        mailHandler.sendMail(otherStudent.getEmail(),
+        MailHandler.sendMail(otherStudent.getEmail(),
                   currentStudent.getName() + "has swapped indexes for " +
                              courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
                              "is now " + newIndex.getIndexNum() + ".",
