@@ -2,7 +2,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class AdminInterface extends UserInterface {
@@ -60,9 +59,8 @@ public class AdminInterface extends UserInterface {
             LocalDateTime[] accessTime = null;
             String newStart;
             String newEnd;
-            String matricNum = null;
             System.out.print("Enter student matriculation number: ");
-            matricNum = getInput(typeOfInput.MATRIC_NUM);
+            String matricNum = getInput(typeOfInput.MATRIC_NUM);
 
             do {
                 System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(dateTimeFormatter), accessTime[1].format(dateTimeFormatter));
@@ -75,7 +73,7 @@ public class AdminInterface extends UserInterface {
             } while (!adHandler.editAccessPeriod(matricNum, LocalDateTime.parse(newStart, dateTimeFormatter), LocalDateTime.parse(newEnd, dateTimeFormatter)));
             System.out.println("Access time successfully changed");
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -113,7 +111,7 @@ public class AdminInterface extends UserInterface {
             adHandler.finalizeCourse();
             System.out.println("Course successfully added");
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -134,14 +132,14 @@ public class AdminInterface extends UserInterface {
             numLessons = Integer.parseInt(getInput(typeOfInput.INT));
             for (int i = 0; i < numLessons; i++) {
                 System.out.printf("Creating Lesson %d:\n", i + 1);
-                createLesson(courseCode, indexNum);
+                createLesson(indexNum);
             }
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
-    private void createLesson(String courseCode, String indexNum) {
+    private void createLesson(String indexNum) {
         try {
             String lessonType;
             String group;
@@ -189,7 +187,7 @@ public class AdminInterface extends UserInterface {
             } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
                     venue, teachingWeeks));
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -235,25 +233,26 @@ public class AdminInterface extends UserInterface {
             } while (!adHandler.addStudent(userid, password, studentName, studentMatric, email,
                     gender, nationality, major, maxAUs));
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
     private void checkIndex() {
         try {
-            String course;
+            Index index;
             String indexNum;
-            int vacancies = -1;
             do {
                 System.out.print("Enter course code: ");
-                course = getInput(typeOfInput.COURSE_CODE);
+                String course = getInput(typeOfInput.COURSE_CODE);
 
                 System.out.print("Enter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
-            } while (vacancies == -1);
-            System.out.println("The vacancy for" + indexNum + "is: " + vacancies);
+                index = adHandler.cdm.getCourse(course).getIndex(indexNum);
+            } while (index == null);
+            System.out.println("The vacancy for index " + indexNum + "is: " +
+                               index.getCurrentVacancy() + "/" + index.getIndexVacancy());
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -276,7 +275,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println(stud);
             }
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -295,7 +294,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println(stud);
             }
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -359,7 +358,7 @@ public class AdminInterface extends UserInterface {
                 }
             } while (choice != 7);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -403,7 +402,7 @@ public class AdminInterface extends UserInterface {
                 }
             } while (choice != 4);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -478,7 +477,7 @@ public class AdminInterface extends UserInterface {
                 }
             } while (choice != 7);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -565,7 +564,7 @@ public class AdminInterface extends UserInterface {
                 }
             } while (choice != 10);
         } catch (EscapeException e) {
-            return;
+            System.out.println(e.getMessage());
         }
     }
 
@@ -575,7 +574,4 @@ public class AdminInterface extends UserInterface {
         System.out.println("Thank you for using MyStars!");
         System.out.println("Goodbye!");
     }
-
-
-
 }
