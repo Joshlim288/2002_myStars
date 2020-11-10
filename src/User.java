@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * User represents a user in the STARS system.<br>
  * It is inherited by Student and Admin.
@@ -6,7 +8,7 @@
  * @version 1.0
  * @since 2020-10-17
  */
-public abstract class User {
+public abstract class User implements Serializable {
 
     /** This user's user ID. */
     private String userID;

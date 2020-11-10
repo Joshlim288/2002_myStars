@@ -32,6 +32,7 @@ public class MyStars {
                     }
                     case(2) -> {
                         System.out.println("Exiting MyStars");
+                        menuChoice = "3";
                     }
 
                     default -> System.out.println("Enter a valid menu choice");
@@ -53,6 +54,7 @@ public class MyStars {
         userId = sc.nextLine();
         System.out.println("Enter password: ");
         password = Arrays.toString(System.console().readPassword());
+        System.out.println(password);
         return AccessControl.validate(userId, password);
     }
 }

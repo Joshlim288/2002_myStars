@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -30,7 +31,7 @@ enum typeOfLesson{
     LEC, TUT, LAB, DES, PRJ, SEM
 }
 
-public class Lesson {
+public class Lesson implements Serializable {
 
     /**
      * This lesson's type (e.g. LEC, TUT, LAB)

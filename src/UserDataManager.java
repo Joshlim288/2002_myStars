@@ -15,7 +15,7 @@ public class UserDataManager implements DataManager{
     public void load() {
         FileInputStream fileIn;
         ObjectInputStream in;
-        File userData = new File("data/users");
+        File userData = new File("data/users/");
         for (File userFile : userData.listFiles()) {
             try {
                 fileIn = new FileInputStream(userFile.getPath());

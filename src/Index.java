@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * @since 2020-10-18
  */
 
-public class Index {
+public class Index implements Serializable {
 
     /**
      * Uniquely identifies each index within a course.

@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * Admin represents an academic staff in the university.
  * Admins can add a new Student, and modify his/her course registrations.

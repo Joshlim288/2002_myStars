@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,7 @@ enum typeOfCourse{
     CORE, MPE, GER, UE
 }
 
-public class Course {
+public class Course implements Serializable {
 
     /**
      * Uniquely identifies the course.

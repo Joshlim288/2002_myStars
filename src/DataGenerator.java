@@ -3,16 +3,25 @@ import java.util.ArrayList;
 
 public class DataGenerator {
     public static void main(String[] args) {
-        CourseDataManager cdm = new CourseDataManager();
-        StudentDataManager sdm = new StudentDataManager();
+        //CourseDataManager cdm = new CourseDataManager();
+        //StudentDataManager sdm = new StudentDataManager();
         AdminDataManager adm = new AdminDataManager();
 
-        Course newcourse1 = new Course("CZ2001","Algorithm", "CORE",3,"SCSE");
-        Course newcourse2 = new Course("CZ2002","OODP", "CORE",3,"SCSE");
-        Course newcourse3 = new Course("CZ2003","CGV", "CORE",3,"SCSE");
+        Admin admin = new Admin("admin1", BCrypt.hashpw("admin", BCrypt.gensalt()), "James Tan", "SCSE",
+                                "ADMIN0000A", "admin1@e.ntu.edu.sg");
+        adm.addAdmin(admin);
+        adm.save();
+        /*
+        Course newcourse1 = new Course("CZ2001","Algorithms", "CORE",3,"SCSE");
+        Course newcourse2 = new Course("CZ2002","Object Oriented Design and Programming", "CORE",3,"SCSE");
+        Course newcourse3 = new Course("CZ2003","Computer Graphics and Visualization", "CORE",3,"SCSE");
+        Course newcourse4 = new Course("CZ2004","Human Computer Interaction", "CORE",3,"SCSE");
+        Course newcourse5 = new Course("EE8084", "Cyber Security", "GER", 3, "EEE");
         cdm.addCourse(newcourse1);
         cdm.addCourse(newcourse2);
         cdm.addCourse(newcourse3);
+        cdm.addCourse(newcourse4);
+        cdm.addCourse(newcourse5);
 
         Index index1 = new Index("10202",50);
         Index index2 = new Index("10203", 50);
@@ -47,7 +56,7 @@ public class DataGenerator {
         index1.addLesson("LEC","CS2","TUES", LocalTime.parse("09:30:00"),LocalTime.parse("10:30:00"),"Online", allweeks);
         index1.addToEnrolledStudents(index1.getEnrolledStudents(), student1);
         index1.addToWaitlist(index1.getWaitlist(), student2);
-
+        */
     }
 
 }
