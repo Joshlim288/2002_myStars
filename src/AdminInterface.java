@@ -26,9 +26,9 @@ public class AdminInterface extends UserInterface {
             System.out.println("3. Check available slot for an index number (vacancy in a class)");
             System.out.println("4. Print student list by index number");
             System.out.println("5. Print student list by course (all students registered for the selected course)");
-            System.out.println("6. Update a course");
-            System.out.println("7. Update a student");
-            System.out.println("8. Log out");
+            System.out.println("6. Update a Course's Details");
+            System.out.println("7. Update a Student's Details");
+            System.out.println("8. Log Out of MyStars");
             System.out.println("(Enter ~ at any time to exit back to menu)");
 
             try {
@@ -102,15 +102,21 @@ public class AdminInterface extends UserInterface {
                 aus = Integer.parseInt(getInput(typeOfInput.INT));
 
                 System.out.print("Enter 'y' if this course has final exams, any keys otherwise: ");
-                hasExams = getInput(typeOfInput.STANDARD) == "y";
+                hasExams = getInput(typeOfInput.STANDARD).equals("y");
 
-                do {
-                    System.out.print("Enter exam start datetime: ");
-                    examStart = getInput(typeOfInput.DATETIME);
+                if (hasExams) {
+                    do {
+                        System.out.print("Enter exam start datetime: ");
+                        examStart = getInput(typeOfInput.DATETIME);
 
-                    System.out.print("Enter exam end datetime: ");
-                    examEnd = getInput(typeOfInput.DATETIME);
-                } while (courseValidator.validateDateTimePeriod(examStart, examEnd));
+                        System.out.print("Enter exam end datetime: ");
+                        examEnd = getInput(typeOfInput.DATETIME);
+                    } while (!courseValidator.validateDateTimePeriod(examStart, examEnd));
+                }
+                else {
+                    examStart = null;
+                    examEnd = null;
+                }
 
             } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examStart, examEnd));
 
@@ -143,7 +149,7 @@ public class AdminInterface extends UserInterface {
             group = getInput(typeOfInput.GROUP_NAME);
         } while (!adHandler.addIndex(indexNum, indexVacancies, group));
 
-        System.out.print("Enter number of Lessons: ");
+        System.out.print("Enter number of lessons: ");
         numLessons = Integer.parseInt(getInput(typeOfInput.INT));
         for (int i = 0; i < numLessons; i++) {
             System.out.printf("Creating lesson %d:\n", i + 1);
@@ -153,7 +159,6 @@ public class AdminInterface extends UserInterface {
 
     private void createLesson(String indexNum) throws EscapeException{
         String lessonType;
-        String group;
         String day;
         LocalTime startTime;
         LocalTime endTime;
@@ -163,9 +168,6 @@ public class AdminInterface extends UserInterface {
         do {
             System.out.print("Enter lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
             lessonType = getInput(typeOfInput.LESSON_TYPE);
-
-            System.out.print("Enter group: ");
-            group = getInput(typeOfInput.GROUP_NAME);
 
             System.out.print("Enter day of week (First 3 letters of day): ");
             day = getInput(typeOfInput.DAY);
@@ -195,7 +197,7 @@ public class AdminInterface extends UserInterface {
                     break;
                 }
             }
-        } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
+        } while (!adHandler.addLesson(indexNum, lessonType, day, startTime, endTime,
                 venue, teachingWeeks));
     }
 
@@ -614,7 +616,7 @@ public class AdminInterface extends UserInterface {
     }
 
     private void logout() {
-        System.out.println("Saving data...");
+        System.out.println("\nSaving data...");
         adHandler.close();
         System.out.println("Thank you for using MyStars!");
         System.out.println("Goodbye!");
