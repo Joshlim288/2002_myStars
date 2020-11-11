@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * Creates objects and handles logic for Admin actions
  */
 public class AdminHandler{
-    Admin currentAdmin;
-    CourseDataManager cdm;
-    StudentDataManager sdm;
-    UserDataManager udm;
-    Course tempCourse;
+    private Admin currentAdmin;
+    private CourseDataManager cdm;
+    private StudentDataManager sdm;
+    private UserDataManager udm;
+    private Course tempCourse;
 
     public AdminHandler(Admin currentAdmin) {
         this.currentAdmin = currentAdmin;
@@ -23,6 +23,26 @@ public class AdminHandler{
         this.udm = new UserDataManager();
         cdm.load();
         sdm.load();
+    }
+    public ArrayList<Course> getCourses(){
+        return cdm.getCourseList();
+    }
+    public ArrayList<Index> getIndexes(String courseCode) {
+        return cdm.getCourse(courseCode).getIndexes();
+    }
+
+    public ArrayList<Lesson> getLessons(String courseCode, String indexNum){
+        return cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
+    }
+    public void printIndexVacancy(String indexNum){
+        Index tempIndex = null;
+        for (Course crs: cdm.getCourseList()) {
+            tempIndex = crs.getIndex(indexNum);
+            if(tempIndex!=null)
+                break;
+        }
+        System.out.println("The vacancy for index " + indexNum + " is: " +
+                tempIndex.getCurrentVacancy() + "/" + tempIndex.getIndexVacancy());
     }
 
     public boolean checkIndexExists(String indexNum) {
@@ -40,6 +60,15 @@ public class AdminHandler{
     public boolean checkCourseExists(String courseCode) {
         if (cdm.getCourse(courseCode) == null) {
             return false;
+        }
+        return true;
+    }
+
+    public boolean checkCourseOccupied(String courseCode){
+        for (Index idx: cdm.getCourse(courseCode).getIndexes()){
+            if (idx.getCurrentVacancy() != idx.getIndexVacancy()){
+                return false;
+            }
         }
         return true;
     }
