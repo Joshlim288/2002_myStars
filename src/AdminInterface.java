@@ -32,6 +32,8 @@ public class AdminInterface extends UserInterface {
             System.out.println("7. Update a course");
             System.out.println("8. Update a student");
             System.out.println("9. Log out");
+            System.out.println("(Enter ~ at any time to exit back to menu)");
+            System.out.print("Enter choice:");
             while (true) {
                 tempString = sc.nextLine();
                 if (userValidator.validateInt(tempString)) {
@@ -126,7 +128,7 @@ public class AdminInterface extends UserInterface {
 
                 System.out.print("Enter number of vacancies: ");
                 indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
-            } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies));
+            } while (!adHandler.addIndex(indexNum, indexVacancies));
 
             System.out.print("Enter number of Lessons: ");
             numLessons = Integer.parseInt(getInput(typeOfInput.INT));
@@ -257,7 +259,7 @@ public class AdminInterface extends UserInterface {
                 indexNum = getInput(typeOfInput.INDEX_NUM);
                 index = adHandler.cdm.getCourse(course).getIndex(indexNum);
             } while (index == null);
-            System.out.println("The vacancy for index " + indexNum + "is: " +
+            System.out.println("The vacancy for index " + indexNum + " is: " +
                                index.getCurrentVacancy() + "/" + index.getIndexVacancy());
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -266,21 +268,17 @@ public class AdminInterface extends UserInterface {
 
     private void printByIndex() {
         try {
-            String courseCode;
             String indexNum;
             ArrayList<Student> studentList;
             do {
-                System.out.print("Enter course code: ");
-                courseCode = getInput(typeOfInput.COURSE_CODE);
-
                 System.out.print("Enter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
 
-                studentList = adHandler.getStudentListByIndex(courseCode, indexNum);
+                studentList = adHandler.getStudentListByIndex(indexNum);
             } while (studentList == null);
 
             for (Student stud : studentList) {
-                System.out.println(stud.getMatricNum() + stud.getName());
+                System.out.println(stud.getMatricNum() +", "+ stud.getName());
             }
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -299,7 +297,7 @@ public class AdminInterface extends UserInterface {
             } while (studentList == null);
 
             for (Student stud : studentList) {
-                System.out.println(stud.getMatricNum() + stud.getName());
+                System.out.println(stud.getMatricNum() +", "+ stud.getName());
             }
         } catch (EscapeException e) {
             System.out.println(e.getMessage());

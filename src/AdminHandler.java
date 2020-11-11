@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * Creates objects and handles logic for Admin actions
  */
 public class AdminHandler{
-    Scanner sc = new Scanner(System.in);
     Admin currentAdmin;
     CourseDataManager cdm;
     StudentDataManager sdm;
@@ -217,7 +216,7 @@ public class AdminHandler{
     }
 
     //TODO make sure no duplicate index
-    public boolean addIndex(String courseCode, String indexNum, int indexVacancies) {
+    public boolean addIndex(String indexNum, int indexVacancies) {
         try {
             tempCourse.addIndex(indexNum, indexVacancies);
             return true;
@@ -262,15 +261,14 @@ public class AdminHandler{
      * TODO Just use indexNum since its unique
      * @param indexNum
      */
-    public ArrayList<Student> getStudentListByIndex(String courseCode, String indexNum){         /*getStudentList()*/
-        try {
-            Course foundCourse = cdm.getCourse(courseCode);
-            Index foundIndex = foundCourse.getIndex(indexNum);
-            return foundIndex.getEnrolledStudents();
-        } catch (NullPointerException e) {
-            System.out.println("Could not find course or index");
-            return null;
+    public ArrayList<Student> getStudentListByIndex(String indexNum){         /*getStudentList()*/
+        for (Course curCourse: cdm.getCourseList()) {
+            Index foundIndex = curCourse.getIndex(indexNum);
+            if (foundIndex != null)
+                return foundIndex.getEnrolledStudents();
         }
+        System.out.println("Could not find course or index");
+        return null;
     }
 
     /**
