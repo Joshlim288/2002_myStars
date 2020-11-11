@@ -11,7 +11,8 @@ public class StudentInterface extends UserInterface {
 
     public StudentInterface(User currentUser, Scanner sc) {
         super(sc);
-        studHandler = new StudentHandler((Student) currentUser);
+        String matricNum = ((Student)currentUser).getMatricNum();
+        studHandler = new StudentHandler(matricNum);
     }
 
     /**
