@@ -28,7 +28,8 @@ public class AdminInterface extends UserInterface {
             System.out.println("5. Print student list by course (all students registered for the selected course)");
             System.out.println("6. Update a Course's Details");
             System.out.println("7. Update a Student's Details");
-            System.out.println("8. Log Out of MyStars");
+            System.out.println("8. Print overview of database");
+            System.out.println("9. Log Out of MyStars");
             System.out.println("(Enter ~ at any time to exit back to menu)");
 
             try {
@@ -46,9 +47,10 @@ public class AdminInterface extends UserInterface {
                 case (5)-> printByCourse();
                 case (6)-> updateCourse();
                 case (7)-> updateStudent();
-                case (8)-> logout();
+                case (8) -> printOverview();
+                case (9)-> logout();
             }
-        } while (choice != 8);
+        } while (choice != 9);
     }
 
     @Deprecated
@@ -609,6 +611,21 @@ public class AdminInterface extends UserInterface {
                     }
                 }
             } while (choice != 10);
+        } catch (EscapeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void printOverview(){
+        try{
+            int choice;
+            System.out.println("Choose overview :");
+            System.out.println("1) Print all Students\n" +
+                               "2) Print all Courses\n" +
+                               "3) Print all Courses + Indexes\n" +
+                               "4) Print all Courses + Indexes + Lessons");
+            choice = Integer.parseInt(getInput(typeOfInput.INT));
+            System.out.println(adHandler.getOverview(choice));
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }

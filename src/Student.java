@@ -254,7 +254,7 @@ public class Student extends User {
         stringBuilder.append(nationality + ", " + gender + "\n");
         stringBuilder.append("Major: " + major + "\n");
         stringBuilder.append("AUs registered: " + currentAUs + "\n");
-        stringBuilder.append("Courses registered: ");
+        stringBuilder.append("Courses registered: \n");
         for (Course course : coursesRegistered.keySet()) {
             stringBuilder.append("- " + course.getCourseCode() + " (" + coursesRegistered.get(course).getIndexNum() + ")\n");
         }

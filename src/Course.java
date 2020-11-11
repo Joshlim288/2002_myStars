@@ -169,6 +169,10 @@ public class Course implements Serializable {
         stringBuilder.append("Course Type: " + courseType + "\n");
         stringBuilder.append("Academic Units: " + academicUnits + "\n");
         stringBuilder.append("School: " + school + "\n");
+        if (examDateTime != null)
+            stringBuilder.append("Exam Date: " + examDateTime[0] + " to " + examDateTime[1] + "\n");
+        else
+            stringBuilder.append("No examinations for this course.\n");
         return stringBuilder.toString();
     }
 }
