@@ -44,14 +44,14 @@ public class AdminHandler{
     public ArrayList<Index> getTempIndexes() {
         return new ArrayList<>(tempCourse.getIndexes());
     }
-    public boolean checkLessonExists(String courseCode, String indexNum, String group){
-        if (checkIndexExists(indexNum)) {
-            for (Lesson lsn: cdm.getCourse(courseCode).getIndex(indexNum).getLessons()){
-                if (lsn.getGroup().equals(group)) return true;
-            }
-        }
-        return false;
-    }
+//    public boolean checkLessonExists(String courseCode, String indexNum, String group){
+//        if (checkIndexExists(indexNum)) {
+//            for (Lesson lsn: cdm.getCourse(courseCode).getIndex(indexNum).getLessons()){
+//                if (lsn.getGroup().equals(group)) return true;
+//            }
+//        }
+//        return false;
+//    }
     public boolean checkStudentExists(String matric){
         return sdm.getStudent(matric) != null;
     }
@@ -80,12 +80,8 @@ public class AdminHandler{
     }
 
     public boolean editIndex(String courseCode, String indexNum, String input, int choice){
-        ArrayList<Index> allIndex = cdm.getCourse(courseCode).getIndexes();
         Index tempIndex = cdm.getCourse(courseCode).getIndex(indexNum);
-        for (Index check: allIndex) {
-            if (check.getGroup().equals(lessonGroup))
-                tempIndex = check;
-        }
+
         switch(choice){
             case(1)-> {
                 if (checkIndexExists(input)){
@@ -103,13 +99,24 @@ public class AdminHandler{
                 tempIndex.setCurrentVacancy(newVacancy-tempIndex.getIndexVacancy());
                 tempIndex.setIndexVacancy(newVacancy);;
             }
+            case(3)->{
+                for (Course crs: cdm.getCourseList()){
+                    for (Index idx: crs.getIndexes()){
+                        if (idx.getGroup().equals(input)){
+                            return false;
+                        }
+                    }
+                }
+                tempIndex.setGroup(input);
+            }
         }
         return true;
     }
 
-    public boolean editLesson(String courseCode, String indexNum, String input, int choice) {
+    public boolean editLesson(String courseCode, String indexNum, int lessonIndex, String input, int choice) {
         ArrayList<Lesson> allIndexLesson = cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
-        Lesson tempLesson = null;
+        Lesson tempLesson = allIndexLesson.get(lessonIndex);
+        allIndexLesson.remove(lessonIndex);
 
         switch(choice){
             case(1)-> tempLesson.setLessonType(input);
