@@ -32,13 +32,12 @@ public class MyStars {
                     }
                     case(2) -> {
                         System.out.println("Exiting MyStars");
-                        menuChoice = "3";
                     }
 
                     default -> System.out.println("Enter a valid menu choice");
                 }
             }
-        } while(Integer.parseInt(menuChoice) != 3);
+        } while(Integer.parseInt(menuChoice) != 2);
     }
 
     /**
@@ -53,7 +52,7 @@ public class MyStars {
         System.out.print("Enter userId: ");
         userId = sc.nextLine();
         System.out.println("Enter password: ");
-        password = Arrays.toString(System.console().readPassword());
+        password = new String(System.console().readPassword());
         System.out.println(password);
         return AccessControl.validate(userId, password);
     }

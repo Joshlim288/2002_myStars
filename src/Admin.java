@@ -30,14 +30,14 @@ public class Admin extends User {
     /**
      * Constructor for <code>Admin</code>.
      * @param userID This admin's user ID.
-     * @param hashedPassword This admin's password (hashed).
+     * @param password This admin's password (hashed).
      * @param adminName This admin's name.
      * @param faculty This admin's faculty.
      * @param staffNum This admin's unique staffNum
      * @param email This admin's email
      */
-    public Admin(String userID, String hashedPassword, String adminName, String faculty, String staffNum, String email) {
-        super(userID, hashedPassword, "Admin", adminName, email);
+    public Admin(String userID, String password, String adminName, String faculty, String staffNum, String email) {
+        super(userID, password, "Admin", adminName, email);
         this.adminName = adminName;
         this.faculty = faculty;
         this.staffNum = staffNum;

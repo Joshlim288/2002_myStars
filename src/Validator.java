@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -27,9 +28,10 @@ public class Validator {
         if (time.matches("[0-9]{2}:[0-9]{2}")) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             try {
-                LocalDateTime.parse(time, formatter);
+                LocalTime.parse(time, formatter);
                 return true;
             } catch (DateTimeParseException e) {
+                System.out.println(e);
                 System.out.println("ERROR: Time is invalid.");
                 return false;
             }

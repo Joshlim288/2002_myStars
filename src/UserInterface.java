@@ -37,9 +37,9 @@ public abstract class UserInterface {
      * @throws EscapeException Used to abort function and return to main menu
      */
     public String getInput(typeOfInput inputType) throws EscapeException{
-        String input;
-        input = sc.nextLine();
         while (true) {
+            String input;
+            input = sc.nextLine();
             if (input.equals("~")) {
                 throw new EscapeException("Exiting to main menu");
             } else {
