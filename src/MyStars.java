@@ -51,7 +51,7 @@ public class MyStars {
         String userId, password;
         System.out.print("Enter userId: ");
         userId = sc.nextLine();
-        System.out.println("Enter password: ");
+        System.out.print("Enter password: ");
         password = new String(System.console().readPassword());
         return AccessControl.validate(userId, password);
     }
