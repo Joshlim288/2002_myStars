@@ -21,8 +21,8 @@ public class StudentHandler {
     StudentDataManager sdm;
     CourseDataManager cdm;
 
-    public StudentHandler(Student currentStudent) {
-        this.currentStudent = currentStudent;
+    public StudentHandler(String matricNum) {
+        this.currentStudent = sdm.getStudent(matricNum);
         this.otherStudent = null;
         this.sdm = new StudentDataManager();
         this.cdm = new CourseDataManager();
