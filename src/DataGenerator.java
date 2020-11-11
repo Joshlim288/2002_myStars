@@ -7,7 +7,7 @@ public class DataGenerator {
         //StudentDataManager sdm = new StudentDataManager();
         AdminDataManager adm = new AdminDataManager();
 
-        Admin admin = new Admin("admin1", BCrypt.hashpw("admin", BCrypt.gensalt()), "James Tan", "SCSE",
+        Admin admin = new Admin("admin1", "admin", "James Tan", "SCSE",
                                 "ADMIN0000A", "admin1@e.ntu.edu.sg");
         adm.addAdmin(admin);
         adm.save();

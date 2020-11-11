@@ -27,11 +27,11 @@ public abstract class User implements Serializable {
     /**
      * Constructor for User, using userID and hashedPassword.
      * @param userID This user's user ID.
-     * @param hashedPassword This user's password (hashed).
+     * @param password This user's password (hashed).
      */
-    public User(String userID, String hashedPassword, String domain, String name, String email) {
+    public User(String userID, String password, String domain, String name, String email) {
         this.userID = userID;
-        this.hashedPassword = hashedPassword;
+        this.hashedPassword = hash(password);
         this.domain = domain;
         this.name = name;
         this.email = email;
