@@ -280,7 +280,7 @@ public class AdminInterface extends UserInterface {
             } while (studentList == null);
 
             for (Student stud : studentList) {
-                System.out.println(stud);
+                System.out.println(stud.getMatricNum() + stud.getName());
             }
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -299,7 +299,7 @@ public class AdminInterface extends UserInterface {
             } while (studentList == null);
 
             for (Student stud : studentList) {
-                System.out.println(stud);
+                System.out.println(stud.getMatricNum() + stud.getName());
             }
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
