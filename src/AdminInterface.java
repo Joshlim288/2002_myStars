@@ -150,7 +150,7 @@ public class AdminInterface extends UserInterface {
             group = getInput(typeOfInput.GROUP_NAME);
         } while (!adHandler.addIndex(indexNum, indexVacancies, group));
 
-        System.out.print("Enter number of Lessons: ");
+        System.out.print("Enter number of lessons: ");
         numLessons = Integer.parseInt(getInput(typeOfInput.INT));
         for (int i = 0; i < numLessons; i++) {
             System.out.printf("Creating lesson %d:\n", i + 1);
@@ -319,7 +319,7 @@ public class AdminInterface extends UserInterface {
             String changedValue;
             int choice;
             do {
-                System.out.print("Enter course to edit:");
+                System.out.print("Enter course to edit: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
             } while (!adHandler.checkCourseExists(courseCode));
 

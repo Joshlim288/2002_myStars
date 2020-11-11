@@ -83,7 +83,7 @@ public class AdminHandler{
                 tempCourse.setExamDateTime(newStart, newEnd);
             }
         }
-        tempCourse = null; // this doesn't destroy the course... right?
+        //tempCourse = null; // this doesn't destroy the course... right?
         return true;
     }
 

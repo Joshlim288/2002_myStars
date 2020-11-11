@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * dayOfWeek.MON, dayOfWeek.TUES, dayOfWeek.WED, dayOfWeek.THURS, dayOfWeek.FRI, dayOfWeek.SAT, dayOfWeek.SUN
  */
 enum dayOfWeek{
-    MON, TUES, WED, THURS, FRI, SAT, SUN
+    MON, TUE, WED, THU, FRI, SAT, SUN
 }
 
 /**
