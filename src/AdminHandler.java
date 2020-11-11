@@ -33,6 +33,7 @@ public class AdminHandler{
                 }
             }
         }
+
         return false;
     }
 
@@ -247,6 +248,12 @@ public class AdminHandler{
             return false;
         }
 
+        for (Index idx: tempCourse.getIndexes()){
+            if (idx.getIndexNum().equals(indexNum)){
+                System.out.println("You have previously created this index");
+                return false;
+            }
+        }
         tempCourse.addIndex(indexNum, indexVacancies, group);
         return true;
     }
