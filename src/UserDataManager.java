@@ -24,15 +24,13 @@ public class UserDataManager implements DataManager{
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
+                //TODO: Print correct error message
                 e.printStackTrace();
             }
         }
 
-        if (userList.isEmpty()) {
+        if (userList.isEmpty())
             System.out.println("...user data loaded but is empty");
-        } else {
-            System.out.println("...user data loaded");
-        }
     }
 
     /**
