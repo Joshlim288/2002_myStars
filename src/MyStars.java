@@ -53,7 +53,6 @@ public class MyStars {
         userId = sc.nextLine();
         System.out.println("Enter password: ");
         password = new String(System.console().readPassword());
-        System.out.println(password);
         return AccessControl.validate(userId, password);
     }
 }
