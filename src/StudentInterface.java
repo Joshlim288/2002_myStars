@@ -31,6 +31,7 @@ public class StudentInterface extends UserInterface {
             System.out.println("5. Change Index");
             System.out.println("6. Swap Index");
             System.out.println("7. Back to main menu");
+            System.out.println("(Enter ~ at any time to exit back to menu)");
             while (true) {
                 tempString = sc.nextLine();
                 if (userValidator.validateInt(tempString)) {
@@ -56,10 +57,10 @@ public class StudentInterface extends UserInterface {
 
         ArrayList<Index> indexList = courseSelected.getIndexes();
 
-        System.out.println("You have selected: " +
-                           courseSelected.getCourseName() + ", " +
-                           courseSelected.getCourseCode() + ".\n" +
-                           "Index Number | Remaining Vacancies" +
+        System.out.println("List of Indexes in " +
+                           courseSelected.getCourseName() + " - " +
+                           courseSelected.getCourseCode() + ":\n" +
+                           "Index Number | Remaining Vacancies\n" +
                            "----------------------------------");
 
         for (Index index : indexList)
@@ -80,8 +81,8 @@ public class StudentInterface extends UserInterface {
         Course courseSelected = studHandler.cdm.getCourse(courseCode);
 
         if (courseSelected == null)
-            System.out.println("Course does not exist in the database!" +
-                               "Please re-enter course again.");
+            System.out.println("Course does not exist in the database!\n" +
+                               "Please re-enter course again.\n");
 
         return courseSelected;
     }
@@ -100,19 +101,31 @@ public class StudentInterface extends UserInterface {
     private void addCourse() {
         String courseCode;
         String indexNum;
+        Course courseSelected;
         try {
-            System.out.print("Enter course to add (e.g. CZ2002):");
-            courseCode = getInput(typeOfInput.COURSE_CODE);
-            Course courseSelected = null;
-            while (courseSelected == null)
+            do {
+                System.out.print("Enter course to add (e.g. CZ2002): ");
+                courseCode = getInput(typeOfInput.COURSE_CODE);
+
                 courseSelected = getCourseInputAndCheck(courseCode);
 
-            if (studHandler.willGoOverMaxAU(courseSelected)) {
-                System.out.println("Cannot register for course, will exceed maximum AUs!");
-                return;
-            }
+                if (courseSelected == null)
+                    continue;
+
+                if (studHandler.willGoOverMaxAU(courseSelected))
+                    System.out.println("Cannot register for course, will exceed maximum AUs!\n");
+
+                if (studHandler.studentInCourse(courseSelected)) {
+                    System.out.println("You are already enrolled in this course!\n");
+                    courseSelected = null;
+                }
+
+            } while (courseSelected == null);
+
+            showIndexesInCourse(courseSelected);
             System.out.println("Enter the index you would like to enroll in.\n" +
                     "You will be added to wait-list if you choose an index with no vacancies:");
+
             indexNum = getInput(typeOfInput.INDEX_NUM);
 
             Index indexSelected = null;

@@ -80,7 +80,12 @@ public class AdminHandler{
     }
 
     public boolean editIndex(String courseCode, String indexNum, String input, int choice){
+        ArrayList<Index> allIndex = cdm.getCourse(courseCode).getIndexes();
         Index tempIndex = cdm.getCourse(courseCode).getIndex(indexNum);
+        for (Index check: allIndex) {
+            if (check.getGroup().equals(lessonGroup))
+                tempIndex = check;
+        }
         switch(choice){
             case(1)-> {
                 if (checkIndexExists(input)){
@@ -102,23 +107,13 @@ public class AdminHandler{
         return true;
     }
 
-    public boolean editLesson(String courseCode, String indexNum, String lessonGroup, String input, int choice) {
+    public boolean editLesson(String courseCode, String indexNum, String input, int choice) {
         ArrayList<Lesson> allIndexLesson = cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
         Lesson tempLesson = null;
-        for (Lesson check: allIndexLesson) {
-            if (check.getGroup().equals(lessonGroup))
-                tempLesson = check;
-        }
+
         switch(choice){
             case(1)-> tempLesson.setLessonType(input);
             case(2)-> {
-                if (checkLessonExists(courseCode, indexNum, input)) {
-                    System.out.println("lesson group already in use");
-                    return false;
-                }
-                tempLesson.setGroup(input);
-            }
-            case(3)-> {
                 // probably better to move out to own method
                 // also please help the if statement is disgusting
                 // i am tired
@@ -135,7 +130,7 @@ public class AdminHandler{
                 }
                 tempLesson.setDay(input);
             }
-            case(4)->{
+            case(3)->{
                 for (Lesson check : allIndexLesson) {
                     if (check.getDay().equals(tempLesson.getDay())) {
                         if (LocalTime.parse(input).isAfter(check.getStartTime()) &&
@@ -147,7 +142,7 @@ public class AdminHandler{
                 }
                 tempLesson.setStartTime(LocalTime.parse(input));
             }
-            case(5)->{
+            case(4)->{
                 for (Lesson check : allIndexLesson) {
                     if (check.getDay().equals(tempLesson.getDay())) {
                         if (LocalTime.parse(input).isAfter(check.getStartTime()) &&
@@ -159,7 +154,7 @@ public class AdminHandler{
                 }
                 tempLesson.setEndTime(LocalTime.parse(input));
             }
-            case(6)->tempLesson.setVenue(input); // need to check if being used at the time?????
+            case(5)->tempLesson.setVenue(input); // need to check if being used at the time?????
         }
         return true;
     }
@@ -205,9 +200,10 @@ public class AdminHandler{
         return true;
     }
 
-    public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school){
+    public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school,
+                             String examDateTime){
         try {
-            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school);
+            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examDateTime);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -216,9 +212,9 @@ public class AdminHandler{
     }
 
     //TODO make sure no duplicate index
-    public boolean addIndex(String indexNum, int indexVacancies) {
+    public boolean addIndex(String indexNum, int indexVacancies, String group) {
         try {
-            tempCourse.addIndex(indexNum, indexVacancies);
+            tempCourse.addIndex(indexNum, indexVacancies, group);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());

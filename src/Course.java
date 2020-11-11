@@ -1,5 +1,7 @@
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 /**
  * Course represents a course taught in the university (e.g. CZ2002 - OODP).
@@ -53,6 +55,8 @@ public class Course implements Serializable {
      */
     private ArrayList<Index> indexes;
 
+    private LocalDateTime examDateTime;
+
     /**
      * Constructor for <code>Course</code>.
      * TODO maybe change exception throwing to static method getter for String version of enums. Can use contains()
@@ -62,13 +66,20 @@ public class Course implements Serializable {
      * @param academicUnits This course's allocated academic units (AUs).
      * @param school The school that teaches this course.
      */
-    public Course(String courseCode, String courseName, String courseType, int academicUnits, String school) {
+    public Course(String courseCode, String courseName, String courseType, int academicUnits, String school
+                    , String examDateTimeInput) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.courseType = typeOfCourse.valueOf(courseType);
         this.academicUnits = academicUnits;
         this.school = school;
         this.indexes = new ArrayList<>();
+        setExamDateTime(examDateTimeInput);
+    }
+
+    public void setExamDateTime(String examDateTimeString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        examDateTime = LocalDateTime.parse(examDateTimeString, formatter);
     }
 
     public String getCourseCode() {
@@ -119,8 +130,8 @@ public class Course implements Serializable {
         this.indexes = indexes;
     }
 
-    public void addIndex(String indexNum, int indexVacancy) {
-        Index newIndex = new Index(indexNum, indexVacancy);
+    public void addIndex(String indexNum, int indexVacancy, String group) {
+        Index newIndex = new Index(indexNum, indexVacancy, group);
         indexes.add(newIndex);
     }
 

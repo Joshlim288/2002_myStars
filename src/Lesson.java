@@ -39,13 +39,6 @@ public class Lesson implements Serializable {
      */
     private typeOfLesson lessonType;
 
-    //TODO: Confirm if group should be an attribute here.
-    /**
-     * This lesson's group.
-     * Each lesson can only belong to one group.
-     */
-    private String group;
-
     /**
      * Day on which lesson is held.
      * Represented with <code>dayOfWeek</code> enumeration.
@@ -88,7 +81,6 @@ public class Lesson implements Serializable {
     public Lesson(String lessonType, String group, String day, LocalTime startTime, LocalTime endTime,
                   String venue, ArrayList<Integer> teachingWeeks) {
         this.lessonType = typeOfLesson.valueOf(lessonType);
-        this.group = group;
         this.day = dayOfWeek.valueOf(day);
         this.startTime = startTime; // kind of spaghetti here
         this.endTime = endTime;
@@ -102,14 +94,6 @@ public class Lesson implements Serializable {
 
     public void setLessonType(String lessonType) {
         this.lessonType = typeOfLesson.valueOf(lessonType);
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
     }
 
     public dayOfWeek getDay() {
@@ -148,21 +132,10 @@ public class Lesson implements Serializable {
         return teachingWeeks;
     }
 
-    /**
-     * Range validation done to ensure teaching weeks fall between Week 1 -13
-     */
     public void setTeachingWeeks(ArrayList<Integer> teachingWeeks) {
-        for (int i = 0; i < teachingWeeks.size(); i++) {
-            if (teachingWeeks.get(i) > 13 || teachingWeeks.get(i) < 1) {
-                System.out.println("Invalid teaching weeks entered.\n" +
-                        "Choose from Weeks 1 - 13");
-                break;
-            }
-            else {
                 this.teachingWeeks = teachingWeeks;
-            }
-        }
     }
+
 
     @Override
     public String toString() {

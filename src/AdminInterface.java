@@ -85,6 +85,7 @@ public class AdminInterface extends UserInterface {
             String school;
             String courseName;
             String courseType;
+            String examDateTime;
             int aus;
             do {
                 System.out.print("Enter course code: ");
@@ -102,7 +103,10 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter academic units: ");
                 aus = Integer.parseInt(getInput(typeOfInput.INT));
 
-            } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school));
+                System.out.print("Enter exam date time: ");
+                examDateTime = getInput(typeOfInput.DATETIME);
+
+            } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, examDateTime));
 
             System.out.print("Enter number of indexes: ");
             int numIndexes = Integer.parseInt(getInput(typeOfInput.INT));
@@ -122,13 +126,17 @@ public class AdminInterface extends UserInterface {
             String indexNum;
             int indexVacancies;
             int numLessons;
+            String group;
             do {
                 System.out.print("Enter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
 
                 System.out.print("Enter number of vacancies: ");
                 indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
-            } while (!adHandler.addIndex(indexNum, indexVacancies));
+
+                System.out.print("Enter group name for the index: ");
+                group = getInput(typeOfInput.GROUP_NAME);
+            } while (!adHandler.addIndex(indexNum, indexVacancies, group));
 
             System.out.print("Enter number of Lessons: ");
             numLessons = Integer.parseInt(getInput(typeOfInput.INT));
@@ -322,7 +330,8 @@ public class AdminInterface extends UserInterface {
                         "4: academicUnits\n" +
                         "5: school\n" +
                         "6: indexes\n" +
-                        "7: exit");
+                        "7: examDate\n" +
+                        "8: exit");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit course code
@@ -361,8 +370,15 @@ public class AdminInterface extends UserInterface {
                         System.out.println("Successfully changed");
                     }
                     case (6) -> editIndex(courseCode); // edit index
+                    case (7) -> {
+                        do {
+                            System.out.print("Enter new exam date and time: ");
+                            changedValue = getInput(typeOfInput.DATETIME);
+                        } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                        System.out.println("Successfully changed");
+                    }
                 }
-            } while (choice != 7);
+            } while (choice != 8);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -386,8 +402,9 @@ public class AdminInterface extends UserInterface {
                 System.out.println("Choose attribute to edit:");
                 System.out.println("1: indexNum\n" +
                         "2: indexVacancy\n" +
-                        "3: lessons\n" +
-                        "4: exit");
+                        "3: group\n" +
+                        "4: lessons\n" +
+                        "5: exit");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit index num
@@ -404,9 +421,16 @@ public class AdminInterface extends UserInterface {
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
-                    case (3) -> editLesson(courseCode, indexNum); // edit lessons
+                    case (3) -> {
+                        do { // edit group number
+                            System.out.print("Enter new group number for index: ");
+                            changedValue = getInput(typeOfInput.GROUP_NAME);
+                        } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                        System.out.println("Successfully changed");
+                    }
+                    case (4) -> editLesson(courseCode, indexNum);
                 }
-            } while (choice != 4);
+            } while (choice != 5);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -431,57 +455,49 @@ public class AdminInterface extends UserInterface {
             do {
                 System.out.println("Choose attribute to edit:");
                 System.out.println("1: lessonType\n" +
-                        "2: group\n" +
-                        "3: day\n" +
-                        "4: startTime\n" +
-                        "5: endTime\n" +
-                        "6: venue\n" +
-                        "7: exit");
+                        "2: day\n" +
+                        "3: startTime\n" +
+                        "4: endTime\n" +
+                        "5: venue\n" +
+                        "6: exit");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit lesson type
                         do {
                             System.out.print("Enter new lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
                             changedValue = getInput(typeOfInput.LESSON_TYPE);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                        } while (!adHandler.editLesson(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
-                    case (2) -> { // edit group
-                        do {
-                            System.out.print("Enter new group name: ");
-                            changedValue = getInput(typeOfInput.GROUP_NAME);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
-                        System.out.println("Successfully changed");
-                    }
-                    case (3) -> { // edit day
+                    case (2) -> { // edit day
                         do {
                             System.out.print("Enter new lesson day: ");
                             changedValue = getInput(typeOfInput.DAY);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                        } while (!adHandler.editLesson(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
-                    case (4) -> { // edit start time
+                    case (3) -> { // edit start time
                         do {
                             System.out.print("Enter new start time: ");
                             changedValue = getInput(typeOfInput.TIME);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                        } while (!adHandler.editLesson(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
-                    case (5) -> { // edit end time
+                    case (4) -> { // edit end time
                         do {
                             System.out.print("Enter new end time: ");
                             changedValue = getInput(typeOfInput.TIME);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                        } while (!adHandler.editLesson(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
-                    case (6) -> { // edit venue
+                    case (5) -> { // edit venue
                         do {
                             changedValue = sc.nextLine();
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonGroup, changedValue, choice));
+                        } while (!adHandler.editLesson(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
                 }
-            } while (choice != 7);
+            } while (choice != 6);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }

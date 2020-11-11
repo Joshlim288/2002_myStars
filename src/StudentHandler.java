@@ -30,6 +30,12 @@ public class StudentHandler {
         cdm.load();
     }
 
+    public boolean studentInCourse(Course courseSelected){
+        if(currentStudent.retrieveIndex(courseSelected) == null)
+            return true;
+        return false;
+    }
+
     //TODO: Improve input validation
 
     // Used for both changing/swapping index and adding new course

@@ -36,6 +36,11 @@ public class Index implements Serializable {
     private boolean atMaxCapacity;
 
     /**
+     * The corresponding group for this index (e.g. SS10)
+     */
+    private String group;
+
+    /**
      * Contains all lessons conducted under this index.
      * Each lesson can be mapped to only one index.
      */
@@ -59,11 +64,12 @@ public class Index implements Serializable {
      * @param indexNum Unique identifier for this index.
      * @param indexVacancy Maximum vacancies for this index.
      */
-    public Index(String indexNum, int indexVacancy) {
+    public Index(String indexNum, int indexVacancy, String group) {
         this.indexNum = indexNum;
         this.indexVacancy = indexVacancy;
-        this.currentVacancy = 0;
+        this.currentVacancy = this.indexVacancy;
         this.atMaxCapacity = false;
+        this.group = group;
         this.lessons = new ArrayList<>();
         this.waitlist = new ArrayList<>();
         this.enrolledStudents = new ArrayList<>();
@@ -99,6 +105,14 @@ public class Index implements Serializable {
 
     public void setAtMaxCapacity(boolean atMaxCapacity) {
         this.atMaxCapacity = atMaxCapacity;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     public ArrayList<Lesson> getLessons() {
@@ -182,8 +196,8 @@ public class Index implements Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Index " + indexNum + ", " + "Vacancies: " + currentVacancy
-                + "/" + indexVacancy + "\n");
+        stringBuilder.append("Index " + indexNum + "  | " + "Group " + group + "\n" +
+                "Vacancies: " + currentVacancy + "/" + indexVacancy + "\n");
         stringBuilder.append("Number of students currently in wait list: " + waitlist.size() + "\n");
         return stringBuilder.toString();
     }
