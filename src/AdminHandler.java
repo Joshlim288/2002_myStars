@@ -29,17 +29,18 @@ public class AdminHandler{
         for (Course crs: cdm.getCourseList()){
             for (Index idx: crs.getIndexes()){
                 if (idx.getIndexNum().equals(indexNum)) {
-                    System.out.println("Index in use");
                     return true;
                 }
             }
         }
-        System.out.println("Index not in use");
         return false;
     }
 
     public boolean checkCourseExists(String courseCode) {
-        return cdm.getCourse(courseCode) != null;
+        if (cdm.getCourse(courseCode) == null) {
+            return false;
+        }
+        return true;
     }
     public ArrayList<Index> getTempIndexes() {
         return new ArrayList<>(tempCourse.getIndexes());
@@ -87,6 +88,7 @@ public class AdminHandler{
         switch(choice){
             case(1)-> {
                 if (checkIndexExists(input)){
+                    System.out.println("Index with this index number already exists");
                     return false;
                 }
                 tempIndex.setIndexNum(input);
@@ -118,54 +120,50 @@ public class AdminHandler{
     public boolean editLesson(String courseCode, String indexNum, int lessonIndex, String input, int choice) {
         ArrayList<Lesson> allIndexLesson = cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
         Lesson tempLesson = allIndexLesson.get(lessonIndex);
-        allIndexLesson.remove(lessonIndex);
+        allIndexLesson.remove(lessonIndex); // removes the lesson first. If the changes succeed, we add it back
 
         switch(choice){
             case(1)-> tempLesson.setLessonType(input);
             case(2)-> {
-                // probably better to move out to own method
-                // also please help the if statement is disgusting
-                // i am tired
-                for (Lesson check : allIndexLesson) {
-                    if (check.getDay().toString().equals(input)) {
-                        if ((tempLesson.getStartTime().isAfter(check.getStartTime()) &&
-                                tempLesson.getStartTime().isBefore(check.getEndTime())) ||
-                                (tempLesson.getEndTime().isAfter(check.getStartTime()) &&
-                                        tempLesson.getEndTime().isBefore(check.getEndTime()))) {
-                            System.out.println("Lesson clashes");
-                            return false;
-                        }
-                    }
-                }
+                if (checkClash(allIndexLesson, input, new LocalTime[]{tempLesson.getStartTime(), tempLesson.getEndTime()}))
+                    return false;
+
                 tempLesson.setDay(input);
             }
             case(3)->{
-                for (Lesson check : allIndexLesson) {
-                    if (check.getDay().equals(tempLesson.getDay())) {
-                        if (LocalTime.parse(input).isAfter(check.getStartTime()) &&
-                            LocalTime.parse(input).isBefore(check.getEndTime())) {
-                            System.out.println("Lesson clashes");
-                            return false;
-                        }
-                    }
-                }
+                LocalTime startTime = LocalTime.parse(input);
+                if (checkClash(allIndexLesson, tempLesson.getDay().toString(),
+                        new LocalTime[]{startTime, tempLesson.getEndTime()}))
+                    return false;
+
                 tempLesson.setStartTime(LocalTime.parse(input));
             }
             case(4)->{
-                for (Lesson check : allIndexLesson) {
-                    if (check.getDay().equals(tempLesson.getDay())) {
-                        if (LocalTime.parse(input).isAfter(check.getStartTime()) &&
-                                LocalTime.parse(input).isBefore(check.getEndTime())) {
-                            System.out.println("Lesson clashes");
-                            return false;
-                        }
-                    }
-                }
+                LocalTime endTime = LocalTime.parse(input);
+                if (checkClash(allIndexLesson, tempLesson.getDay().toString(),
+                        new LocalTime[]{tempLesson.getStartTime(), endTime}))
+                    return false;
+
                 tempLesson.setEndTime(LocalTime.parse(input));
             }
             case(5)->tempLesson.setVenue(input); // need to check if being used at the time?????
         }
+        allIndexLesson.add(lessonIndex, tempLesson); // add back the lesson we removed, after the changes are accepted
         return true;
+    }
+
+    private boolean checkClash(ArrayList<Lesson> allIndexLessons, String day, LocalTime[] timeArray) {
+        for (Lesson check : allIndexLessons) {
+            if (check.getDay().toString().equals(day)) {
+                for (LocalTime time: timeArray) {
+                    if (time.isAfter(check.getStartTime()) && time.isBefore(check.getEndTime())){
+                            System.out.println("Lesson clashes");
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public boolean editStudent(String matricNum, String updatedValue, int choice){
@@ -209,40 +207,55 @@ public class AdminHandler{
         return true;
     }
 
+    /**
+     * Initializes a temporary course object in the variable tempCourse if course code is not already in use
+     * @param courseCode
+     * @param courseName
+     * @param courseType
+     * @param academicUnits
+     * @param school
+     * @param examDateTime
+     * @return
+     */
     public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school,
-                             boolean hasExam, String examDateTime){
-        try {
-            if(hasExam)
-                tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examDateTime);
-            else
-                tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, null);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+                             boolean hasExam,String examDateTime){
+        if (checkCourseExists(courseCode)) {
+            System.out.println("Course with this course code already exists");
             return false;
         }
+
+        if(hasExam)
+            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examDateTime);
+        else
+            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, null);
+        return true;
+
     }
 
-    //TODO make sure no duplicate index
+    /**
+     * Adds a new index to the tempCourse object if the index number is not already in use
+     * @param indexNum
+     * @param indexVacancies
+     * @param group
+     * @return
+     */
     public boolean addIndex(String indexNum, int indexVacancies, String group) {
-        try {
-            tempCourse.addIndex(indexNum, indexVacancies, group);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (checkIndexExists(indexNum)) {
+            System.out.println("Index with this index number already exists");
             return false;
         }
+
+        tempCourse.addIndex(indexNum, indexVacancies, group);
+        return true;
     }
 
     public boolean addLesson(String indexNum, String lessonType, String group, String day,
                           LocalTime startTime, LocalTime endTime, String venue, ArrayList<Integer>teachingWeeks) {
-        try {
-            tempCourse.getIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue, teachingWeeks);
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        if (checkClash(tempCourse.getIndex(indexNum).getLessons(), day, new LocalTime[]{startTime, endTime}))
             return false;
-        }
+
+        tempCourse.getIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue, teachingWeeks);
+        return true;
     }
 
     public void finalizeCourse(){
@@ -266,16 +279,17 @@ public class AdminHandler{
 
     /**
      * Prints student list in the index specified by the admin
-     * TODO Just use indexNum since its unique
      * @param indexNum
      */
     public ArrayList<Student> getStudentListByIndex(String indexNum){         /*getStudentList()*/
-        for (Course curCourse: cdm.getCourseList()) {
-            Index foundIndex = curCourse.getIndex(indexNum);
-            if (foundIndex != null)
-                return foundIndex.getEnrolledStudents();
+        if (checkIndexExists(indexNum)) {
+            for (Course curCourse : cdm.getCourseList()) {
+                Index foundIndex = curCourse.getIndex(indexNum);
+                if (foundIndex != null)
+                    return foundIndex.getEnrolledStudents();
+            }
         }
-        System.out.println("Could not find course or index");
+        System.out.println("Index not found");
         return null;
     }
 
@@ -285,14 +299,14 @@ public class AdminHandler{
      * @returns array list of students
      */
     public ArrayList<Student> getStudentListByCourse(String courseCode){         /*getStudentList()*/
-        try {
+        if (checkCourseExists(courseCode)){
             ArrayList<Index> courseIndexes = cdm.getCourse(courseCode).getIndexes();
             ArrayList<Student> courseStudents = new ArrayList<>();
             for (Index idx : courseIndexes) {
                 courseStudents.addAll(idx.getEnrolledStudents());
             }
             return courseStudents;
-        } catch (NullPointerException e) {
+        } else {
             System.out.println("Could not find course");
             return null;
         }

@@ -157,26 +157,26 @@ public class AdminInterface extends UserInterface {
         String[] inputWeeks;
         ArrayList<Integer> teachingWeeks;
         do {
-            System.out.print("Enter lesson type: LEC, TUT, LAB, DES, PRJ, SEM");
+            System.out.print("Enter lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
             lessonType = getInput(typeOfInput.LESSON_TYPE);
 
             System.out.print("Enter group: ");
             group = getInput(typeOfInput.GROUP_NAME);
 
-            System.out.print("Enter day of week: (First 3 letters of day)");
+            System.out.print("Enter day of week (First 3 letters of day): ");
             day = getInput(typeOfInput.DAY);
 
-            System.out.print("Enter start time (HH:MM)");
+            System.out.print("Enter start time (HH:MM): ");
             startTime = LocalTime.parse(getInput(typeOfInput.TIME));
 
-            System.out.print("Enter end time (HH:MM)");
+            System.out.print("Enter end time (HH:MM): ");
             endTime = LocalTime.parse(getInput(typeOfInput.TIME));
 
-            System.out.print("Enter venue");
+            System.out.print("Enter venue: ");
             venue = sc.nextLine();
 
             while (true) {
-                System.out.print("Enter teaching weeks, separated with a comma (1-13)");
+                System.out.print("Enter teaching weeks, separated with a comma (1-13): ");
                 inputWeeks = sc.nextLine().split(",");
                 teachingWeeks = new ArrayList<>();
                 for (String week : inputWeeks) {
