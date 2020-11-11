@@ -183,10 +183,10 @@ public class AdminInterface extends UserInterface {
                     inputWeeks = sc.nextLine().split(",");
                     teachingWeeks = new ArrayList<>();
                     for (String week : inputWeeks) {
-                        if (courseValidator.validateInt(week) && Integer.parseInt(week) < 13 && Integer.parseInt(week) > 0) {
+                        if (courseValidator.validateTeachingWeek(week)) {
                             teachingWeeks.add(Integer.parseInt(week));
                         } else {
-                            System.out.println("ERROR: Invalid week entered.");
+                            System.out.println("Please enter the teaching weeks again.");
                             break;
                         }
                     }
