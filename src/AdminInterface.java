@@ -160,7 +160,6 @@ public class AdminInterface extends UserInterface {
 
     private void createLesson(String indexNum) throws EscapeException{
         String lessonType;
-        String group;
         String day;
         LocalTime startTime;
         LocalTime endTime;
@@ -170,9 +169,6 @@ public class AdminInterface extends UserInterface {
         do {
             System.out.print("Enter lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
             lessonType = getInput(typeOfInput.LESSON_TYPE);
-
-            System.out.print("Enter group: ");
-            group = getInput(typeOfInput.GROUP_NAME);
 
             System.out.print("Enter day of week (First 3 letters of day): ");
             day = getInput(typeOfInput.DAY);
@@ -202,7 +198,7 @@ public class AdminInterface extends UserInterface {
                     break;
                 }
             }
-        } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
+        } while (!adHandler.addLesson(indexNum, lessonType, day, startTime, endTime,
                 venue, teachingWeeks));
     }
 

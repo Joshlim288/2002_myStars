@@ -258,12 +258,12 @@ public class AdminHandler{
         return true;
     }
 
-    public boolean addLesson(String indexNum, String lessonType, String group, String day,
+    public boolean addLesson(String indexNum, String lessonType, String day,
                           LocalTime startTime, LocalTime endTime, String venue, ArrayList<Integer>teachingWeeks) {
         if (checkClash(tempCourse.getIndex(indexNum).getLessons(), day, new LocalTime[]{startTime, endTime}))
             return false;
 
-        tempCourse.getIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue, teachingWeeks);
+        tempCourse.getIndex(indexNum).addLesson(lessonType, day, startTime, endTime, venue, teachingWeeks);
         return true;
     }
 

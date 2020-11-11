@@ -31,7 +31,7 @@ public class StudentHandler {
     }
 
     public boolean studentInCourse(Course courseSelected){
-        if(currentStudent.retrieveIndex(courseSelected) == null)
+        if(currentStudent.retrieveIndex(courseSelected) != null)
             return true;
         return false;
     }

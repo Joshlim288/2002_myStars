@@ -120,9 +120,9 @@ public class Index implements Serializable {
     }
 
     // TODO: Check if necessary to have set method for lessons as a whole
-    public void addLesson(String type, String group, String day, LocalTime startTime, LocalTime endTime,
+    public void addLesson(String type, String day, LocalTime startTime, LocalTime endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
-        Lesson newLesson = new Lesson(type, group, day, startTime, endTime, venue, teachingWeeks);
+        Lesson newLesson = new Lesson(type, day, startTime, endTime, venue, teachingWeeks);
         lessons.add(newLesson);
     }
 
