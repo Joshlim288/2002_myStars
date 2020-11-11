@@ -42,7 +42,7 @@ public class Validator {
 
     public boolean validateDateTime(String dateTime) {
         if (dateTime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}")) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             try {
                 LocalDateTime.parse(dateTime, formatter);
                 return true;
@@ -51,7 +51,7 @@ public class Validator {
                 return false;
             }
         }
-        System.out.println("ERROR: Date must be in the format YYYY-MM-DD");
+        System.out.println("ERROR: Date must be in the format YYYY-MM-DD HH:mm");
         return false;
     }
 }

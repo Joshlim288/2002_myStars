@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
@@ -147,8 +148,9 @@ public class Student extends User {
      * @param end the ending time as LocalDateTime for accessing STARS for this student
      */
     public void setAccessTime(String start, String end) {
-        accessTime[0] = LocalDateTime.parse(start);
-        accessTime[1] = LocalDateTime.parse(end);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        accessTime[0] = LocalDateTime.parse(start, formatter);
+        accessTime[1] = LocalDateTime.parse(end, formatter);
     }
 
     public HashMap<Course, Index> getCoursesRegistered() {

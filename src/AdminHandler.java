@@ -320,6 +320,7 @@ public class AdminHandler{
             System.out.println("Student "+studentName+" has been added successfully!");
             return true;
         } catch (Exception e) {
+            System.out.println("Creation of new Student failed");
             System.out.println(e.getMessage());
             return false;
         }
