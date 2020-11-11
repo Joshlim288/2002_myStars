@@ -70,7 +70,7 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter new access end date: ");
                 newEnd = getInput(typeOfInput.DATETIME);
 
-            } while (!adHandler.editAccessPeriod(matricNum, LocalDateTime.parse(newStart, dateTimeFormatter), LocalDateTime.parse(newEnd, dateTimeFormatter)));
+            } while (!adHandler.editAccessPeriod(matricNum, newStart, newEnd));
             System.out.println("Access time successfully changed");
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -201,6 +201,8 @@ public class AdminInterface extends UserInterface {
             String userid;
             String password;
             String major;
+            String startAccessPeriod;
+            String endAccessPeriod;
             int maxAUs;
 
             do {
@@ -223,15 +225,21 @@ public class AdminInterface extends UserInterface {
                 userid = getInput(typeOfInput.USERID);
 
                 System.out.print("Enter password: "); //TODO: put restrictions on password?
-                password = BCrypt.hashpw(Arrays.toString(System.console().readPassword()), BCrypt.gensalt());
+                password = new String(System.console().readPassword());
 
                 System.out.print("Enter major: ");
                 major = getInput(typeOfInput.NAME);
 
                 System.out.print("Enter maxAUs: ");
                 maxAUs = Integer.parseInt(getInput(typeOfInput.INT));
+
+                System.out.print("Enter start access period: ");
+                startAccessPeriod = getInput(typeOfInput.DATETIME);
+
+                System.out.print("Enter end access period: ");
+                endAccessPeriod = getInput(typeOfInput.DATETIME);
             } while (!adHandler.addStudent(userid, password, studentName, studentMatric, email,
-                    gender, nationality, major, maxAUs));
+                    gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod));
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }

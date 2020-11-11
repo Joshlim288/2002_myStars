@@ -68,7 +68,8 @@ public class Student extends User {
      * @param major This student's major.
      */
     public Student(String userID, String password, String studentName, String matricNum, String email,
-                   String gender, String nationality, String major, int maxAUs) {
+                   String gender, String nationality, String major, int maxAUs, String startAccessTime,
+                   String endAccessTime) {
         super(userID, password, "Student", studentName, email);
         this.matricNum = matricNum;
         this.gender = typeOfGender.valueOf(gender);
@@ -77,6 +78,7 @@ public class Student extends User {
         this.maxAUs = maxAUs;
         this.major = major;
         this.accessTime = new LocalDateTime[2];
+        setAccessTime(startAccessTime, endAccessTime);
         this.coursesRegistered = new HashMap<>();
         this.waitList = new HashMap<>();
     }
@@ -144,9 +146,9 @@ public class Student extends User {
      * @param start the starting time as LocalDateTime for accessing STARS for this student
      * @param end the ending time as LocalDateTime for accessing STARS for this student
      */
-    public void setAccessTime(LocalDateTime start, LocalDateTime end) {
-        accessTime[0] = start;
-        accessTime[1] = end;
+    public void setAccessTime(String start, String end) {
+        accessTime[0] = LocalDateTime.parse(start);
+        accessTime[1] = LocalDateTime.parse(end);
     }
 
     public HashMap<Course, Index> getCoursesRegistered() {

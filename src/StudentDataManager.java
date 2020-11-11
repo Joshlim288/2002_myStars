@@ -12,7 +12,7 @@ public class StudentDataManager implements DataManager{
      */
     public void load() {
         try {
-            FileInputStream fileIn = new FileInputStream("data/studentData.dat");
+            FileInputStream fileIn = new FileInputStream("data/users/studentData.dat");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             studentList = (ArrayList<Student>) in.readObject();
             if (studentList.isEmpty()) {

@@ -52,7 +52,7 @@ public class MyStars {
         System.out.print("Enter userId: ");
         userId = sc.nextLine();
         System.out.println("Enter password: ");
-        password = Arrays.toString(System.console().readPassword());
+        password = new String(System.console().readPassword());
         System.out.println(password);
         return AccessControl.validate(userId, password);
     }

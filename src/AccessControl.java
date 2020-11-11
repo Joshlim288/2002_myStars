@@ -24,6 +24,8 @@ public class AccessControl {
         ArrayList<User> userList = udm.getUserList();
         for (User account : userList) {
             System.out.println(account.getHashedPassword());
+            if(account.getDomain().equals("Student")) //TODO change this
+                account = (Student) account;
             if (account.validateLogin(userId, password))
                 return account;
         }

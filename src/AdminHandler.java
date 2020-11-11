@@ -300,7 +300,7 @@ public class AdminHandler{
         return null;
     }
 
-    public boolean editAccessPeriod(String matricNum, LocalDateTime start, LocalDateTime end){
+    public boolean editAccessPeriod(String matricNum, String start, String end){
         // check start time < end time
         if (end.compareTo(start) > 0) {
             sdm.getStudent(matricNum).setAccessTime(start, end);
@@ -311,10 +311,11 @@ public class AdminHandler{
     }
 
     public boolean addStudent(String userid, String password, String studentName, String studentMatric, String email,
-                           String gender, String nationality, String major, int maxAUs){
+                              String gender, String nationality, String major, int maxAUs, String startAccessPeriod,
+                              String endAccessPeriod){
         try {
             Student newStudent = new Student(userid, password, studentName, studentMatric, email,
-                    gender, nationality, major, maxAUs);
+                    gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod);
             sdm.getStudentList().add(newStudent);
             System.out.println("Student "+studentName+" has been added successfully!");
             return true;
