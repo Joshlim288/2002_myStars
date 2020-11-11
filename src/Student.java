@@ -58,7 +58,7 @@ public class Student extends User {
     /**
      * Constructor for <code>Student</code>.<br>
      * <code>accessTime</code> and <code>coursesRegistered</code> cannot be passed into the constructor and must instead be manually set.
-     * @param hashedPassword This student's password (hashed).
+     * @param password This student's password (hashed).
      * @param studentName This student's name.
      * @param matricNum This student's matriculation number. It is unique.
      * @param email This student's email.
@@ -67,9 +67,9 @@ public class Student extends User {
      * @param maxAUs This student's AU balance.
      * @param major This student's major.
      */
-    public Student(String userID, String hashedPassword, String studentName, String matricNum, String email,
+    public Student(String userID, String password, String studentName, String matricNum, String email,
                    String gender, String nationality, String major, int maxAUs) {
-        super(userID, hashedPassword, "Student", studentName, email);
+        super(userID, password, "Student", studentName, email);
         this.matricNum = matricNum;
         this.gender = typeOfGender.valueOf(gender);
         this.nationality = nationality;
