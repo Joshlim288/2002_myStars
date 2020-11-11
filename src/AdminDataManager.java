@@ -21,7 +21,8 @@ public class AdminDataManager implements DataManager{
                 System.out.println("...admin data loaded");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Admin file not found or is blank. Initializing file...");
+            adminList = new ArrayList<>();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

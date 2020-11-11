@@ -17,10 +17,9 @@ public class AdminInterface extends UserInterface {
      * Admin UI is displayed here
      */
     public void start() {
-        int choice;
-
+        int choice = -1;
         do{
-            System.out.println("Welcome, Admin " + adHandler.currentAdmin.getAdminName()
+            System.out.println("\nWelcome, Admin " + adHandler.currentAdmin.getAdminName()
                     + ", " + adHandler.currentAdmin.getStaffNum() + "!");
             System.out.println("Choose an action: ");
             System.out.println("1. Edit student access period");
@@ -33,15 +32,14 @@ public class AdminInterface extends UserInterface {
             System.out.println("8. Update a student");
             System.out.println("9. Log out");
             System.out.println("(Enter ~ at any time to exit back to menu)");
-            System.out.print("Enter choice:");
-            while (true) {
-                tempString = sc.nextLine();
-                if (userValidator.validateInt(tempString)) {
-                    choice = Integer.parseInt(tempString);
-                    break;
-                }
-            }
 
+            try {
+                System.out.print("Enter choice: ");
+                choice = Integer.parseInt(getInput(typeOfInput.INT));
+            } catch (EscapeException e) {
+                logout();
+                return;
+            }
             switch(choice){
                 case (1)-> editAccessPeriod();
                 case (2)-> createStudent();
@@ -111,8 +109,8 @@ public class AdminInterface extends UserInterface {
             System.out.print("Enter number of indexes: ");
             int numIndexes = Integer.parseInt(getInput(typeOfInput.INT));
             for (int i = 0; i < numIndexes; i++) {
-                System.out.printf("Creating Index %d:\n", i + 1);
-                createIndex(courseCode);
+                System.out.printf("\nCreating Index %d:\n", i + 1);
+                createIndex();
             }
             adHandler.finalizeCourse();
             System.out.println("Course successfully added");
@@ -121,7 +119,7 @@ public class AdminInterface extends UserInterface {
         }
     }
 
-    private void createIndex(String courseCode) throws EscapeException {
+    private void createIndex() throws EscapeException {
         String indexNum;
         int indexVacancies;
         int numLessons;
@@ -140,7 +138,7 @@ public class AdminInterface extends UserInterface {
         System.out.print("Enter number of Lessons: ");
         numLessons = Integer.parseInt(getInput(typeOfInput.INT));
         for (int i = 0; i < numLessons; i++) {
-            System.out.printf("Creating Lesson %d:\n", i + 1);
+            System.out.printf("Creating lesson %d:\n", i + 1);
             createLesson(indexNum);
         }
     }
@@ -191,7 +189,6 @@ public class AdminInterface extends UserInterface {
             }
         } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
                 venue, teachingWeeks));
-
     }
 
     private void createStudent() {
