@@ -11,6 +11,7 @@ public class AdminInterface extends UserInterface {
     public AdminInterface (User currentUser, Scanner sc) {
         super(sc);
         adHandler = new AdminHandler((Admin)currentUser);
+        System.out.println("\nWelcome, Admin " + currentUser.getName() + "!");
     }
 
     /**
@@ -19,9 +20,7 @@ public class AdminInterface extends UserInterface {
     public void start() {
         int choice = -1;
         do{
-            System.out.println("\nWelcome, Admin " + adHandler.currentAdmin.getAdminName()
-                    + ", " + adHandler.currentAdmin.getStaffNum() + "!");
-            System.out.println("Choose an action: ");
+            System.out.println("\nChoose an action: ");
             System.out.println("1. Add a student (name, matric number, gender, nationality, etc)");
             System.out.println("2. Add a course (course code, school, its index numbers and vacancy)");
             System.out.println("3. Check available slot for an index number (vacancy in a class)");
@@ -259,15 +258,10 @@ public class AdminInterface extends UserInterface {
             Index index;
             String indexNum;
             do {
-                System.out.print("Enter course code: ");
-                String course = getInput(typeOfInput.COURSE_CODE);
-
                 System.out.print("Enter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
-                index = adHandler.cdm.getCourse(course).getIndex(indexNum);
-            } while (index == null);
-            System.out.println("The vacancy for index " + indexNum + " is: " +
-                               index.getCurrentVacancy() + "/" + index.getIndexVacancy());
+            } while (!adHandler.checkIndexExists(indexNum));
+            adHandler.printIndexVacancy(indexNum);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -316,10 +310,25 @@ public class AdminInterface extends UserInterface {
             String courseCode;
             String changedValue;
             int choice;
-            do {
+            System.out.println("Courses:");
+            for (Course crs: adHandler.getCourses()){
+                System.out.println(crs);
+            }
+            while (true) {
                 System.out.print("Enter course to edit:");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
-            } while (!adHandler.checkCourseExists(courseCode));
+                if (adHandler.checkCourseExists(courseCode)) {
+                    System.out.println("Course does not exist");
+                    continue;
+                }
+
+                if (adHandler.checkCourseOccupied(courseCode)) {
+                    System.out.println("Course already has students enrolled, cannot be changed");
+                    continue;
+                }
+                break;
+            }
+
 
             do {
                 System.out.println("Choose attribute to edit:");
@@ -397,7 +406,7 @@ public class AdminInterface extends UserInterface {
             String indexNum;
             int choice;
             System.out.println("Indexes:");
-            for (Index idx : adHandler.getTempIndexes()) {
+            for(Index idx: adHandler.getIndexes(courseCode)){
                 System.out.println(idx);
             }
             do {
@@ -448,18 +457,16 @@ public class AdminInterface extends UserInterface {
             String changedValue;
             int lessonIndex;
             int choice;
-            int i=0;
+            int i=1;
             System.out.println("Lessons:");
-            for (Index idx : adHandler.getTempIndexes()) {
-                if (idx.getIndexNum().equals(indexNum))
-                    for (i=0; i<idx.getLessons().size();i++) {
-                        System.out.println(i+1 +":\n"+ idx.getLessons().get(i));
-                    }
+            for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)){
+                System.out.println("\n" + i +":\n"+lsn);
+                i++;
             }
             do {
-                System.out.println("Enter lesson group to edit:");
-                lessonIndex = Integer.parseInt(getInput(typeOfInput.INT));
-            } while (lessonIndex<=i && lessonIndex>=0);
+                System.out.println("Enter lesson number to edit:");
+                lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
+            } while (lessonIndex<i && lessonIndex>=0);
 
             do {
                 System.out.println("Choose attribute to edit:");
