@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * dayOfWeek.MON, dayOfWeek.TUES, dayOfWeek.WED, dayOfWeek.THURS, dayOfWeek.FRI, dayOfWeek.SAT, dayOfWeek.SUN
  */
 enum dayOfWeek{
-    MON, TUES, WED, THURS, FRI, SAT, SUN
+    MON, TUE, WED, THU, FRI, SAT, SUN
 }
 
 /**
@@ -71,14 +71,13 @@ public class Lesson implements Serializable {
     /**
      * Constructor for <code>Lesson</code>.<br>
      * @param lessonType Type of lesson. Represented with <code>typeOfLesson</code> enumeration.
-     * @param group //The group this lesson belongs to.
      * @param day Day on which lesson is held. Represented with <code>dayofWeek</code> enumeration.
      * @param startTime This lesson's start time.
      * @param endTime This lesson's end time.
      * @param venue This lesson's venue.
      * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 13).
      */
-    public Lesson(String lessonType, String group, String day, LocalTime startTime, LocalTime endTime,
+    public Lesson(String lessonType, String day, LocalTime startTime, LocalTime endTime,
                   String venue, ArrayList<Integer> teachingWeeks) {
         this.lessonType = typeOfLesson.valueOf(lessonType);
         this.day = dayOfWeek.valueOf(day);

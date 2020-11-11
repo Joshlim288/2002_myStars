@@ -24,15 +24,15 @@ public class StudentInterface extends UserInterface {
         do {
             System.out.println("\nWelcome, Student " + studHandler.currentStudent.getName()
                     + ", " + studHandler.currentStudent.getMatricNum() + "!");
-            System.out.println("Choose an action: ");
-            System.out.println("1. Add Course");
-            System.out.println("2. Drop Course");
-            System.out.println("3. Check Registered Courses");
-            System.out.println("4. Check Vacancies");
-            System.out.println("5. Change Index");
-            System.out.println("6. Swap Index");
-            System.out.println("7. Back to main menu");
-            System.out.println("(Enter ~ at any time to exit back to menu)");
+            System.out.println("What would you like to do today?");
+            System.out.println("1. Add New Course");
+            System.out.println("2. Drop Registered Course");
+            System.out.println("3. Check Current Registered Courses");
+            System.out.println("4. Check Vacancies of Course");
+            System.out.println("5. Change Index of Registered Course");
+            System.out.println("6. Swap Index of Registered Course");
+            System.out.println("7. Log Out of MyStars");
+            System.out.println("(Enter ~ at any time to return back to main menu)");
 
             try {
                 System.out.print("Enter choice: ");
@@ -295,7 +295,7 @@ public class StudentInterface extends UserInterface {
     }
 
     private void logout(){
-        System.out.println("Saving Data...");
+        System.out.println("\nSaving Data...");
         studHandler.close();
         System.out.println("Thank you for using MyStars!");
         System.out.println("Goodbye!");

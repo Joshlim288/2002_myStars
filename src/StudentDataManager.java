@@ -16,12 +16,12 @@ public class StudentDataManager implements DataManager{
             ObjectInputStream in = new ObjectInputStream(fileIn);
             studentList = (ArrayList<Student>) in.readObject();
             if (studentList.isEmpty()) {
-                System.out.println("...student data loaded but is empty");
+                System.out.println("\n...Student data loaded but data is empty!");
             } else {
-                System.out.println("...student data loaded");
+                System.out.println("\n...Student data loaded successfully!");
             }
         } catch (IOException e) {
-            System.out.println("Student data file not found or is empty. Initializing file...");
+            System.out.println("\n...Student data file not found or is empty. Initializing file...");
             studentList = new ArrayList<>();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -38,7 +38,7 @@ public class StudentDataManager implements DataManager{
             out.writeObject(studentList);
             out.close();
             fileOut.close();
-            System.out.println("... student data saved");
+            System.out.println("... Student Data saved successfully!");
         } catch (IOException e) {
             e.printStackTrace();
         }

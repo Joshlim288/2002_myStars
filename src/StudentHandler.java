@@ -22,16 +22,16 @@ public class StudentHandler {
     CourseDataManager cdm;
 
     public StudentHandler(String matricNum) {
-        this.currentStudent = sdm.getStudent(matricNum);
-        this.otherStudent = null;
         this.sdm = new StudentDataManager();
         this.cdm = new CourseDataManager();
         sdm.load();
         cdm.load();
+        this.currentStudent = sdm.getStudent(matricNum);
+        this.otherStudent = null;
     }
 
     public boolean studentInCourse(Course courseSelected){
-        if(currentStudent.retrieveIndex(courseSelected) == null)
+        if(currentStudent.retrieveIndex(courseSelected) != null)
             return true;
         return false;
     }
@@ -128,8 +128,7 @@ public class StudentHandler {
 
         //Use StringBuilder to create required output and return to StudentInterface
         StringBuilder stringBuilder = new StringBuilder();
-        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseName() + " " +
-                course.getCourseName() + ": Index" + index.getIndexNum()));
+        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseName() +  ": Index" + index.getIndexNum()));
         return stringBuilder.toString();
     }
 

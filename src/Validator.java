@@ -58,7 +58,7 @@ public class Validator {
     public boolean validateDateTimePeriod(String start, String end) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime startDateTime = LocalDateTime.parse(start, formatter);
-        LocalDateTime endDateTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(end, formatter);
         if (startDateTime.compareTo(endDateTime) < 0) {
             return true;
         }
