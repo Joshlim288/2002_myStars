@@ -59,4 +59,15 @@ public class CourseValidator extends Validator {
         System.out.println("ERROR: Group name can only contain alphabets (in uppercase) and numbers.");
         return false;
     }
+
+    public boolean validateTeachingWeek(String week) {
+        if (validateInt(week)) {
+            int teachingWeek = Integer.parseInt(week);
+            if (teachingWeek <= 13 && teachingWeek >= 1) {
+                return true;
+            }
+            System.out.println("ERROR: Invalid week entered.");
+        }
+        return false;
+    }
 }
