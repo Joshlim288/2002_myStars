@@ -18,10 +18,10 @@ public class StudentInterface extends UserInterface {
      * Student UI is displayed here
      */
     public void start() {
-        int choice;
+        int choice = -1;
 
         do {
-            System.out.println("Welcome, Student " + studHandler.currentStudent.getName()
+            System.out.println("\nWelcome, Student " + studHandler.currentStudent.getName()
                     + ", " + studHandler.currentStudent.getMatricNum() + "!");
             System.out.println("Choose an action: ");
             System.out.println("1. Add Course");
@@ -32,14 +32,14 @@ public class StudentInterface extends UserInterface {
             System.out.println("6. Swap Index");
             System.out.println("7. Back to main menu");
             System.out.println("(Enter ~ at any time to exit back to menu)");
-            while (true) {
-                tempString = sc.nextLine();
-                if (userValidator.validateInt(tempString)) {
-                    choice = Integer.parseInt(tempString);
-                    break;
-                }
-            }
 
+            try {
+                System.out.print("Enter choice: ");
+                choice = Integer.parseInt(getInput(typeOfInput.INT));
+            } catch (EscapeException e) {
+                logout();
+                return;
+            }
             switch (choice) {
                 case (1) -> addCourse();
                 case (2) -> dropCourse();

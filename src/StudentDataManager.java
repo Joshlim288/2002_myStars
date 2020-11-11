@@ -21,7 +21,8 @@ public class StudentDataManager implements DataManager{
                 System.out.println("...student data loaded");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Student data file not found or is empty. Initializing file...");
+            studentList = new ArrayList<>();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
