@@ -1,19 +1,6 @@
 import java.io.Serializable;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-
-/**
- * Lesson represents the actual classes held for an index of a course.
- * Lessons encompasses lectures, tutorials, seminars, etc.
- * Lessons can have different venues, timings, and so on.
- * There are multiple lessons per index of a course.
- * Enumerations for day of lessons and type of lessons are also included.
- * @author Chong Shen Rui
- * @version 1.0
- * @since 2020-10-18
- */
 
 /**
  * Definition of enumeration called dayOfWeek, with 7 elements, referred to as:
@@ -31,6 +18,16 @@ enum typeOfLesson{
     LEC, TUT, LAB, DES, PRJ, SEM
 }
 
+/**
+ * Lesson represents the actual classes held for an index of a course.
+ * Lessons encompasses lectures, tutorials, seminars, etc.
+ * Lessons can have different venues, timings, and so on.
+ * There are multiple lessons per index of a course.
+ * Enumerations for day of lessons and type of lessons are also included.
+ * @author Chong Shen Rui
+ * @version 1.0
+ * @since 2020-10-18
+ */
 public class Lesson implements Serializable {
 
     /**
@@ -71,7 +68,6 @@ public class Lesson implements Serializable {
     /**
      * Constructor for <code>Lesson</code>.<br>
      * @param lessonType Type of lesson. Represented with <code>typeOfLesson</code> enumeration.
-     * @param group //The group this lesson belongs to.
      * @param day Day on which lesson is held. Represented with <code>dayofWeek</code> enumeration.
      * @param startTime This lesson's start time.
      * @param endTime This lesson's end time.
@@ -144,9 +140,7 @@ public class Lesson implements Serializable {
         //TODO: to format starttime and endtime, extract elements and print (LocalTime alr has its own toString)
         stringBuilder.append(day + ", " + startTime + " - " + endTime + "\n");
         stringBuilder.append("Teaching Weeks: ");
-        teachingWeeks.forEach((week) -> {
-            stringBuilder.append(week + ", ");
-        });
+        teachingWeeks.forEach((week) -> stringBuilder.append(week + ", "));
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }

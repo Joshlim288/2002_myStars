@@ -1,5 +1,3 @@
-import java.io.Serializable;
-
 /**
  * Admin represents an academic staff in the university.
  * Admins can add a new Student, and modify his/her course registrations.
@@ -76,7 +74,7 @@ public class Admin extends User {
             return false;
         }
         Admin other = (Admin) o;
-        return other.getStaffNum() == this.staffNum;
+        return other.getStaffNum().equals(this.staffNum);
     }
 
     @Override

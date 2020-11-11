@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 /**
+ * Definition of enumeration called typeOfCourse, with 4 elements, referred to as:
+ * typeOfCourse.CORE, typeOfCourse.MPE, typeOfCourse.GER, typeOfCourse.UE
+ */
+enum typeOfCourse{
+    CORE, MPE, GER, UE
+}
+
+/**
  * Course represents a course taught in the university (e.g. CZ2002 - OODP).
  * It consists of multiple indexes which have lessons of different timings.
  * The database of courses is maintained and obtained through <code>FileHandler</code>.
@@ -12,15 +20,6 @@ import java.time.LocalDateTime;
  * @version 1.0
  * @since 2020-10-18
  */
-
-/**
- * Definition of enumeration called typeOfCourse, with 4 elements, referred to as:
- * typeOfCourse.CORE, typeOfCourse.MPE, typeOfCourse.GER, typeOfCourse.UE
- */
-enum typeOfCourse{
-    CORE, MPE, GER, UE
-}
-
 public class Course implements Serializable {
 
     /**
@@ -84,10 +83,11 @@ public class Course implements Serializable {
         if (examStart == null) {
             examDateTime[0] = null;
             examDateTime[1] = null;
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            examDateTime[0] = LocalDateTime.parse(examStart, formatter);
+            examDateTime[1] = LocalDateTime.parse(examEnd, formatter);
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        examDateTime[0] = LocalDateTime.parse(examStart, formatter);
-        examDateTime[1] = LocalDateTime.parse(examEnd, formatter);
     }
 
     public String getCourseCode() {

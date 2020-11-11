@@ -68,7 +68,7 @@ public class Validator {
 
     public boolean validateTimePeriod(String start, String end) {
         LocalTime startTime = LocalTime.parse(start);
-        LocalTime endTime = LocalTime.parse(start);
+        LocalTime endTime = LocalTime.parse(end);
         if (startTime.compareTo(endTime) < 0) {
             return true;
         }

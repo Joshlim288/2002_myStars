@@ -1,3 +1,9 @@
+import java.time.LocalTime;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /** Control class for handling student matters
  * Try not to ask for input here, get input using scanner in AdminInterface
  * Then pass the input as arguments
@@ -9,12 +15,6 @@
  *
  * Try to add JavaDocs as you go
  */
-import java.time.LocalTime;
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class StudentHandler {
     Student currentStudent;
     Student otherStudent;
@@ -31,9 +31,7 @@ public class StudentHandler {
     }
 
     public boolean studentInCourse(Course courseSelected){
-        if(currentStudent.retrieveIndex(courseSelected) != null)
-            return true;
-        return false;
+        return currentStudent.retrieveIndex(courseSelected) != null;
     }
 
     //TODO: Improve input validation

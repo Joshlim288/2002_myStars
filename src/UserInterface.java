@@ -16,7 +16,6 @@ public abstract class UserInterface {
     protected CourseValidator courseValidator;
     protected DateTimeFormatter dateTimeFormatter;
     protected DateTimeFormatter timeFormatter;
-    String tempString;
 
     public UserInterface(Scanner sc){
         this.sc = sc;

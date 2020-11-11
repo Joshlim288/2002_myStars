@@ -19,7 +19,7 @@ public class StudentInterface extends UserInterface {
      * Student UI is displayed here
      */
     public void start() {
-        int choice = -1;
+        int choice;
 
         do {
             System.out.println("\nWelcome, Student " + studHandler.currentStudent.getName()

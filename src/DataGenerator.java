@@ -1,6 +1,3 @@
-import java.time.LocalTime;
-import java.util.ArrayList;
-
 public class DataGenerator {
     public static void main(String[] args) {
         //CourseDataManager cdm = new CourseDataManager();

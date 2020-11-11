@@ -3,14 +3,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
- * Student represents a student enrolled in the university. It inherits from User.
- * A student is enrolled in one or more courses through indexes.
- * @author Toh Jun Wei
- * @version 1.0
- * @since 2020-10-17
- */
-
-/**
  * Definition of enumeration called typeOfGender, with 3 elements, referred to as:
  * typeOfGender.MALE, typeOfGender.FEMALE, typeOfGender.OTHER
  */
@@ -18,6 +10,13 @@ enum typeOfGender {
     MALE, FEMALE, OTHER
 }
 
+/**
+ * Student represents a student enrolled in the university. It inherits from User.
+ * A student is enrolled in one or more courses through indexes.
+ * @author Toh Jun Wei
+ * @version 1.0
+ * @since 2020-10-17
+ */
 public class Student extends User {
 
     /** This student's matriculation number. It is unique. */
@@ -234,7 +233,7 @@ public class Student extends User {
             return false;
         }
         Student other = (Student) o;
-        return other.getMatricNum() == this.matricNum;
+        return other.getMatricNum().equals(this.matricNum);
     }
 
     @Override

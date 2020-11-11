@@ -16,7 +16,7 @@ public class CourseValidator extends Validator {
 
     public boolean validateCourseType(String courseType) {
         try {
-            courseType.valueOf(courseType);
+            typeOfCourse.valueOf(courseType);
             return true;
         } catch (IllegalArgumentException e) {
             System.out.println("ERROR: Course type can only be CORE / MPE / GER / UE.");
