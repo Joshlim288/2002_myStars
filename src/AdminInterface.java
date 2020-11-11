@@ -121,84 +121,77 @@ public class AdminInterface extends UserInterface {
         }
     }
 
-    private void createIndex(String courseCode) {
-        try {
-            String indexNum;
-            int indexVacancies;
-            int numLessons;
-            String group;
-            do {
-                System.out.print("Enter index number: ");
-                indexNum = getInput(typeOfInput.INDEX_NUM);
+    private void createIndex(String courseCode) throws EscapeException {
+        String indexNum;
+        int indexVacancies;
+        int numLessons;
+        String group;
+        do {
+            System.out.print("Enter index number: ");
+            indexNum = getInput(typeOfInput.INDEX_NUM);
 
-                System.out.print("Enter number of vacancies: ");
-                indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
+            System.out.print("Enter number of vacancies: ");
+            indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
 
-                System.out.print("Enter group name for the index: ");
-                group = getInput(typeOfInput.GROUP_NAME);
-            } while (!adHandler.addIndex(indexNum, indexVacancies, group));
+            System.out.print("Enter group name for the index: ");
+            group = getInput(typeOfInput.GROUP_NAME);
+        } while (!adHandler.addIndex(indexNum, indexVacancies, group));
 
-            System.out.print("Enter number of Lessons: ");
-            numLessons = Integer.parseInt(getInput(typeOfInput.INT));
-            for (int i = 0; i < numLessons; i++) {
-                System.out.printf("Creating Lesson %d:\n", i + 1);
-                createLesson(indexNum);
-            }
-        } catch (EscapeException e) {
-            System.out.println(e.getMessage());
+        System.out.print("Enter number of Lessons: ");
+        numLessons = Integer.parseInt(getInput(typeOfInput.INT));
+        for (int i = 0; i < numLessons; i++) {
+            System.out.printf("Creating Lesson %d:\n", i + 1);
+            createLesson(indexNum);
         }
     }
 
-    private void createLesson(String indexNum) {
-        try {
-            String lessonType;
-            String group;
-            String day;
-            LocalTime startTime;
-            LocalTime endTime;
-            String venue;
-            String[] inputWeeks;
-            ArrayList<Integer> teachingWeeks;
-            do {
-                System.out.print("Enter lesson type: LEC, TUT, LAB, DES, PRJ, SEM");
-                lessonType = getInput(typeOfInput.LESSON_TYPE);
+    private void createLesson(String indexNum) throws EscapeException{
+        String lessonType;
+        String group;
+        String day;
+        LocalTime startTime;
+        LocalTime endTime;
+        String venue;
+        String[] inputWeeks;
+        ArrayList<Integer> teachingWeeks;
+        do {
+            System.out.print("Enter lesson type: LEC, TUT, LAB, DES, PRJ, SEM");
+            lessonType = getInput(typeOfInput.LESSON_TYPE);
 
-                System.out.print("Enter group: ");
-                group = getInput(typeOfInput.GROUP_NAME);
+            System.out.print("Enter group: ");
+            group = getInput(typeOfInput.GROUP_NAME);
 
-                System.out.print("Enter day of week: (First 3 letters of day)");
-                day = getInput(typeOfInput.DAY);
+            System.out.print("Enter day of week: (First 3 letters of day)");
+            day = getInput(typeOfInput.DAY);
 
-                System.out.print("Enter start time (HH:MM)");
-                startTime = LocalTime.parse(getInput(typeOfInput.TIME));
+            System.out.print("Enter start time (HH:MM)");
+            startTime = LocalTime.parse(getInput(typeOfInput.TIME));
 
-                System.out.print("Enter end time (HH:MM)");
-                endTime = LocalTime.parse(getInput(typeOfInput.TIME));
+            System.out.print("Enter end time (HH:MM)");
+            endTime = LocalTime.parse(getInput(typeOfInput.TIME));
 
-                System.out.print("Enter venue");
-                venue = sc.nextLine();
+            System.out.print("Enter venue");
+            venue = sc.nextLine();
 
-                while (true) {
-                    System.out.print("Enter teaching weeks, separated with a comma (1-13)");
-                    inputWeeks = sc.nextLine().split(",");
-                    teachingWeeks = new ArrayList<>();
-                    for (String week : inputWeeks) {
-                        if (courseValidator.validateTeachingWeek(week)) {
-                            teachingWeeks.add(Integer.parseInt(week));
-                        } else {
-                            System.out.println("Please enter the teaching weeks again.");
-                            break;
-                        }
-                    }
-                    if (inputWeeks.length == teachingWeeks.size()) {
+            while (true) {
+                System.out.print("Enter teaching weeks, separated with a comma (1-13)");
+                inputWeeks = sc.nextLine().split(",");
+                teachingWeeks = new ArrayList<>();
+                for (String week : inputWeeks) {
+                    if (courseValidator.validateTeachingWeek(week)) {
+                        teachingWeeks.add(Integer.parseInt(week));
+                    } else {
+                        System.out.println("Please enter the teaching weeks again.");
                         break;
                     }
                 }
-            } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
-                    venue, teachingWeeks));
-        } catch (EscapeException e) {
-            System.out.println(e.getMessage());
-        }
+                if (inputWeeks.length == teachingWeeks.size()) {
+                    break;
+                }
+            }
+        } while (!adHandler.addLesson(indexNum, lessonType, group, day, startTime, endTime,
+                venue, teachingWeeks));
+
     }
 
     private void createStudent() {
