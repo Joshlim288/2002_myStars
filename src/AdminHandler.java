@@ -76,7 +76,11 @@ public class AdminHandler{
             case(3)-> tempCourse.setCourseType(input);
             case(4)-> tempCourse.setAcademicUnits(Integer.parseInt(input));
             case(5)-> tempCourse.setSchool(input);
-            case(7)-> tempCourse.setExamDateTime(input);
+            case(7)-> {
+                String newStart = input.split("&")[0];
+                String newEnd = input.split("&")[0];
+                tempCourse.setExamDateTime(newStart, newEnd);
+            }
         }
         tempCourse = null; // this doesn't destroy the course... right?
         return true;
@@ -131,22 +135,16 @@ public class AdminHandler{
                 tempLesson.setDay(input);
             }
             case(3)->{
-                LocalTime startTime = LocalTime.parse(input);
+                LocalTime startTime = LocalTime.parse(input.split("&")[0]);
+                LocalTime endTime = LocalTime.parse(input.split("&")[1]);
                 if (checkClash(allIndexLesson, tempLesson.getDay().toString(),
-                        new LocalTime[]{startTime, tempLesson.getEndTime()}))
+                        new LocalTime[]{startTime, endTime}))
                     return false;
 
-                tempLesson.setStartTime(LocalTime.parse(input));
+                tempLesson.setStartTime(startTime);
+                tempLesson.setEndTime(endTime);
             }
-            case(4)->{
-                LocalTime endTime = LocalTime.parse(input);
-                if (checkClash(allIndexLesson, tempLesson.getDay().toString(),
-                        new LocalTime[]{tempLesson.getStartTime(), endTime}))
-                    return false;
-
-                tempLesson.setEndTime(LocalTime.parse(input));
-            }
-            case(5)->tempLesson.setVenue(input); // need to check if being used at the time?????
+            case(4)->tempLesson.setVenue(input); // need to check if being used at the time?????
         }
         allIndexLesson.add(lessonIndex, tempLesson); // add back the lesson we removed, after the changes are accepted
         return true;
@@ -203,6 +201,11 @@ public class AdminHandler{
                 }
                 tempStudent.setMaxAUs(Integer.parseInt(updatedValue));
             }
+            case(10)->{
+                String newStart = updatedValue.split("&")[0];
+                String newEnd = updatedValue.split("&")[0];
+                tempStudent.setAccessTime(newStart, newEnd);
+            }
         }
         return true;
     }
@@ -214,20 +217,19 @@ public class AdminHandler{
      * @param courseType
      * @param academicUnits
      * @param school
-     * @param examDateTime
      * @return
      */
     public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school,
-                             boolean hasExam,String examDateTime){
+                             boolean hasExam,String examStart, String examEnd){
         if (checkCourseExists(courseCode)) {
             System.out.println("Course with this course code already exists");
             return false;
         }
 
         if(hasExam)
-            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examDateTime);
+            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examStart, examEnd);
         else
-            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, null);
+            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, null, null);
         return true;
 
     }
@@ -320,6 +322,8 @@ public class AdminHandler{
         return null;
     }
 
+    //TODO: Use validator method instead in the interface
+    @Deprecated
     public boolean editAccessPeriod(String matricNum, String start, String end){
         // check start time < end time
         if (end.compareTo(start) > 0) {

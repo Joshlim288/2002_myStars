@@ -55,7 +55,7 @@ public class Course implements Serializable {
      */
     private ArrayList<Index> indexes;
 
-    private LocalDateTime examDateTime;
+    private LocalDateTime[] examDateTime;
 
     /**
      * Constructor for <code>Course</code>.
@@ -67,21 +67,22 @@ public class Course implements Serializable {
      * @param school The school that teaches this course.
      */
     public Course(String courseCode, String courseName, String courseType, int academicUnits, String school
-                    , String examDateTimeInput) {
+                    , String examStart, String examEnd) {
         this.courseCode = courseCode;
         this.courseName = courseName;
         this.courseType = typeOfCourse.valueOf(courseType);
         this.academicUnits = academicUnits;
         this.school = school;
         this.indexes = new ArrayList<>();
-        setExamDateTime(examDateTimeInput);
+        setExamDateTime(examStart, examEnd);
     }
 
-    public LocalDateTime getExamDateTime(){return examDateTime;}
+    public LocalDateTime[] getExamDateTime(){return examDateTime;}
 
-    public void setExamDateTime(String examDateTimeString) {
+    public void setExamDateTime(String examStart, String examEnd) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        examDateTime = LocalDateTime.parse(examDateTimeString, formatter);
+        examDateTime[0] = LocalDateTime.parse(examStart, formatter);
+        examDateTime[1] = LocalDateTime.parse(examEnd, formatter);
     }
 
     public String getCourseCode() {

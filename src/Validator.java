@@ -55,6 +55,27 @@ public class Validator {
         return false;
     }
 
+    public boolean validateDateTimePeriod(String start, String end) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime startDateTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(start, formatter);
+        if (startDateTime.compareTo(endDateTime) < 0) {
+            return true;
+        }
+        System.out.println("ERROR: End datetime cannot be before or same as start datetime.");
+        return false;
+    }
+
+    public boolean validateTimePeriod(String start, String end) {
+        LocalTime startTime = LocalTime.parse(start);
+        LocalTime endTime = LocalTime.parse(start);
+        if (startTime.compareTo(endTime) < 0) {
+            return true;
+        }
+        System.out.println("ERROR: End time cannot be before or same as start time.");
+        return false;
+    }
+
     //TODO: let students set their passwords upon first login
     public boolean validatePassword(String password) {
         if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,15}$")) {
