@@ -58,19 +58,16 @@ public class AdminHandler{
     }
 
     public boolean checkCourseExists(String courseCode) {
-        if (cdm.getCourse(courseCode) == null) {
-            return false;
-        }
-        return true;
+        return cdm.getCourse(courseCode) != null;
     }
 
     public boolean checkCourseOccupied(String courseCode){
         for (Index idx: cdm.getCourse(courseCode).getIndexes()){
             if (idx.getCurrentVacancy() != idx.getIndexVacancy()){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
     public ArrayList<Index> getTempIndexes() {
         return new ArrayList<>(tempCourse.getIndexes());

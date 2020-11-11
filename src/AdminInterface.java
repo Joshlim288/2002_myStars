@@ -317,9 +317,9 @@ public class AdminInterface extends UserInterface {
                 System.out.println(crs);
             }
             while (true) {
-                System.out.print("Enter course to edit:");
+                System.out.print("Enter course to edit: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
-                if (adHandler.checkCourseExists(courseCode)) {
+                if (!adHandler.checkCourseExists(courseCode)) {
                     System.out.println("Course does not exist");
                     continue;
                 }
@@ -330,7 +330,6 @@ public class AdminInterface extends UserInterface {
                 }
                 break;
             }
-
 
             do {
                 System.out.println("Choose attribute to edit:");
