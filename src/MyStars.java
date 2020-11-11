@@ -4,9 +4,9 @@ import java.util.Scanner;
 public class MyStars {
     public static void main(String[] args){
         String menuChoice;
-        AccessControl.initialize();
         Scanner sc = new Scanner(System.in);
         do {
+            AccessControl.initialize();
             System.out.println( "Welcome to MyStars\n" +
                                 "------------------\n\n" +
                                 "1 - Login\n" +

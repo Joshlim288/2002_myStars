@@ -54,4 +54,18 @@ public class Validator {
         System.out.println("ERROR: Date must be in the format YYYY-MM-DD HH:mm");
         return false;
     }
+
+    //TODO: let students set their passwords upon first login
+    public boolean validatePassword(String password) {
+        if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,15}$")) {
+            return true;
+        }
+        System.out.println("ERROR: Password must contain at least \n" +
+                            "- an uppercase letter\n" +
+                            "- a lowercase letter\n" +
+                            "- a digit\n" +
+                            "- a symbol\n" +
+                            "and must be at least 8 characters long");
+        return true;
+    }
 }

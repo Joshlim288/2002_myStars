@@ -59,7 +59,7 @@ public class Student extends User {
     /**
      * Constructor for <code>Student</code>.<br>
      * <code>accessTime</code> and <code>coursesRegistered</code> cannot be passed into the constructor and must instead be manually set.
-     * @param password This student's password (hashed).
+     * @param password This student's password (in plain text).
      * @param studentName This student's name.
      * @param matricNum This student's matriculation number. It is unique.
      * @param email This student's email.
