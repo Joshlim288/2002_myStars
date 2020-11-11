@@ -74,12 +74,17 @@ public class Course implements Serializable {
         this.academicUnits = academicUnits;
         this.school = school;
         this.indexes = new ArrayList<>();
+        this.examDateTime = new LocalDateTime[2];
         setExamDateTime(examStart, examEnd);
     }
 
     public LocalDateTime[] getExamDateTime(){return examDateTime;}
 
     public void setExamDateTime(String examStart, String examEnd) {
+        if (examStart == null) {
+            examDateTime[0] = null;
+            examDateTime[1] = null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         examDateTime[0] = LocalDateTime.parse(examStart, formatter);
         examDateTime[1] = LocalDateTime.parse(examEnd, formatter);

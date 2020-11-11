@@ -23,8 +23,10 @@ public class AccessControl {
     public static User validate(String userId, String password) throws AccessDeniedException{
         ArrayList<User> userList = udm.getUserList();
         for (User account : userList) {
-            if (account.validateLogin(userId, password))
+            if (account.validateLogin(userId, password)) {
+                System.out.println("Login successful!");
                 return account;
+            }
         }
         throw new AccessDeniedException("User id not found");
     }

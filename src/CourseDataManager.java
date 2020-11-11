@@ -13,9 +13,9 @@ public class CourseDataManager implements DataManager{
             ObjectInputStream in = new ObjectInputStream(fileIn);
             courseList = (ArrayList<Course>) in.readObject();
             if (courseList.isEmpty()) {
-                System.out.println("...course data loaded but is empty");
+                System.out.println("...Course data loaded but data is empty!");
             } else {
-                System.out.println("...course data loaded");
+                System.out.println("...Course data loaded successfully!");
             }
         } catch (IOException e) {
             System.out.println("Course data file not found or is blank. Initializing file...");
@@ -32,7 +32,7 @@ public class CourseDataManager implements DataManager{
             out.writeObject(courseList);
             out.close();
             fileOut.close();
-            System.out.println("... course data saved");
+            System.out.println("... Course Data saved successfully!");
         } catch (IOException e) {
             e.printStackTrace();
         }

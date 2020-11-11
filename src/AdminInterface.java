@@ -21,15 +21,15 @@ public class AdminInterface extends UserInterface {
         do{
             System.out.println("\nWelcome, Admin " + adHandler.currentAdmin.getAdminName()
                     + ", " + adHandler.currentAdmin.getStaffNum() + "!");
-            System.out.println("Choose an action: ");
+            System.out.println("What would you like to do today?");
             System.out.println("1. Add a student (name, matric number, gender, nationality, etc)");
             System.out.println("2. Add a course (course code, school, its index numbers and vacancy)");
             System.out.println("3. Check available slot for an index number (vacancy in a class)");
             System.out.println("4. Print student list by index number");
             System.out.println("5. Print student list by course (all students registered for the selected course)");
-            System.out.println("6. Update a course");
-            System.out.println("7. Update a student");
-            System.out.println("8. Log out");
+            System.out.println("6. Update a Course's Details");
+            System.out.println("7. Update a Student's Details");
+            System.out.println("8. Log Out of MyStars");
             System.out.println("(Enter ~ at any time to exit back to menu)");
 
             try {
@@ -103,15 +103,21 @@ public class AdminInterface extends UserInterface {
                 aus = Integer.parseInt(getInput(typeOfInput.INT));
 
                 System.out.print("Enter 'y' if this course has final exams, any keys otherwise: ");
-                hasExams = getInput(typeOfInput.STANDARD) == "y";
+                hasExams = getInput(typeOfInput.STANDARD).equals("y");
 
-                do {
-                    System.out.print("Enter exam start datetime: ");
-                    examStart = getInput(typeOfInput.DATETIME);
+                if (hasExams) {
+                    do {
+                        System.out.print("Enter exam start datetime: ");
+                        examStart = getInput(typeOfInput.DATETIME);
 
-                    System.out.print("Enter exam end datetime: ");
-                    examEnd = getInput(typeOfInput.DATETIME);
-                } while (courseValidator.validateDateTimePeriod(examStart, examEnd));
+                        System.out.print("Enter exam end datetime: ");
+                        examEnd = getInput(typeOfInput.DATETIME);
+                    } while (!courseValidator.validateDateTimePeriod(examStart, examEnd));
+                }
+                else {
+                    examStart = null;
+                    examEnd = null;
+                }
 
             } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examStart, examEnd));
 
@@ -607,7 +613,7 @@ public class AdminInterface extends UserInterface {
     }
 
     private void logout() {
-        System.out.println("Saving data...");
+        System.out.println("\nSaving data...");
         adHandler.close();
         System.out.println("Thank you for using MyStars!");
         System.out.println("Goodbye!");

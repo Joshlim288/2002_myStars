@@ -15,7 +15,7 @@ public class MyStars {
 
         do{
             AccessControl.initialize();
-            System.out.print("------------------------------------------\n" +
+            System.out.print("\n------------------------------------------\n" +
                             "|          Welcome to MyStars!           |\n" +
                             "|----------------------------------------|\n" +
                             "|               1 - Login                |\n" +
@@ -42,7 +42,7 @@ public class MyStars {
                     }
                 }
                 case(2) -> System.out.println("Exiting MyStars!");
-                default -> System.out.println("Invalid, please enter a valid menu choice");
+                default -> System.out.println("Invalid, please enter a valid menu choice!");
             }
         } while(Integer.parseInt(menuChoice) != 2);
     }
@@ -56,9 +56,9 @@ public class MyStars {
      */
     public static User login(Scanner sc) throws AccessDeniedException{
         String userId, password;
-        System.out.print("Enter user id (case sensitive): ");
+        System.out.print("Enter your user ID (case sensitive): ");
         userId = sc.nextLine();
-        System.out.print("Enter password (case sensitive): ");
+        System.out.print("Enter your password (case sensitive): ");
         password = new String(System.console().readPassword());
         return AccessControl.validate(userId, password);
     }
