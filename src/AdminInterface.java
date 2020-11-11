@@ -84,6 +84,7 @@ public class AdminInterface extends UserInterface {
             String courseName;
             String courseType;
             String examDateTime;
+            boolean hasExams;
             int aus;
             do {
                 System.out.print("Enter course code: ");
@@ -101,10 +102,13 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter academic units: ");
                 aus = Integer.parseInt(getInput(typeOfInput.INT));
 
+                System.out.print("Enter 'y' if this course has final exams, any keys otherwise: ");
+                hasExams = getInput(typeOfInput.STANDARD) == "y" ? true : false;
+
                 System.out.print("Enter exam date time: ");
                 examDateTime = getInput(typeOfInput.DATETIME);
 
-            } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, examDateTime));
+            } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examDateTime));
 
             System.out.print("Enter number of indexes: ");
             int numIndexes = Integer.parseInt(getInput(typeOfInput.INT));
