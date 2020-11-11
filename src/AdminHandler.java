@@ -292,7 +292,7 @@ public class AdminHandler{
         if (checkClash(tempCourse.getIndex(indexNum).getLessons(), day, new LocalTime[]{startTime, endTime}))
             return false;
 
-        tempCourse.getIndex(indexNum).addLesson(lessonType, group, day, startTime, endTime, venue, teachingWeeks);
+        tempCourse.getIndex(indexNum).addLesson(lessonType, day, startTime, endTime, venue, teachingWeeks);
         return true;
     }
 
