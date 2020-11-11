@@ -136,7 +136,6 @@ public class Lesson implements Serializable {
                 this.teachingWeeks = teachingWeeks;
     }
 
-
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

@@ -55,6 +55,7 @@ public class AdminHandler{
     public boolean checkStudentExists(String matric){
         return sdm.getStudent(matric) != null;
     }
+
     /**
      * Edits the course details
      * @param  courseCode, courseName,courseType, academicUnits,school, indexes
@@ -74,6 +75,7 @@ public class AdminHandler{
             case(3)-> tempCourse.setCourseType(input);
             case(4)-> tempCourse.setAcademicUnits(Integer.parseInt(input));
             case(5)-> tempCourse.setSchool(input);
+            case(7)-> tempCourse.setExamDateTime(input);
         }
         tempCourse = null; // this doesn't destroy the course... right?
         return true;
@@ -208,9 +210,12 @@ public class AdminHandler{
     }
 
     public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school,
-                             String examDateTime){
+                             boolean hasExam, String examDateTime){
         try {
-            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examDateTime);
+            if(hasExam)
+                tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examDateTime);
+            else
+                tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, null);
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());

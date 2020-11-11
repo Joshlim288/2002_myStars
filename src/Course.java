@@ -77,6 +77,8 @@ public class Course implements Serializable {
         setExamDateTime(examDateTimeInput);
     }
 
+    public LocalDateTime getExamDateTime(){return examDateTime;}
+
     public void setExamDateTime(String examDateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         examDateTime = LocalDateTime.parse(examDateTimeString, formatter);
