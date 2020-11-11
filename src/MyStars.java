@@ -7,7 +7,7 @@ public class MyStars {
         Scanner sc = new Scanner(System.in);
         do {
             AccessControl.initialize();
-            System.out.println( "Welcome to MyStars\n" +
+            System.out.print( "Welcome to MyStars\n" +
                                 "------------------\n\n" +
                                 "1 - Login\n" +
                                 "2 - Quit\n\n" +
@@ -49,9 +49,9 @@ public class MyStars {
      */
     public static User login(Scanner sc) throws AccessDeniedException{
         String userId, password;
-        System.out.print("Enter userId: ");
+        System.out.print("Enter user id (case sensitive): ");
         userId = sc.nextLine();
-        System.out.print("Enter password: ");
+        System.out.print("Enter password (case sensitive): ");
         password = new String(System.console().readPassword());
         return AccessControl.validate(userId, password);
     }

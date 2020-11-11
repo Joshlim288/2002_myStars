@@ -26,6 +26,6 @@ public class AccessControl {
             if (account.validateLogin(userId, password))
                 return account;
         }
-        throw new AccessDeniedException("Invalid UserID or password");
+        throw new AccessDeniedException("User id not found");
     }
 }

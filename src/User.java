@@ -86,7 +86,14 @@ public abstract class User implements Serializable {
     }
 
     public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException{
-        return checkID.equals(this.userID) && BCrypt.checkpw(checkpw, hashedPassword);
+        if(checkID.equals(this.userID)) {
+            if (BCrypt.checkpw(checkpw, hashedPassword)) {
+                return true;
+            } else {
+                throw new AccessDeniedException("Invalid password");
+            }
+        }
+        return  false;
     }
 
     @Override
