@@ -105,7 +105,7 @@ public class Index implements Serializable {
         return atMaxCapacity;
     }
 
-    public void setAtMaxCapacity(boolean atMaxCapacity) {
+    private void setAtMaxCapacity(boolean atMaxCapacity) {
         this.atMaxCapacity = atMaxCapacity;
     }
 
@@ -178,10 +178,12 @@ public class Index implements Serializable {
      * @param enrolledStudents The ArrayList to add the student into.
      * @param student The student to be added.
      */
-    // TODO: Exception handling if at max capacity
+    // TODO: Exception handling if at max capacity (added?)
     public void addToEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
         enrolledStudents.add(student);
-        this.currentVacancy--;
+        currentVacancy--;
+        if (currentVacancy == 0)
+            setAtMaxCapacity(true);
     }
 
     /**
@@ -193,6 +195,7 @@ public class Index implements Serializable {
     public void removeFromEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
             enrolledStudents.remove(student);
             this.currentVacancy++;
+            setAtMaxCapacity(false);
     }
 
     @Override

@@ -126,7 +126,7 @@ public class StudentHandler {
 
         //Use StringBuilder to create required output and return to StudentInterface
         StringBuilder stringBuilder = new StringBuilder();
-        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseName() +  ": Index" + index.getIndexNum()));
+        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseCode() + " " + course.getCourseName() +  ": Index " + index.getIndexNum() + "\n"));
         return stringBuilder.toString();
     }
 
