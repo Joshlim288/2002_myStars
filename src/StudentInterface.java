@@ -144,26 +144,27 @@ public class StudentInterface extends UserInterface {
     }
 
     private void dropCourse() {
-        String courseCode;
+        String courseCode = "";
         checkRegisteredCourses();
         try {
-            System.out.print("Enter course to drop (e.g. CZ2002):");
-            courseCode = getInput(typeOfInput.COURSE_CODE);
             Course courseSelected = null;
-            while (courseSelected == null)
+            while (courseSelected == null) {
+                System.out.print("Enter course to drop (e.g. CZ2002):");
+                courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
+            }
 
-            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
+            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseCode)) {
                 System.out.println("You are not enrolled in this course!");
                 return;
             }
 
-            Index index = studHandler.currentStudent.retrieveIndex(courseSelected);
+            String index = studHandler.currentStudent.retrieveIndex(courseCode);
             System.out.println("You have selected to drop: \n" +
-                    courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
-                    "Index Number: " + index.getIndexNum());
+                    courseCode + " " + courseSelected.getCourseName() + "\n" +
+                    "Index Number: " + index);
             studHandler.dropCourse(courseSelected, index);
-            System.out.println("Successfully dropped " + index.getIndexNum() + "!");
+            System.out.println("Successfully dropped " + index + "!");
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -194,23 +195,23 @@ public class StudentInterface extends UserInterface {
     }
 
     private void changeIndex() {
-        String courseCode;
-        String indexNum = "";
+        String courseCode = "";
+        String indexNum;
         try {
             System.out.println(studHandler.getRegisteredCourses());
-            System.out.print("Choose course for changing of index (e.g. CZ2002):");
-            courseCode = getInput(typeOfInput.COURSE_CODE);
-
             Course courseSelected = null;
-            while (courseSelected == null)
+            while (courseSelected == null) {
+                System.out.print("Choose course for changing of index (e.g. CZ2002):");
+                courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
+            }
 
             if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
                 System.out.println("You are not enrolled in this course!");
                 return;
             }
 
-            Index indexToDrop = this.studHandler.currentStudent.retrieveIndex(courseSelected);
+            Index indexToDrop = getIndexInputAndCheck(courseSelected, this.studHandler.currentStudent.retrieveIndex(courseCode));
             Index indexSelected = null;
             while(indexSelected == null) {
                 System.out.println("Enter the index to swap to.\n" +
@@ -232,15 +233,15 @@ public class StudentInterface extends UserInterface {
     }
 
     private void swapIndex() {
-        String courseCode;
+        String courseCode = "";
         try {
             System.out.println(studHandler.getRegisteredCourses());
-            System.out.print("Choose course for swapping of index (e.g. CZ2002):");
-            courseCode = getInput(typeOfInput.COURSE_CODE);
-
             Course courseSelected = null;
-            while (courseSelected == null)
+            while (courseSelected == null) {
+                System.out.print("Choose course for swapping of index (e.g. CZ2002):");
+                courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
+            }
 
             if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
                 System.out.println("You are not enrolled in this course!");
@@ -248,7 +249,7 @@ public class StudentInterface extends UserInterface {
             }
 
             showIndexesInCourse(courseSelected);
-            Index indexToSwapOut = this.studHandler.currentStudent.retrieveIndex(courseSelected);
+            Index indexToSwapOut = getIndexInputAndCheck(courseSelected, this.studHandler.currentStudent.retrieveIndex(courseCode));
 
             boolean validUser = false;
             System.out.println("Enter the particulars of the student to swap with:");
@@ -266,7 +267,7 @@ public class StudentInterface extends UserInterface {
                 return;
             }
 
-            Index indexToSwapIn = studHandler.otherStudent.retrieveIndex(courseSelected);
+            Index indexToSwapIn = getIndexInputAndCheck(courseSelected, studHandler.otherStudent.retrieveIndex(courseCode));
 
             System.out.println("Summary of Indexes after swap performed:\n" +
                     courseSelected.getCourseName() + "\n");

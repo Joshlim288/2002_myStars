@@ -45,15 +45,15 @@ public class Student extends User {
 
     /**
      * This student's registered courses and the corresponding index for the semester, stored as a HashMap.
-     * Key is the registered course, and value is the index registered by this student.
+     * Key is the registered course's code, and value is the index number registered by this student.
      */
-    private HashMap<Course, Index> coursesRegistered;
+    private HashMap<String, String> coursesRegistered;
 
     /**
      * This student's list of courses waiting to be registered, stored as a HashMap.
-     * Key is the course to be registered, and value is the index registered by this student.
+     * Key is the course code to be registered, and value is the index number registered by this student.
      */
-    private HashMap<Course, Index> waitList;
+    private HashMap<String, String> waitList;
 
     /**
      * Constructor for <code>Student</code>.<br>
@@ -120,16 +120,17 @@ public class Student extends User {
 
     public int getCurrentAUs() { return currentAUs; }
 
-    /**
-     * Updates this student's current AUs, based on courses this student has registered.<br>
-     * This method is called whenever a modification to this student's courses registered is performed.
-     */
-    private void updateCurrentAUs() {
-        currentAUs = 0;
-        for (Course course : coursesRegistered.keySet()) {
-            currentAUs += course.getAcademicUnits();
-        }
-    }
+    //TODO: Remove
+//    /**
+//     * Updates this student's current AUs, based on courses this student has registered.<br>
+//     * This method is called whenever a modification to this student's courses registered is performed.
+//     */
+//    private void updateCurrentAUs() {
+//        currentAUs = 0;
+//        for (Course course : coursesRegistered.keySet()) {
+//            currentAUs += course.getAcademicUnits();
+//        }
+//    }
 
     public String getMajor() { return major; }
 
@@ -152,16 +153,16 @@ public class Student extends User {
         accessTime[1] = LocalDateTime.parse(end, formatter);
     }
 
-    public HashMap<Course, Index> getCoursesRegistered() {
+    public HashMap<String, String> getCoursesRegistered() {
         return coursesRegistered;
     }
 
     /**
      * Retrieves an index registered by this student.
-     * @param course The course object of the index to be retrieved
+     * @param course The course code of the index to be retrieved
      * @return <code>Index</code> object if the corresponding course exists; null otherwise.
      */
-    public Index retrieveIndex(Course course){
+    public String retrieveIndex(String course){
         return coursesRegistered.get(course);
     }
 
@@ -170,9 +171,9 @@ public class Student extends User {
      * @param course The object of the course to be added.
      * @param index The object of the index of the course to be added.
      */
-    public void addCourse(Course course, Index index) {
+    public void addCourse(String course, String index, int AUs) {
         coursesRegistered.put(course, index);
-        updateCurrentAUs();
+        currentAUs += AUs;
     }
 
     /**
@@ -180,42 +181,42 @@ public class Student extends User {
      * @param course The object of the course to be removed.
      * @return <code>true</code> if the course code is removed.
      */
-    public boolean removeCourse(Course course) {
-        Index removedIndex = coursesRegistered.remove(course);
+    public boolean removeCourse(String course, int AUs) {
+        String removedIndex = coursesRegistered.remove(course);
         if (removedIndex == null)
             return false;
-        updateCurrentAUs();
+        currentAUs -= AUs;
         return true;
     }
 
-    public HashMap<Course, Index> getWaitList() {
+    public HashMap<String, String> getWaitList() {
         return waitList;
     }
 
     /**
      * Adds a course to wait list.
-     * @param course the object of the course to be added
-     * @param index the object of the chosen index to be added
+     * @param course the code of the course to be added
+     * @param index the number of the chosen index to be added
      */
-    public void addCourseToWaitList(Course course, Index index) {
+    public void addCourseToWaitList(String course, String index) {
         waitList.put(course, index);
     }
 
     /**
      * Removes a course from wait list
-     * @param course the object of the course to be removed
+     * @param course the code of the course to be removed
      * @return true if the removal is successful
      */
-    public boolean removeCourseFromWaitList(Course course) {
+    public boolean removeCourseFromWaitList(String course) {
         return waitList.remove(course) != null;
     }
 
     /**
      * Retrieves an index registered by this student, from this student's wait list.
-     * @param course The course object of the index to be retrieved
+     * @param course The course code of the index to be retrieved
      * @return <code>Index</code> object if the corresponding course exists; null otherwise.
      */
-    public Index retrieveIndexFromWaitList(Course course) {
+    public String retrieveIndexFromWaitList(String course) {
         return waitList.get(course);
     }
 
@@ -258,8 +259,8 @@ public class Student extends User {
         stringBuilder.append("Major: " + major + "\n");
         stringBuilder.append("AUs registered: " + currentAUs + "\n");
         stringBuilder.append("Courses registered: \n");
-        for (Course course : coursesRegistered.keySet()) {
-            stringBuilder.append("- " + course.getCourseCode() + " (" + coursesRegistered.get(course).getIndexNum() + ")\n");
+        for (String course : coursesRegistered.keySet()) {
+            stringBuilder.append("- " + course + " (" + coursesRegistered.get(course) + ")\n");
         }
         return stringBuilder.toString();
     }
@@ -269,16 +270,17 @@ public class Student extends User {
      * the lesson information.
      * KIV if to be placed here or handler
      */
-    public void printRegisteredCoursesInfo() {
-        System.out.println("Courses Registered For " + super.getName());
-        for (Course course : coursesRegistered.keySet()) {
-            System.out.println(course.getCourseCode() + ": " + course.getCourseName());
-            System.out.println(course.getCourseType() + "\tAUs: " + course.getAcademicUnits());
-            Index index = coursesRegistered.get(course);
-            System.out.println("Index: " + index.getIndexNum());
-            for (Lesson lesson : index.getLessons()) {
-                System.out.println(lesson);
-            }
-        }
-    }
+    //TODO: Remove
+//    public void printRegisteredCoursesInfo() {
+//        System.out.println("Courses Registered For " + super.getName());
+//        for (String course : coursesRegistered.keySet()) {
+//            System.out.println(course.getCourseCode() + ": " + course.getCourseName());
+//            System.out.println(course.getCourseType() + "\tAUs: " + course.getAcademicUnits());
+//            Index index = coursesRegistered.get(course);
+//            System.out.println("Index: " + index.getIndexNum());
+//            for (Lesson lesson : index.getLessons()) {
+//                System.out.println(lesson);
+//            }
+//        }
+//    }
 }

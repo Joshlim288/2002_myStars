@@ -31,7 +31,7 @@ public class StudentHandler {
     }
 
     public boolean studentInCourse(Course courseSelected){
-        return currentStudent.retrieveIndex(courseSelected) != null;
+        return currentStudent.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
     //TODO: Improve input validation
@@ -43,38 +43,39 @@ public class StudentHandler {
     // Converts course index as integer first for switch statement of printStatusOfAddCourse
     //TODO: To improve, feels like it can be done better
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop) {
-        Index clashWithRegistered = hasClash(indexToAdd, student.getCoursesRegistered());
-        Index clashWithWaitList = hasClash(indexToAdd, student.getWaitList());
+        String clashWithRegistered = hasClash(indexToAdd, student.getCoursesRegistered());
+        String clashWithWaitList = hasClash(indexToAdd, student.getWaitList());
 
         if(clashWithRegistered != null)
-            return Integer.parseInt(clashWithRegistered.getIndexNum());
+            return Integer.parseInt(clashWithRegistered);
         if(clashWithWaitList != null)
-            return Integer.parseInt(clashWithWaitList.getIndexNum());
+            return Integer.parseInt(clashWithWaitList);
 
         else if (indexToAdd.isAtMaxCapacity()) {
-            if (indexToDrop != null) dropCourse(course, indexToDrop);
+            if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
             updateWaitList(course, indexToAdd);
             return 1;
         } else{
-            if (indexToDrop != null) dropCourse(course, indexToDrop);
+            if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
             indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student);
-            student.addCourse(course, indexToAdd);
+            student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
             return 2;
         }
     }
 
-    public void dropCourse(Course course,Index cIndex) {
+    public void dropCourse(Course course,String index) {
+        Index cIndex = course.getIndex(index);
         //Remove student from list of enrolled students in index
         cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
 
         //Remove course from student's registered courses
-        currentStudent.removeCourse(course);
+        currentStudent.removeCourse(course.getCourseCode(), course.getAcademicUnits());
 
         //Register student at start of waitlist for the course
         if(!cIndex.getWaitlist().isEmpty()) {
             Student studentRemoved = cIndex.removeFromWaitlist(cIndex.getWaitlist());
-            studentRemoved.removeCourseFromWaitList(course);
-            studentRemoved.addCourse(course, cIndex);
+            studentRemoved.removeCourseFromWaitList(course.getCourseCode());
+            studentRemoved.addCourse(course.getCourseCode(), index, course.getAcademicUnits());
 
             //Create a MailHandler object to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
@@ -85,17 +86,18 @@ public class StudentHandler {
 
     private void updateWaitList(Course course, Index index) {
         index.addToWaitlist(index.getWaitlist(), this.currentStudent);
-        currentStudent.addCourseToWaitList(course, index);
+        currentStudent.addCourseToWaitList(course.getCourseCode(), index.getIndexNum());
     }
 
-    private Index hasClash(Index indexToAdd, HashMap<Course,Index> coursesRegistered) {
+    private String hasClash(Index indexToAdd, HashMap<String,String> coursesRegistered) {
         //Retrieve lessons to be added for new index
         ArrayList<Lesson> lessonsToCheck = indexToAdd.getLessons();
 
         // For all indexes registered for the student
-        for (Map.Entry<Course, Index> entry : coursesRegistered.entrySet()) {
+        for (Map.Entry<String, String> entry : coursesRegistered.entrySet()) {
+            Course courseIndexBelongsTo = cdm.getCourse(entry.getKey());
             //For each lesson in index to check against
-            for (Lesson existingLesson : entry.getValue().getLessons()) {
+            for (Lesson existingLesson : courseIndexBelongsTo.getIndex(entry.getValue()).getLessons()) {
                 //For each lesson in new index
                 for (Lesson newLesson : lessonsToCheck) {
                     LocalTime startTime = newLesson.getStartTime();
@@ -122,11 +124,11 @@ public class StudentHandler {
 
     public String getRegisteredCourses() {
         //Get list of courses student is registered in.
-        HashMap<Course, Index> coursesRegistered = currentStudent.getCoursesRegistered();
+        HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
 
         //Use StringBuilder to create required output and return to StudentInterface
         StringBuilder stringBuilder = new StringBuilder();
-        coursesRegistered.forEach((course, index) -> stringBuilder.append(course.getCourseCode() + " " + course.getCourseName() +  ": Index " + index.getIndexNum() + "\n"));
+        coursesRegistered.forEach((course, index) -> stringBuilder.append(course + " " + ": Index " + index + "\n"));
         return stringBuilder.toString();
     }
 
