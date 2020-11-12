@@ -71,8 +71,8 @@ public class StudentInterface extends UserInterface {
     //Default when an integer representing clash is returned
     private void printStatusOfAddCourse(int status, Index indexSelected){
         switch (status) {
-            case (1) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + "successfully!");
-            case (2) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + "successfully!");
+            case (1) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + " successfully!");
+            case (2) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + " successfully!");
             default -> System.out.println("Unsuccessful, clash found with Index" + status + "!");
         }
     }
@@ -101,7 +101,7 @@ public class StudentInterface extends UserInterface {
 
     private void addCourse() {
         String courseCode;
-        String indexNum;
+        String indexNum = "";
         Course courseSelected;
         try {
             do {
@@ -124,14 +124,13 @@ public class StudentInterface extends UserInterface {
             } while (courseSelected == null);
 
             showIndexesInCourse(courseSelected);
-            System.out.println("Enter the index you would like to enroll in.\n" +
-                    "You will be added to wait-list if you choose an index with no vacancies:");
-
-            indexNum = getInput(typeOfInput.INDEX_NUM);
-
             Index indexSelected = null;
-            while (indexSelected == null)
+            while (indexSelected == null) {
+                System.out.println("Enter the index you would like to enroll in.\n" +
+                        "You will be added to wait-list if you choose an index with no vacancies:");
+                indexNum = getInput(typeOfInput.INDEX_NUM);
                 indexSelected = getIndexInputAndCheck(courseSelected, indexNum);
+            }
 
             System.out.println("You have selected to add : \n" +
                     courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
@@ -196,7 +195,7 @@ public class StudentInterface extends UserInterface {
 
     private void changeIndex() {
         String courseCode;
-        String indexNum;
+        String indexNum = "";
         try {
             System.out.println(studHandler.getRegisteredCourses());
             System.out.print("Choose course for changing of index (e.g. CZ2002):");
@@ -212,13 +211,13 @@ public class StudentInterface extends UserInterface {
             }
 
             Index indexToDrop = this.studHandler.currentStudent.retrieveIndex(courseSelected);
-            System.out.println("Enter the index to swap to.\n" +
-                    "You will be dropped from course and added to wait-list if index with no vacancies chosen:");
-            indexNum = getInput(typeOfInput.INDEX_NUM);
-
             Index indexSelected = null;
-            while(indexSelected == null)
+            while(indexSelected == null) {
+                System.out.println("Enter the index to swap to.\n" +
+                        "You will be dropped from course and added to wait-list if index with no vacancies chosen:");
+                indexNum = getInput(typeOfInput.INDEX_NUM);
                 indexSelected = getIndexInputAndCheck(courseSelected, indexNum);
+            }
 
             if (indexSelected.equals(indexToDrop)) {
                 System.out.println("You have chosen the index you are currently in!");
