@@ -29,7 +29,8 @@ public class AdminInterface extends UserInterface {
             System.out.println("6. Update a Course's Details");
             System.out.println("7. Update a Student's Details");
             System.out.println("8. Print overview of database");
-            System.out.println("9. Log Out of MyStars");
+            System.out.println("9. Delete a Student");
+            System.out.println("10. Log Out of MyStars");
             System.out.println("(Enter ~ at any time to exit back to menu)");
 
             try {
@@ -47,10 +48,12 @@ public class AdminInterface extends UserInterface {
                 case (5)-> printByCourse();
                 case (6)-> updateCourse();
                 case (7)-> updateStudent();
-                case (8) -> printOverview();
-                case (9)-> logout();
+                case (8)-> printOverview();
+                case (9)-> deleteStudent();
+                case (10)-> deleteCourse();
+                case (11)-> logout();
             }
-        } while (choice != 9);
+        } while (choice != 11);
     }
 
     @Deprecated
@@ -656,6 +659,42 @@ public class AdminInterface extends UserInterface {
             System.out.println(adHandler.getOverview(choice));
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    private void deleteStudent(){
+        try{
+            String matricNum;
+            adHandler.getOverview(1);
+            while (true) {
+                System.out.print("Enter Matriculation number of student to delete: ");
+                matricNum = getInput(typeOfInput.MATRIC_NUM);
+                if (adHandler.checkStudentExists(matricNum)){
+                    break;
+                }
+                System.out.println("Student not found");
+            }
+            adHandler.removeStudent(matricNum);
+        } catch (EscapeException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void deleteCourse(){
+        try{
+            String courseCode;
+            adHandler.getOverview(2);
+            while (true) {
+                System.out.print("Enter course code of course to delete: ");
+                courseCode = getInput(typeOfInput.COURSE_CODE);
+                if (adHandler.checkCourseExists(courseCode)) {
+                    break;
+                }
+                System.out.println("Course not found");
+            }
+            adHandler.removeCourse(courseCode);
+        } catch(EscapeException e) {
+            System.out.printf(e.getMessage());
         }
     }
 

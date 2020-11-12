@@ -3,9 +3,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Creates objects and handles logic for Admin actions
@@ -105,6 +103,16 @@ public class AdminHandler{
                     return false;
                 }
                 tempCourse.setCourseCode(input);
+                HashMap<String, String> coursesRegistered;
+                String holdIndex;
+                for (Student stud: sdm.getStudentList()){
+                    coursesRegistered = stud.getCoursesRegistered();
+                    if (coursesRegistered.containsKey(courseCode)){
+                        holdIndex = coursesRegistered.get(courseCode);
+                        coursesRegistered.remove(courseCode);
+                        coursesRegistered.put(input, holdIndex);
+                    }
+                }
             }
             case(2)-> tempCourse.setCourseName(input);
             case(3)-> tempCourse.setCourseType(input);
@@ -130,6 +138,13 @@ public class AdminHandler{
                     return false;
                 }
                 tempIndex.setIndexNum(input);
+                HashMap<String, String> coursesRegistered;
+                for (Student stud: sdm.getStudentList()){
+                    coursesRegistered = stud.getCoursesRegistered();
+                    if (coursesRegistered.containsValue(indexNum)){
+                        coursesRegistered.put(courseCode, input);
+                    }
+                }
             }
             case(2)-> {
                 // im very tired is this correct
@@ -217,6 +232,16 @@ public class AdminHandler{
                     return false;
                 }
                 tempStudent.setMatricNum(updatedValue);
+                ArrayList<String> enrolledStudents;
+                for (Course crs: cdm.getCourseList()){
+                    for (Index idx: crs.getIndexes()){
+                        enrolledStudents = idx.getEnrolledStudents();
+                        if (enrolledStudents.contains(matricNum)){
+                            enrolledStudents.remove(matricNum);
+                            enrolledStudents.add(updatedValue);
+                        }
+                    }
+                }
             }
             case(5)->{
                 for (User u: udm.getUserList()){
@@ -442,6 +467,30 @@ public class AdminHandler{
             }
         }
         return stringBuilder.toString();
+    }
+
+    public void removeStudent(String matricNum){
+        Student toBeRemoved = sdm.getStudent(matricNum);
+        HashMap<String, String> registeredMap = toBeRemoved.getCoursesRegistered();
+        Course regCourse;
+        Index regIndex;
+        for (String courseCode: registeredMap.keySet()){
+            regCourse = cdm.getCourse(courseCode);
+            regIndex = regCourse.getIndex(registeredMap.get(courseCode));
+            regIndex.getEnrolledStudents().remove(matricNum);
+            regIndex.setCurrentVacancy(regIndex.getCurrentVacancy()+1);
+        }
+        sdm.removeStudent(matricNum);
+    }
+
+    public void removeCourse(String courseCode){
+        Course toBeRemoved = cdm.getCourse(courseCode);
+        for (Index idx: toBeRemoved.getIndexes()){
+            for (String matricNum: idx.getEnrolledStudents()){
+                sdm.getStudent(matricNum).removeCourse(courseCode);
+            }
+        }
+        cdm.removeCourse(courseCode);
     }
 
     public void close() {
