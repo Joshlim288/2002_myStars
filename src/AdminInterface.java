@@ -221,7 +221,7 @@ public class AdminInterface extends UserInterface {
             int maxAUs;
 
             do {
-                System.out.print("Enter matriculation number: ");
+                System.out.print("Enter Matriculation Number of Student: ");
                 studentMatric = getInput(typeOfInput.MATRIC_NUM);
 
                 System.out.print("Enter student name: ");
@@ -417,10 +417,14 @@ public class AdminInterface extends UserInterface {
             for(Index idx: adHandler.getIndexes(courseCode)){
                 System.out.println(idx);
             }
-            do {
+            while(true) {
                 System.out.print("Enter index to edit: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
-            } while (!adHandler.checkIndexExists(indexNum));
+                if (adHandler.checkIndexExists(indexNum)){
+                    break;
+                }
+                System.out.println("Index number not found");
+            };
 
             do {
                 System.out.println("Choose attribute to edit:");
@@ -472,10 +476,14 @@ public class AdminInterface extends UserInterface {
                 System.out.println("\n" + i +":\n"+lsn);
                 i++;
             }
-            do {
+            while(true) {
                 System.out.println("Enter lesson number to edit:");
                 lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
-            } while (lessonIndex>=i || lessonIndex<0);
+                if (lessonIndex<=i && lessonIndex>0){
+                    break;
+                }
+                System.out.println("Index out of range, enter lesson number < "+ i);
+            };
 
             do {
                 System.out.println("Choose attribute to edit:");
@@ -534,14 +542,21 @@ public class AdminInterface extends UserInterface {
             String matric;
             String updatedValue;
             int choice;
-            do {
+
+            System.out.println(adHandler.getOverview(1));
+
+            while(true) {
                 System.out.print("Enter Matriculation Number of Student: ");
                 matric = getInput(typeOfInput.MATRIC_NUM);
-            } while (!adHandler.checkStudentExists(matric));
+                if(adHandler.checkStudentExists(matric)){
+                    break;
+                }
+                System.out.println("Student not found, please try again");
+            }
 
             do {
                 System.out.println("Choose attribute to edit: ");
-                System.out.println(" 1: userID\n" +
+                System.out.print(" 1: userID\n" +
                         " 2: Password\n" +
                         " 3: Name\n" +
                         " 4: matricNum\n" +
@@ -551,7 +566,8 @@ public class AdminInterface extends UserInterface {
                         " 8: major\n" +
                         " 9: maxAUs\n" +
                         "10: access period\n" +
-                        "11: exit");
+                        "11: exit\n" +
+                        "Enter choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
 
                 switch (choice) {
@@ -563,7 +579,8 @@ public class AdminInterface extends UserInterface {
                     }
                     case (2) -> { // password
                         do {
-                            updatedValue = BCrypt.hashpw(Arrays.toString(System.console().readPassword()), BCrypt.gensalt());
+                            System.out.print("Enter new password: ");
+                            updatedValue = new String(System.console().readPassword());
                         } while (!adHandler.editStudent(matric, updatedValue, choice));
                     }
                     case (3) -> { // name
@@ -577,6 +594,7 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter student's new matriculation number: ");
                             updatedValue = getInput(typeOfInput.MATRIC_NUM);
                         } while (!adHandler.editStudent(matric, updatedValue, choice));
+                        matric = updatedValue;
                     }
                     case (5) -> { // email
                         do {
@@ -604,6 +622,7 @@ public class AdminInterface extends UserInterface {
                     }
                     case (9) -> { // maxAUs
                         do {
+                            System.out.print("Enter student's new max AUs: ");
                             updatedValue = getInput(typeOfInput.INT);
                         } while (!adHandler.editStudent(matric, updatedValue, choice));
                     }
@@ -611,13 +630,15 @@ public class AdminInterface extends UserInterface {
                         String newStart;
                         String newEnd;
                         do {
+                            System.out.print("Enter student's new start access datetime: ");
                             newStart = getInput(typeOfInput.DATETIME);
+                            System.out.print("Enter student's new end access datetime: ");
                             newEnd = getInput(typeOfInput.DATETIME);
                         } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editStudent(matric, newStart+"&"+newEnd, choice));
                     }
                 }
-            } while (choice != 10);
+            } while (choice != 11);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
