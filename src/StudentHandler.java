@@ -57,11 +57,7 @@ public class StudentHandler {
             return 1;
         } else{
             if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
-            ArrayList<Student> enrolledStudents = new ArrayList<>();
-            for(String matricNum: indexToAdd.getEnrolledStudents()){
-                enrolledStudents.add(sdm.getStudent(matricNum));
-            }
-            indexToAdd.addToEnrolledStudents(enrolledStudents, student);
+            indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student.getMatricNum());
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
             return 2;
         }
@@ -81,7 +77,8 @@ public class StudentHandler {
 
         //Register student at start of waitlist for the course
         if(!cIndex.getWaitlist().isEmpty()) {
-            Student studentRemoved = cIndex.removeFromWaitlist(cIndex.getWaitlist());
+            String matricNum = cIndex.removeFromWaitlist(cIndex.getWaitlist());
+            Student studentRemoved = sdm.getStudent(matricNum);
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
             studentRemoved.addCourse(course.getCourseCode(), index, course.getAcademicUnits());
 
@@ -93,7 +90,7 @@ public class StudentHandler {
     }
 
     private void updateWaitList(Course course, Index index) {
-        index.addToWaitlist(index.getWaitlist(), this.currentStudent);
+        index.addToWaitlist(index.getWaitlist(), currentStudent.getMatricNum());
         currentStudent.addCourseToWaitList(course.getCourseCode(), index.getIndexNum());
     }
 

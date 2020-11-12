@@ -52,7 +52,7 @@ public class Index implements Serializable {
      * Contains all students in waiting list for this index.
      * Each student can only be on the waitlist on one index per course.
      */
-    private ArrayList<Student> waitlist;
+    private ArrayList<String> waitlist;
 
     /**
      * Contains all students currently registered in this index
@@ -128,12 +128,12 @@ public class Index implements Serializable {
         lessons.add(newLesson);
     }
 
-    public ArrayList<Student> getWaitlist() {
+    public ArrayList<String> getWaitlist() {
         return waitlist;
     }
 
     // TODO: Check if necessary to have set method for entire waitlist
-    public void setWaitlist(ArrayList<Student> waitlist) {
+    public void setWaitlist(ArrayList<String> waitlist) {
         this.waitlist = waitlist;
     }
 
@@ -150,10 +150,9 @@ public class Index implements Serializable {
      * Method to add a student to current waitlist
      * Student added to the back of the queue.
      * @param waitlist The waitlist to add to.
-     * @param student The student to add to waitlist.
      */
-    public void addToWaitlist(ArrayList<Student> waitlist, Student student){
-        waitlist.add(student);
+    public void addToWaitlist(ArrayList<String> waitlist, String matricNum){
+        waitlist.add(matricNum);
     }
 
     /**
@@ -163,7 +162,7 @@ public class Index implements Serializable {
      * @param waitlist The waitlist to remove from.
      */
     //TODO: Improve if possible (first draft)
-    public Student removeFromWaitlist(ArrayList<Student> waitlist){
+    public String removeFromWaitlist(ArrayList<String> waitlist){
         try{
             return waitlist.remove(0);
         }
@@ -176,11 +175,10 @@ public class Index implements Serializable {
     /**
      * Method to add a student from EnrolledStudents ArrayList
      * @param enrolledStudents The ArrayList to add the student into.
-     * @param student The student to be added.
      */
     // TODO: Exception handling if at max capacity (added?)
-    public void addToEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
-        enrolledStudents.add(student);
+    public void addToEnrolledStudents(ArrayList<String> enrolledStudents, String matricNum){
+        enrolledStudents.add(matricNum);
         currentVacancy--;
         if (currentVacancy == 0)
             setAtMaxCapacity(true);
