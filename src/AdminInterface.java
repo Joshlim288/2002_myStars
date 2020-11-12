@@ -70,7 +70,7 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter new access end date: ");
                 newEnd = getInput(typeOfInput.DATETIME);
 
-            } while (!userValidator.validateDateTimePeriod(newStart, newEnd) && !adHandler.editAccessPeriod(matricNum, newStart, newEnd));
+            } while (!userValidator.validateDateTimePeriod(newStart, newEnd) || !adHandler.editAccessPeriod(matricNum, newStart, newEnd));
             System.out.println("Access time successfully changed");
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -358,6 +358,7 @@ public class AdminInterface extends UserInterface {
                             changedValue = getInput(typeOfInput.COURSE_CODE);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
                         System.out.println("Successfully changed");
+                        courseCode = changedValue; // to allow further edits of same course in the same method call
                     }
                     case (2) -> { // edit course name
                         do {
@@ -396,7 +397,7 @@ public class AdminInterface extends UserInterface {
                             newStart = getInput(typeOfInput.DATETIME);
                             System.out.print("Enter new exam end datetime: ");
                             newEnd = getInput(typeOfInput.DATETIME);
-                        } while (!userValidator.validateDateTimePeriod(newStart, newStart) &&
+                        } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editCourse(courseCode, newStart+"&"+newEnd, choice));
                         System.out.println("Successfully changed");
                     }
@@ -436,6 +437,7 @@ public class AdminInterface extends UserInterface {
                             changedValue = getInput(typeOfInput.INDEX_NUM);
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
                         System.out.println("Successfully changed");
+                        indexNum = changedValue; // to allow further edits of same index in the same method call
                     }
                     case (2) -> {
                         do { // edit index vacancies
@@ -473,7 +475,7 @@ public class AdminInterface extends UserInterface {
             do {
                 System.out.println("Enter lesson number to edit:");
                 lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
-            } while (lessonIndex>=i && lessonIndex<0);
+            } while (lessonIndex>=i || lessonIndex<0);
 
             do {
                 System.out.println("Choose attribute to edit:");
@@ -506,13 +508,14 @@ public class AdminInterface extends UserInterface {
                             newStart = getInput(typeOfInput.TIME);
                             System.out.print("Enter new end time: ");
                             newEnd = getInput(typeOfInput.TIME);
-                        } while (!courseValidator.validateTimePeriod(newStart, newEnd) &&
+                        } while (!courseValidator.validateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editLesson(courseCode, indexNum, lessonIndex, newStart+"&"+newEnd, choice));
                         System.out.println("Successfully changed");
                     }
                     case (4) -> { // edit venue
                         do {
-                            changedValue = sc.nextLine();
+                            System.out.println("Enter new venue: ");
+                            changedValue = getInput(typeOfInput.STANDARD);
                         } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
                         System.out.println("Successfully changed");
                     }
@@ -610,7 +613,7 @@ public class AdminInterface extends UserInterface {
                         do {
                             newStart = getInput(typeOfInput.DATETIME);
                             newEnd = getInput(typeOfInput.DATETIME);
-                        } while (!userValidator.validateDateTimePeriod(newStart, newEnd) &&
+                        } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editStudent(matric, newStart+"&"+newEnd, choice));
                     }
                 }

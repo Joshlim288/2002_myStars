@@ -136,7 +136,8 @@ public class AdminHandler{
                 if (newVacancy < tempIndex.getIndexVacancy()-tempIndex.getCurrentVacancy()) {
                     return false;
                 }
-                tempIndex.setCurrentVacancy(newVacancy-tempIndex.getIndexVacancy());
+                // set new current vacancy to be new vacancy - (num of people alr registered)
+                tempIndex.setCurrentVacancy(newVacancy - (tempIndex.getIndexVacancy() - tempIndex.getCurrentVacancy()));
                 tempIndex.setIndexVacancy(newVacancy);;
             }
             case(3)->{
