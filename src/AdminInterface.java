@@ -413,7 +413,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println(idx);
             }
             do {
-                System.out.print("Enter index to edit:");
+                System.out.print("Enter index to edit: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
             } while (!adHandler.checkIndexExists(indexNum));
 
@@ -469,7 +469,7 @@ public class AdminInterface extends UserInterface {
             do {
                 System.out.println("Enter lesson number to edit:");
                 lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
-            } while (lessonIndex<i && lessonIndex>=0);
+            } while (lessonIndex>=i && lessonIndex<0);
 
             do {
                 System.out.println("Choose attribute to edit:");
