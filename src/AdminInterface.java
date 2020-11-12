@@ -580,7 +580,7 @@ public class AdminInterface extends UserInterface {
                     case (2) -> { // password
                         do {
                             System.out.print("Enter new password: ");
-                            updatedValue = Arrays.toString(System.console().readPassword());
+                            updatedValue = new String(System.console().readPassword());
                         } while (!adHandler.editStudent(matric, updatedValue, choice));
                     }
                     case (3) -> { // name
