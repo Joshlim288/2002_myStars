@@ -34,6 +34,11 @@ public class AdminHandler{
     public ArrayList<Lesson> getLessons(String courseCode, String indexNum){
         return cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
     }
+
+    public ArrayList<Student> getStudents(){
+        return sdm.getStudentList();
+    }
+
     public void printIndexVacancy(String indexNum){
         Index tempIndex = null;
         for (Course crs: cdm.getCourseList()) {

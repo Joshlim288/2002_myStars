@@ -255,6 +255,10 @@ public class AdminInterface extends UserInterface {
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
+
+        for (Student stud: adHandler.getStudents()){
+            System.out.println("\n" + stud.getName() + ", " + stud.getMatricNum());
+        }
     }
 
     private void checkIndex() {
