@@ -30,6 +30,8 @@ enum typeOfLesson{
  */
 public class Lesson implements Serializable {
 
+    private static final long serialVersionUID = 6612746893184830119L;
+
     /**
      * This lesson's type (e.g. LEC, TUT, LAB)
      * Represented with <code>typeOfLesson</code> enumeration.

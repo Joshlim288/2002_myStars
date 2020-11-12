@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class Index implements Serializable {
 
+    private static final long serialVersionUID = 7335698930935614740L;
+
     /**
      * Uniquely identifies each index within a course.
      */
@@ -120,7 +122,7 @@ public class Index implements Serializable {
     }
 
     // TODO: Check if necessary to have set method for lessons as a whole
-    public void addLesson(String type, String day, LocalTime startTime, LocalTime endTime,
+    public void addLesson(String type, String day, String startTime, String endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
         Lesson newLesson = new Lesson(type, day, startTime, endTime, venue, teachingWeeks);
         lessons.add(newLesson);

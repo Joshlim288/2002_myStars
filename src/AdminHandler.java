@@ -290,10 +290,8 @@ public class AdminHandler{
     }
 
     public boolean addLesson(String indexNum, String lessonType, String day,
-                          String start, String end, String venue, ArrayList<Integer>teachingWeeks) {
-        LocalTime startTime = LocalTime.parse(start);
-        LocalTime endTime = LocalTime.parse(end);
-        if (checkClash(tempCourse.getIndex(indexNum).getLessons(), day, new LocalTime[]{startTime, endTime}))
+                          String startTime, String endTime, String venue, ArrayList<Integer>teachingWeeks) {
+        if (checkClash(tempCourse.getIndex(indexNum).getLessons(), day, new LocalTime[]{LocalTime.parse(startTime), LocalTime.parse(endTime)}))
             return false;
 
         tempCourse.getIndex(indexNum).addLesson(lessonType, day, startTime, endTime, venue, teachingWeeks);

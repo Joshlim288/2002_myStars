@@ -22,6 +22,8 @@ enum typeOfCourse{
  */
 public class Course implements Serializable {
 
+    private static final long serialVersionUID = 2520995089542352025L;
+
     /**
      * Uniquely identifies the course.
      */

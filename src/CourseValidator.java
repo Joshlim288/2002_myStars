@@ -67,6 +67,8 @@ public class CourseValidator extends Validator {
                 return true;
             }
             System.out.println("ERROR: Invalid week entered.");
+        } else {
+            System.out.println("Ensure input is of the correct format (e.g. 1,2,3,4).");
         }
         return false;
     }
