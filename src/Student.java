@@ -239,9 +239,12 @@ public class Student extends User {
     @Override
     public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException {
         if (super.validateLogin(checkID, checkpw)) {
-            if (LocalDateTime.now().isBefore(this.accessTime[0]) || LocalDateTime.now().isAfter(this.accessTime[1]))
+            if (LocalDateTime.now().isBefore(this.accessTime[0]) || LocalDateTime.now().isAfter(this.accessTime[1])) {
+                String startTime = this.accessTime[0].toString().replace("T", " ");
+                String endTime = this.accessTime[1].toString().replace("T", " ");
                 throw new AccessDeniedException("Access Denied: Outside of allocated time period\n" +
-                        "Time period allocated is from " + this.accessTime[0] + " to " + this.accessTime[1]);
+                        "Time period allocated is from " + startTime + " to " + endTime);
+            }
             return true;
         }
         return false;

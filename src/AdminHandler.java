@@ -3,6 +3,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ public class AdminHandler{
         this.udm = new UserDataManager();
         cdm.load();
         sdm.load();
+        udm.load();
     }
     public ArrayList<Course> getCourses(){
         return cdm.getCourseList();
@@ -236,10 +238,16 @@ public class AdminHandler{
             }
             case(10)->{
                 String newStart = updatedValue.split("&")[0];
-                String newEnd = updatedValue.split("&")[0];
+                String newEnd = updatedValue.split("&")[1];
                 tempStudent.setAccessTime(newStart, newEnd);
             }
         }
+        System.out.println("Successfully changed");
+        System.out.println(tempStudent);
+        System.out.println(tempStudent.getMaxAUs());
+        System.out.println(tempStudent.getUserID());
+        System.out.println(tempStudent.getEmail());
+        System.out.println(Arrays.toString(tempStudent.getAccessTime()));
         return true;
     }
 
@@ -376,17 +384,17 @@ public class AdminHandler{
     public boolean addStudent(String userid, String password, String studentName, String studentMatric, String email,
                               String gender, String nationality, String major, int maxAUs, String startAccessPeriod,
                               String endAccessPeriod){
-        try {
-            Student newStudent = new Student(userid, password, studentName, studentMatric, email,
-                    gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod);
-            sdm.getStudentList().add(newStudent);
-            System.out.println("Student "+studentName+" has been added successfully!");
-            return true;
-        } catch (Exception e) {
-            System.out.println("Creation of new Student failed");
-            System.out.println(e.getMessage());
+        if (checkStudentExists(studentMatric)){
+            System.out.println("Matriculation number already in use");
+            System.out.println("Student creation failed");
+            System.out.println("Please try again");
             return false;
         }
+        Student newStudent = new Student(userid, password, studentName, studentMatric, email,
+                gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod);
+        sdm.getStudentList().add(newStudent);
+        System.out.println("Student "+studentName+" has been added successfully!");
+        return true;
     }
 
     public String getOverview(int choice){
