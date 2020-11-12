@@ -31,7 +31,6 @@ public class Validator {
                 LocalTime.parse(time, formatter);
                 return true;
             } catch (DateTimeParseException e) {
-                System.out.println(e);
                 System.out.println("ERROR: Time is invalid.");
                 return false;
             }

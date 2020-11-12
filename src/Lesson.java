@@ -74,12 +74,12 @@ public class Lesson implements Serializable {
      * @param venue This lesson's venue.
      * @param teachingWeeks Array of integers representing teaching weeks (Wk 1 - 13).
      */
-    public Lesson(String lessonType, String day, LocalTime startTime, LocalTime endTime,
+    public Lesson(String lessonType, String day, String startTime, String endTime,
                   String venue, ArrayList<Integer> teachingWeeks) {
         this.lessonType = typeOfLesson.valueOf(lessonType);
         this.day = dayOfWeek.valueOf(day);
-        this.startTime = startTime; // kind of spaghetti here
-        this.endTime = endTime;
+        this.startTime = LocalTime.parse(startTime); // kind of spaghetti here
+        this.endTime = LocalTime.parse(endTime);
         this.venue = venue;
         this.teachingWeeks = teachingWeeks;
     }
