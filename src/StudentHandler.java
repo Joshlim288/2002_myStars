@@ -57,7 +57,11 @@ public class StudentHandler {
             return 1;
         } else{
             if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
-            indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student);
+            ArrayList<Student> enrolledStudents = new ArrayList<>();
+            for(String matricNum: indexToAdd.getEnrolledStudents()){
+                enrolledStudents.add(sdm.getStudent(matricNum));
+            }
+            indexToAdd.addToEnrolledStudents(enrolledStudents, student);
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
             return 2;
         }
@@ -66,7 +70,11 @@ public class StudentHandler {
     public void dropCourse(Course course,String index) {
         Index cIndex = course.getIndex(index);
         //Remove student from list of enrolled students in index
-        cIndex.removeFromEnrolledStudents(cIndex.getEnrolledStudents(), this.currentStudent);
+        ArrayList<Student> enrolledStudents = new ArrayList<>();
+        for(String matricNum: cIndex.getEnrolledStudents()){
+            enrolledStudents.add(sdm.getStudent(matricNum));
+        }
+        cIndex.removeFromEnrolledStudents(enrolledStudents, this.currentStudent);
 
         //Remove course from student's registered courses
         currentStudent.removeCourse(course.getCourseCode(), course.getAcademicUnits());

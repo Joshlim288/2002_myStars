@@ -359,8 +359,13 @@ public class AdminHandler{
         if (checkIndexExists(indexNum)) {
             for (Course curCourse : cdm.getCourseList()) {
                 Index foundIndex = curCourse.getIndex(indexNum);
-                if (foundIndex != null)
-                    return foundIndex.getEnrolledStudents();
+                if (foundIndex != null) {
+                    ArrayList<Student> studentList = new ArrayList<>();
+                    for(String matricNum: foundIndex.getEnrolledStudents()) {
+                        studentList.add(sdm.getStudent(matricNum));
+                        return studentList;
+                    }
+                }
             }
         }
         System.out.println("Index not found");
@@ -377,7 +382,9 @@ public class AdminHandler{
             ArrayList<Index> courseIndexes = cdm.getCourse(courseCode).getIndexes();
             ArrayList<Student> courseStudents = new ArrayList<>();
             for (Index idx : courseIndexes) {
-                courseStudents.addAll(idx.getEnrolledStudents());
+                for (String matricNum: idx.getEnrolledStudents()){
+                    courseStudents.add(sdm.getStudent(matricNum));
+                }
             }
             return courseStudents;
         } else {
@@ -487,7 +494,7 @@ public class AdminHandler{
         Course toBeRemoved = cdm.getCourse(courseCode);
         for (Index idx: toBeRemoved.getIndexes()){
             for (String matricNum: idx.getEnrolledStudents()){
-                sdm.getStudent(matricNum).removeCourse(courseCode);
+                sdm.getStudent(matricNum).removeCourse(courseCode, toBeRemoved.getAcademicUnits());
             }
         }
         cdm.removeCourse(courseCode);

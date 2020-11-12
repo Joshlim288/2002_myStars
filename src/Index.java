@@ -58,7 +58,7 @@ public class Index implements Serializable {
      * Contains all students currently registered in this index
      * Each student can only be registered in one index for each course.
      */
-    private ArrayList<Student> enrolledStudents;
+    private ArrayList<String> enrolledStudents;
 
     /**
      * Constructor for <code>Index</code>.
@@ -137,12 +137,12 @@ public class Index implements Serializable {
         this.waitlist = waitlist;
     }
 
-    public ArrayList<Student> getEnrolledStudents() {
+    public ArrayList<String> getEnrolledStudents() {
         return enrolledStudents;
     }
 
     // TODO: Check if necessary to have set method for entire enrolledStudents
-    public void setEnrolledStudents(ArrayList<Student> enrolledStudents) {
+    public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
     }
 
