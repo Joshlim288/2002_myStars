@@ -18,23 +18,25 @@ public class AdminInterface extends UserInterface {
      * Admin UI is displayed here
      */
     public void start() {
-        int choice = -1;
+        int choice;
         do{
-            System.out.println("\nChoose an action: ");
-            System.out.println("1. Add a student (name, matric number, gender, nationality, etc)");
-            System.out.println("2. Add a course (course code, school, its index numbers and vacancy)");
-            System.out.println("3. Check available slot for an index number (vacancy in a class)");
-            System.out.println("4. Print student list by index number");
-            System.out.println("5. Print student list by course (all students registered for the selected course)");
+            System.out.println("What would you like to do today?");
+            System.out.println("--------------------------------------------------------");
+            System.out.println("1. Add a new Student");
+            System.out.println("2. Add a new Course");
+            System.out.println("3. Check vacancy of an Index");
+            System.out.println("4. Check students registered in an Index");
+            System.out.println("5. Check students registered in a Course");
             System.out.println("6. Update a Course's Details");
             System.out.println("7. Update a Student's Details");
-            System.out.println("8. Print overview of database");
-            System.out.println("9. Delete a Student");
-            System.out.println("10. Log Out of MyStars");
+            System.out.println("8. Print Overview of Database");
+            System.out.println("9. Delete a Student from Database");
+            System.out.println("10. Delete a Course from Database");
+            System.out.println("11. Log Out of MyStars");
             System.out.println("(Enter ~ at any time to exit back to menu)");
 
             try {
-                System.out.print("Enter choice: ");
+                System.out.print("Please enter your choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
             } catch (EscapeException e) {
                 logout();

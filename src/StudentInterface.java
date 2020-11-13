@@ -13,6 +13,7 @@ public class StudentInterface extends UserInterface {
         super(sc);
         String matricNum = ((Student)currentUser).getMatricNum();
         studHandler = new StudentHandler(matricNum);
+        System.out.println("\nWelcome, Student " + currentUser.getName() + "!");
     }
 
     /**
@@ -22,12 +23,11 @@ public class StudentInterface extends UserInterface {
         int choice;
 
         do {
-            System.out.println("\nWelcome, Student " + studHandler.currentStudent.getName()
-                    + ", " + studHandler.currentStudent.getMatricNum() + "!");
             System.out.println("What would you like to do today?");
+            System.out.println("--------------------------------------------------------");
             System.out.println("1. Add New Course");
             System.out.println("2. Drop Registered Course");
-            System.out.println("3. Check Current Registered Courses");
+            System.out.println("3. Check Currently Registered Courses");
             System.out.println("4. Check Vacancies of Course");
             System.out.println("5. Change Index of Registered Course");
             System.out.println("6. Swap Index of Registered Course");
@@ -35,7 +35,7 @@ public class StudentInterface extends UserInterface {
             System.out.println("(Enter ~ at any time to return back to main menu)");
 
             try {
-                System.out.print("Enter choice: ");
+                System.out.print("Please enter your choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
             } catch (EscapeException e) {
                 logout();
