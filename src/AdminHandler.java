@@ -363,8 +363,8 @@ public class AdminHandler{
                     ArrayList<Student> studentList = new ArrayList<>();
                     for(String matricNum: foundIndex.getEnrolledStudents()) {
                         studentList.add(sdm.getStudent(matricNum));
-                        return studentList;
                     }
+                    return studentList;
                 }
             }
         }

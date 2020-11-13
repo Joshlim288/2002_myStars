@@ -91,6 +91,11 @@ public abstract class UserInterface {
         }
     }
 
+    public void waitForEnterInput(){
+        System.out.println("Press Enter to continue...");
+        System.console().readPassword();
+    }
+
 //    /**
 //     * Gets integer from user, allows user to abort function if they wish by entering "~"
 //     * @return int that the user entered

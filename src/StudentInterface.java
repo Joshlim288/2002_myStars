@@ -138,6 +138,7 @@ public class StudentInterface extends UserInterface {
 
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null);
             printStatusOfAddCourse(status, indexSelected);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -165,6 +166,7 @@ public class StudentInterface extends UserInterface {
                     "Index Number: " + index);
             studHandler.dropCourse(courseSelected, index);
             System.out.println("Successfully dropped " + index + "!");
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -173,6 +175,7 @@ public class StudentInterface extends UserInterface {
     private void checkRegisteredCourses(){
         System.out.println("Here are your currently registered courses:");
         System.out.println(studHandler.getRegisteredCourses());
+        waitForEnterInput();
     }
 
     private void checkIndexVacancies(){
@@ -189,6 +192,7 @@ public class StudentInterface extends UserInterface {
 
             System.out.println("Here are the vacancies for the indexes in this course:");
             showIndexesInCourse(courseSelected);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -227,6 +231,7 @@ public class StudentInterface extends UserInterface {
 
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
             printStatusOfAddCourse(status, indexSelected);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -289,6 +294,7 @@ public class StudentInterface extends UserInterface {
                 studHandler.updateOtherStudent(courseSelected, indexToSwapIn, indexToSwapOut);
             } else
                 System.out.println("Swap not performed.\n" + "Exiting to main menu...");
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }

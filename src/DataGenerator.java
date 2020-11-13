@@ -149,7 +149,7 @@ public class DataGenerator {
         /* Adding Students to Courses */
 
         index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U1111111A");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U22222222B");
+        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U2222222B");
         index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U3333333C");
         index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U4444444D");
         index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U5555555E");
@@ -181,7 +181,7 @@ public class DataGenerator {
         studentB.addCourse("CZ2007", "55555", 3);
 
         index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U1111111A");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U22222222B");
+        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U2222222B");
         index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U3333333C");
         index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U4444444D");
         index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U5555555E");

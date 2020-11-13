@@ -3,6 +3,7 @@ import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AdminInterface extends UserInterface {
 
@@ -136,6 +137,7 @@ public class AdminInterface extends UserInterface {
             adHandler.finalizeCourse();
             System.out.println("Course successfully added");
             adHandler.getOverview(2);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -267,6 +269,7 @@ public class AdminInterface extends UserInterface {
         for (Student stud: adHandler.getStudents()){
             System.out.println("\n" + stud.getName() + ", " + stud.getMatricNum());
         }
+        waitForEnterInput();
     }
 
     private void checkIndex() {
@@ -274,10 +277,11 @@ public class AdminInterface extends UserInterface {
             Index index;
             String indexNum;
             do {
-                System.out.print("Enter index number: ");
+                System.out.print("\nEnter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
             } while (!adHandler.checkIndexExists(indexNum));
             adHandler.printIndexVacancy(indexNum);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -294,9 +298,11 @@ public class AdminInterface extends UserInterface {
                 studentList = adHandler.getStudentListByIndex(indexNum);
             } while (studentList == null);
 
+            System.out.println("\nStudents currently registered for Index " + indexNum + ": ");
             for (Student stud : studentList) {
                 System.out.println(stud.getMatricNum() +", "+ stud.getName());
             }
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -313,9 +319,11 @@ public class AdminInterface extends UserInterface {
                 studentList = adHandler.getStudentListByCourse(courseCode);
             } while (studentList == null);
 
+            System.out.println("\nStudents currently registered for " + courseCode + ":");
             for (Student stud : studentList) {
                 System.out.println(stud.getMatricNum() +", "+ stud.getName());
             }
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -408,6 +416,7 @@ public class AdminInterface extends UserInterface {
                     }
                 }
             } while (choice != 8);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -644,6 +653,7 @@ public class AdminInterface extends UserInterface {
                     }
                 }
             } while (choice != 11);
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -659,6 +669,7 @@ public class AdminInterface extends UserInterface {
                                "4) Print all Courses + Indexes + Lessons");
             choice = Integer.parseInt(getInput(typeOfInput.INT));
             System.out.println(adHandler.getOverview(choice));
+            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -677,6 +688,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println("Student not found");
             }
             adHandler.removeStudent(matricNum);
+            waitForEnterInput();
         } catch (EscapeException e){
             System.out.println(e.getMessage());
         }
@@ -695,6 +707,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println("Course not found");
             }
             adHandler.removeCourse(courseCode);
+            waitForEnterInput();
         } catch(EscapeException e) {
             System.out.printf(e.getMessage());
         }
