@@ -281,7 +281,7 @@ public class StudentInterface extends UserInterface {
                     indexToSwapIn.getIndexNum() + " | " + indexToSwapOut.getIndexNum() + "\n" +
                     "Confirm to proceed with the swap? Press 'Y/y' to continue and any other key otherwise.");
 
-            char ans = sc.nextLine().toCharArray()[0];
+            char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
                 //Perform the swap. AddCourse() also drops the current index they were previously in
                 //TODO: To ensure wait-list of indexes not triggered in the middle of swap

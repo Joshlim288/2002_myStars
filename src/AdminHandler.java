@@ -16,7 +16,7 @@ public class AdminHandler{
     private Course tempCourse;
 
     public AdminHandler(Admin currentAdmin) {
-        this.currentAdmin = currentAdmin;
+        this.currentAdmin = currentAdmin; //TODO: remove?? dont think its used
         this.cdm = new CourseDataManager();
         this.sdm = new StudentDataManager();
         this.udm = new UserDataManager();

@@ -191,7 +191,7 @@ public class AdminInterface extends UserInterface {
             } while (!courseValidator.validateTimePeriod(startTime, endTime));
 
             System.out.print("Enter venue: ");
-            venue = sc.nextLine();
+            venue = getInput(typeOfInput.STANDARD);
 
             while (true) {
                 System.out.print("Enter teaching weeks, separated with a comma (1-13): ");
