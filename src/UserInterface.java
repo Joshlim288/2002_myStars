@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -94,7 +97,21 @@ public abstract class UserInterface {
     public void waitForEnterInput(){
         System.out.println("Press Enter to continue...");
         System.console().readPassword();
+
     }
+    // TODO test this function, allow user to abort logout
+    public void exit() {
+            int waitPeriodMillis = 10*1000;
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Press any key to logout, automatically logging out in 10 seconds");
+            long startTime = System.currentTimeMillis();
+            try {
+                while ((System.currentTimeMillis() - startTime) < waitPeriodMillis && !in.ready());
+            } catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+     }
 
 //    /**
 //     * Gets integer from user, allows user to abort function if they wish by entering "~"
