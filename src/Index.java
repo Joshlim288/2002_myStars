@@ -149,9 +149,8 @@ public class Index implements Serializable {
     /**
      * Method to add a student to current waitlist
      * Student added to the back of the queue.
-     * @param waitlist The waitlist to add to.
      */
-    public void addToWaitlist(ArrayList<String> waitlist, String matricNum){
+    public void addToWaitlist(String matricNum){
         waitlist.add(matricNum);
     }
 
@@ -159,10 +158,9 @@ public class Index implements Serializable {
      * Method to remove a student from current waitlist.
      * Student at front of queue removed
      * Exception handling if waitlist is already empty
-     * @param waitlist The waitlist to remove from.
      */
     //TODO: Improve if possible (first draft)
-    public String removeFromWaitlist(ArrayList<String> waitlist){
+    public String removeFromWaitlist(){
         try{
             return waitlist.remove(0);
         }
@@ -172,26 +170,19 @@ public class Index implements Serializable {
         }
     }
 
-    /**
-     * Method to add a student from EnrolledStudents ArrayList
-     * @param enrolledStudents The ArrayList to add the student into.
-     */
+
     // TODO: Exception handling if at max capacity (added?)
-    public void addToEnrolledStudents(ArrayList<String> enrolledStudents, String matricNum){
+    public void addToEnrolledStudents(String matricNum){
         enrolledStudents.add(matricNum);
         currentVacancy--;
         if (currentVacancy == 0)
             setAtMaxCapacity(true);
     }
 
-    /**
-     * Method to remove a student from EnrolledStudents ArrayList
-     * @param enrolledStudents The ArrayList to remove the student from.
-     * @param student The student to be removed.
-     */
+
     // TODO: Exception handling if at zero capacity
-    public void removeFromEnrolledStudents(ArrayList<Student> enrolledStudents, Student student){
-            enrolledStudents.remove(student);
+    public void removeFromEnrolledStudents(String matricNum){
+            enrolledStudents.remove(matricNum);
             this.currentVacancy++;
             setAtMaxCapacity(false);
     }

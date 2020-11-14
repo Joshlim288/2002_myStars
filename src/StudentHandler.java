@@ -57,7 +57,7 @@ public class StudentHandler {
             return 1;
         } else{
             if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
-            indexToAdd.addToEnrolledStudents(indexToAdd.getEnrolledStudents(), student.getMatricNum());
+            indexToAdd.addToEnrolledStudents(student.getMatricNum());
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
             return 2;
         }
@@ -66,18 +66,14 @@ public class StudentHandler {
     public void dropCourse(Course course,String index) {
         Index cIndex = course.getIndex(index);
         //Remove student from list of enrolled students in index
-        ArrayList<Student> enrolledStudents = new ArrayList<>();
-        for(String matricNum: cIndex.getEnrolledStudents()){
-            enrolledStudents.add(sdm.getStudent(matricNum));
-        }
-        cIndex.removeFromEnrolledStudents(enrolledStudents, this.currentStudent);
+        cIndex.removeFromEnrolledStudents(currentStudent.getMatricNum());
 
         //Remove course from student's registered courses
         currentStudent.removeCourse(course.getCourseCode(), course.getAcademicUnits());
 
         //Register student at start of waitlist for the course
         if(!cIndex.getWaitlist().isEmpty()) {
-            String matricNum = cIndex.removeFromWaitlist(cIndex.getWaitlist());
+            String matricNum = cIndex.removeFromWaitlist();
             Student studentRemoved = sdm.getStudent(matricNum);
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
             studentRemoved.addCourse(course.getCourseCode(), index, course.getAcademicUnits());
@@ -90,7 +86,7 @@ public class StudentHandler {
     }
 
     private void updateWaitList(Course course, Index index) {
-        index.addToWaitlist(index.getWaitlist(), currentStudent.getMatricNum());
+        index.addToWaitlist(currentStudent.getMatricNum());
         currentStudent.addCourseToWaitList(course.getCourseCode(), index.getIndexNum());
     }
 

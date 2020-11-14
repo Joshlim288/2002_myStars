@@ -58,7 +58,7 @@ public class StudentInterface extends UserInterface {
 
         ArrayList<Index> indexList = courseSelected.getIndexes();
 
-        System.out.println("List of Indexes in " +
+        System.out.println("\nList of Indexes in " +
                            courseSelected.getCourseName() + " - " +
                            courseSelected.getCourseCode() + ":\n" +
                            "Index Number | Remaining Vacancies\n" +
@@ -132,7 +132,7 @@ public class StudentInterface extends UserInterface {
                 indexSelected = getIndexInputAndCheck(courseSelected, indexNum);
             }
 
-            System.out.println("You have selected to add : \n" +
+            System.out.println("\nYou have selected to add : \n" +
                     courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
                     "Index Number: " + indexSelected.getIndexNum());
 
@@ -173,7 +173,7 @@ public class StudentInterface extends UserInterface {
     }
 
     private void checkRegisteredCourses(){
-        System.out.println("Here are your currently registered courses:");
+        System.out.println("\nHere are your currently registered courses:");
         System.out.println(studHandler.getRegisteredCourses());
         waitForEnterInput();
     }
@@ -181,16 +181,17 @@ public class StudentInterface extends UserInterface {
     private void checkIndexVacancies(){
         try {
             String courseCode;
-            System.out.println("Enter course to check (e.g. CZ2002):");
-            courseCode = getInput(typeOfInput.COURSE_CODE);
-            Course courseSelected = studHandler.cdm.getCourse(courseCode);
+            Course courseSelected;
 
-            if (courseSelected == null) {
-                System.out.println("Course does not exist!");
-                return;
-            }
+            do {
+                System.out.print("Enter course code to check (e.g. CZ2002): ");
+                courseCode = getInput(typeOfInput.COURSE_CODE);
+                courseSelected = studHandler.cdm.getCourse(courseCode);
 
-            System.out.println("Here are the vacancies for the indexes in this course:");
+                if (courseSelected == null)
+                    System.out.println("Course does not exist!");
+            } while (courseSelected == null);
+
             showIndexesInCourse(courseSelected);
             waitForEnterInput();
         } catch (EscapeException e) {
@@ -201,6 +202,8 @@ public class StudentInterface extends UserInterface {
     private void changeIndex() {
         String courseCode = "";
         String indexNum;
+
+        //TODO: Very spaghetti
         try {
             System.out.println(studHandler.getRegisteredCourses());
             Course courseSelected = null;
@@ -208,25 +211,26 @@ public class StudentInterface extends UserInterface {
                 System.out.print("Choose course for changing of index (e.g. CZ2002):");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
-            }
-
-            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
-                System.out.println("You are not enrolled in this course!");
-                return;
+                if (courseSelected == null)
+                    continue;
+                if (!checkIfRegistered(studHandler.currentStudent, courseCode))
+                    courseSelected = null;
             }
 
             Index indexToDrop = getIndexInputAndCheck(courseSelected, this.studHandler.currentStudent.retrieveIndex(courseCode));
+            showIndexesInCourse(courseSelected);
             Index indexSelected = null;
+
             while(indexSelected == null) {
                 System.out.println("Enter the index to swap to.\n" +
                         "You will be dropped from course and added to wait-list if index with no vacancies chosen:");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
                 indexSelected = getIndexInputAndCheck(courseSelected, indexNum);
-            }
-
-            if (indexSelected.equals(indexToDrop)) {
-                System.out.println("You have chosen the index you are currently in!");
-                return;
+                if (indexSelected != null)
+                    if(indexSelected.equals(indexToDrop)) {
+                        System.out.println("You have chosen the index you are currently in!");
+                        indexSelected = null;
+                    }
             }
 
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
@@ -239,6 +243,8 @@ public class StudentInterface extends UserInterface {
 
     private void swapIndex() {
         String courseCode = "";
+
+        //TODO: Very spaghetti
         try {
             System.out.println(studHandler.getRegisteredCourses());
             Course courseSelected = null;
@@ -246,36 +252,32 @@ public class StudentInterface extends UserInterface {
                 System.out.print("Choose course for swapping of index (e.g. CZ2002):");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
-            }
-
-            if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseSelected)) {
-                System.out.println("You are not enrolled in this course!");
-                return;
+                if (courseSelected == null)
+                    continue;
+                if (!checkIfRegistered(studHandler.currentStudent, courseCode))
+                    courseSelected = null;
             }
 
             showIndexesInCourse(courseSelected);
             Index indexToSwapOut = getIndexInputAndCheck(courseSelected, this.studHandler.currentStudent.retrieveIndex(courseCode));
 
-            boolean validUser = false;
-            System.out.println("Enter the particulars of the student to swap with:");
-            while (!validUser) {
-                try {
-                    studHandler.retrieveOtherStudent(sc);
-                    validUser = true;
-                } catch (AccessDeniedException e){
-                    System.out.println(e.getMessage());
-                }
-            }
-
-            if (!studHandler.otherStudent.getCoursesRegistered().containsKey(courseSelected)) {
-                System.out.println("The other student is not enrolled in this course!");
-                return;
-            }
+            boolean validUser;
+            do {
+                System.out.println("Enter the particulars of the student to swap with:");
+                    try {
+                        studHandler.retrieveOtherStudent(sc);
+                    } catch (AccessDeniedException e){
+                        System.out.println(e.getMessage());
+                    }
+                    validUser = checkIfRegistered(studHandler.otherStudent, courseCode);
+            } while (validUser == false);
 
             Index indexToSwapIn = getIndexInputAndCheck(courseSelected, studHandler.otherStudent.retrieveIndex(courseCode));
 
-            System.out.println("Summary of Indexes after swap performed:\n" +
-                    courseSelected.getCourseName() + "\n");
+            //TODO: Check clash before allowing swap of index
+
+            System.out.println("\nSummary of Indexes after swap performed:\n" +
+                    courseSelected.getCourseName());
 
             System.out.println(studHandler.currentStudent.getName() + " | " + studHandler.otherStudent.getName() + "\n" +
                     indexToSwapIn.getIndexNum() + " | " + indexToSwapOut.getIndexNum() + "\n" +
@@ -298,6 +300,14 @@ public class StudentInterface extends UserInterface {
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private boolean checkIfRegistered(Student studentToCheck, String courseToCheck){
+        if(!studentToCheck.getCoursesRegistered().containsKey(courseToCheck)){
+            System.out.println("Student not enrolled in this course!");
+            return false;
+        }
+        return true;
     }
 
     private void logout(){

@@ -148,16 +148,16 @@ public class DataGenerator {
 
         /* Adding Students to Courses */
 
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U1111111A");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U2222222B");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U3333333C");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U4444444D");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U5555555E");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U6666666F");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U7777777G");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U8888888H");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U0000000K");
-        index11111.addToEnrolledStudents(index11111.getEnrolledStudents(), "U4040404P");
+        index11111.addToEnrolledStudents("U1111111A");
+        index11111.addToEnrolledStudents("U2222222B");
+        index11111.addToEnrolledStudents("U3333333C");
+        index11111.addToEnrolledStudents("U4444444D");
+        index11111.addToEnrolledStudents("U5555555E");
+        index11111.addToEnrolledStudents("U6666666F");
+        index11111.addToEnrolledStudents("U7777777G");
+        index11111.addToEnrolledStudents("U8888888H");
+        index11111.addToEnrolledStudents("U0000000K");
+        index11111.addToEnrolledStudents("U4040404P");
         studentA.addCourse("CZ2002", "11111", 3);
         studentB.addCourse("CZ2002", "11111", 3);
         studentC.addCourse("CZ2002", "11111", 3);
@@ -169,26 +169,26 @@ public class DataGenerator {
         studentK.addCourse("CZ2002", "11111", 3);
         studentP.addCourse("CZ2002", "11111", 3);
 
-        index11111.addToWaitlist(index11111.getWaitlist(), "U2020202M");
-        index11111.addToWaitlist(index11111.getWaitlist(), "U3030303N");
+        index11111.addToWaitlist("U2020202M");
+        index11111.addToWaitlist("U3030303N");
         studentM.addCourseToWaitList("CZ2002", "11111");
         studentN.addCourseToWaitList("CZ2002", "11111");
 
-        index22222.addToEnrolledStudents(index22222.getEnrolledStudents(), "U1010101L");
+        index22222.addToEnrolledStudents("U1010101L");
         studentL.addCourse("CZ2002", "22222", 3);
 
-        index55555.addToEnrolledStudents(index55555.getEnrolledStudents(), "U2222222B");
+        index55555.addToEnrolledStudents("U2222222B");
         studentB.addCourse("CZ2007", "55555", 3);
 
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U1111111A");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U2222222B");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U3333333C");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U4444444D");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U5555555E");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U6666666F");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U7777777G");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U8888888H");
-        index77777.addToEnrolledStudents(index77777.getEnrolledStudents(), "U0000000K");
+        index77777.addToEnrolledStudents("U1111111A");
+        index77777.addToEnrolledStudents("U2222222B");
+        index77777.addToEnrolledStudents("U3333333C");
+        index77777.addToEnrolledStudents("U4444444D");
+        index77777.addToEnrolledStudents("U5555555E");
+        index77777.addToEnrolledStudents("U6666666F");
+        index77777.addToEnrolledStudents("U7777777G");
+        index77777.addToEnrolledStudents("U8888888H");
+        index77777.addToEnrolledStudents("U0000000K");
         studentA.addCourse("EG0001", "77777", 3);
         studentB.addCourse("EG0001", "77777", 3);
         studentC.addCourse("EG0001", "77777", 3);
@@ -199,11 +199,11 @@ public class DataGenerator {
         studentH.addCourse("EG0001", "77777", 3);
         studentK.addCourse("EG0001", "77777", 3);
 
-        index88888.addToEnrolledStudents(index88888.getEnrolledStudents(), "U9999999J");
+        index88888.addToEnrolledStudents("U9999999J");
         studentJ.addCourse("EG0001", "88888", 3);
 
-        index99999.addToEnrolledStudents(index99999.getEnrolledStudents(), "U9999999J");
-        index99999.addToEnrolledStudents(index88888.getEnrolledStudents(), "U3030303N");
+        index99999.addToEnrolledStudents("U9999999J");
+        index99999.addToEnrolledStudents("U3030303N");
         studentJ.addCourse("LK9001", "99999", 3);
         studentN.addCourse("LK9001", "99999", 3);
 
