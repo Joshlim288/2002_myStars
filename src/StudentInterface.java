@@ -109,6 +109,14 @@ public class StudentInterface extends UserInterface {
         return false;
     }
 
+    private boolean checkIfRegistered(Student studentToCheck, String courseToCheck){
+        if(!studentToCheck.getCoursesRegistered().containsKey(courseToCheck)){
+            System.out.println("Student not enrolled in this course!");
+            return false;
+        }
+        return true;
+    }
+
     private void checkRegisteredCourses(){
         System.out.println("\nHere are your currently registered courses:");
         System.out.println(studHandler.getRegisteredCourses());
@@ -169,10 +177,10 @@ public class StudentInterface extends UserInterface {
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
 
-                if (!studHandler.currentStudent.getCoursesRegistered().containsKey(courseCode))
-                    System.out.println("You are not enrolled in this course!");
-                else
+                if (courseSelected == null) continue;
+                else if(checkIfRegistered(studHandler.currentStudent, courseCode))
                     validCourse = true;
+
             } while (!validCourse);
 
             String index = studHandler.currentStudent.retrieveIndex(courseCode);
@@ -204,10 +212,7 @@ public class StudentInterface extends UserInterface {
             do {
                 System.out.print("Enter course code to check (e.g. CZ2002): ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
-                courseSelected = studHandler.cdm.getCourse(courseCode);
-
-                if (courseSelected == null)
-                    System.out.println("Course does not exist!");
+                courseSelected = getCourseInputAndCheck(courseCode);
             } while (courseSelected == null);
 
             showIndexesInCourse(courseSelected);
@@ -324,14 +329,6 @@ public class StudentInterface extends UserInterface {
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    private boolean checkIfRegistered(Student studentToCheck, String courseToCheck){
-        if(!studentToCheck.getCoursesRegistered().containsKey(courseToCheck)){
-            System.out.println("Student not enrolled in this course!");
-            return false;
-        }
-        return true;
     }
 
     private void logout(){
