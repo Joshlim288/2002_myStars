@@ -114,24 +114,19 @@ public class StudentInterface extends UserInterface {
         String indexNum;
         Course courseSelected;
         try {
+            boolean validCourse = false;
             do {
                 System.out.print("Enter course to add (e.g. CZ2002): ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
 
-                /* null breaks the other methods i think ahaha */
                 if (courseSelected == null) continue;
-
-                if (studHandler.willGoOverMaxAU(courseSelected)) {
+                else if (studHandler.willGoOverMaxAU(courseSelected))
                     System.out.println("Cannot register for course, will exceed maximum AUs!\n");
-                    courseSelected = null;
-                }
-
-                if (studHandler.studentInCourse(courseSelected)) {
+                else if (studHandler.studentInCourse(courseSelected))
                     System.out.println("You are already enrolled in this course!\n");
-                    courseSelected = null;
-                }
-            } while (courseSelected == null);
+                else validCourse = true;
+            } while (!validCourse);
 
             Index indexSelected;
             do {

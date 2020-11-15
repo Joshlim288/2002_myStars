@@ -116,7 +116,10 @@ public class StudentHandler {
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {
-        return currentStudent.getCurrentAUs() + courseSelected.getAcademicUnits() > currentStudent.getMaxAUs();
+        int totalAUs = currentStudent.getCurrentAUs();
+        for (Map.Entry<String, String> entry : currentStudent.getWaitList().entrySet())
+            totalAUs += cdm.getCourse(entry.getKey()).getAcademicUnits();
+        return (totalAUs + courseSelected.getAcademicUnits()) > currentStudent.getMaxAUs();
     }
 
     public String getRegisteredCourses() {
