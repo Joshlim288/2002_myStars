@@ -204,7 +204,7 @@ public class AdminHandler{
         for (Lesson check : allIndexLessons) {
             if (check.getDay().toString().equals(day)) {
                 for (LocalTime time: timeArray) {
-                    if (time.isAfter(check.getStartTime()) && time.isBefore(check.getEndTime())){
+                    if (!time.isBefore(check.getStartTime()) && !time.isAfter(check.getEndTime())){
                             System.out.println("Lesson clashes");
                             return true;
                     }
