@@ -120,7 +120,7 @@ public class AdminHandler{
             case(5)-> tempCourse.setSchool(input);
             case(7)-> {
                 String newStart = input.split("&")[0];
-                String newEnd = input.split("&")[0];
+                String newEnd = input.split("&")[1];
                 tempCourse.setExamDateTime(newStart, newEnd);
             }
         }
