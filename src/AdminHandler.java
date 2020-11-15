@@ -203,15 +203,10 @@ public class AdminHandler{
     private boolean checkClash(ArrayList<Lesson> allIndexLessons, String day, LocalTime[] timeArray) {
         for (Lesson check : allIndexLessons) {
             if (check.getDay().toString().equals(day)) {
-                // Start time checks inclusive upper bound, exclusive lower bound (i.e. oldStartTime <= startTime < oldEndTime)
-                if (!timeArray[0].isBefore(check.getStartTime()) && timeArray[0].isBefore(check.getEndTime())){
+                // Start < End && End > Start will clash
+                if (timeArray[0].isBefore(check.getEndTime()) && timeArray[1].isAfter(check.getStartTime())){
                         System.out.println("Lesson clashes");
                         return true;
-                }
-                // End time checks exclusive upper bound, inclusive lower bound (i.e. oldStartTime < endTime <= oldEndTime)
-                if (timeArray[1].isAfter(check.getStartTime()) && !timeArray[0].isAfter(check.getEndTime())){
-                    System.out.println("Lesson clashes");
-                    return true;
                 }
             }
         }
