@@ -58,18 +58,11 @@ public class StudentHandler {
                     oldLessons.addAll(index.getLessons());
                     for (Lesson oldLesson : oldLessons)
                         for (Lesson newLesson : newLessons)
-                            if (newLesson.getDay().equals(oldLesson.getDay())) {
-                                LocalTime oldStart = oldLesson.getStartTime();
-                                LocalTime oldEnd = oldLesson.getEndTime();
-                                LocalTime newStart = newLesson.getStartTime();
-                                LocalTime newEnd = newLesson.getEndTime();
-
-                                /* Account for all 3 scenarios that could result in a clash */
-                                if ((oldStart.isBefore(newEnd) && oldStart.isAfter(newStart)) ||
-                                        (oldEnd.isBefore(newEnd) && oldStart.isAfter(newStart)) ||
-                                        (oldStart.equals(newStart) && oldEnd.equals(newEnd)))
+                            if (newLesson.getDay().equals(oldLesson.getDay()))
+                                /* Start of new lesson < End of old lesson && End of new lesson > Start of old lesson */
+                                if(newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
+                                        newLesson.getEndTime().isAfter(oldLesson.getStartTime()))
                                     return index.getIndexNum();
-                            }
                 }
         }
         return null;
@@ -87,42 +80,39 @@ public class StudentHandler {
      * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop) {
         if (indexToAdd.isAtMaxCapacity()) {
-            if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
-            updateWaitList(course, indexToAdd);
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
+            indexToAdd.addToWaitlist(currentStudent.getMatricNum());
+            currentStudent.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
             return 1;
         } else{
-            if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
             return 2;
         }
     }
 
-    public void dropCourse(Course course,String index) {
+    //Refreshing of waitlist in separate function
+    public void dropCourse(Student student, Course course,String index) {
         Index cIndex = course.getIndex(index);
         //Remove student from list of enrolled students in index
-        cIndex.removeFromEnrolledStudents(currentStudent.getMatricNum());
+        cIndex.removeFromEnrolledStudents(student.getMatricNum());
 
         //Remove course from student's registered courses
-        currentStudent.removeCourse(course.getCourseCode(), course.getAcademicUnits());
+        student.removeCourse(course.getCourseCode(), course.getAcademicUnits());
+    }
 
-        //Register student at start of waitlist for the course
-        if(!cIndex.getWaitlist().isEmpty()) {
-            String matricNum = cIndex.removeFromWaitlist();
-            Student studentRemoved = sdm.getStudent(matricNum);
+    public void refreshWaitList(Course course, Index index) {
+        if (!index.getWaitlist().isEmpty()) {
+            Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
-            studentRemoved.addCourse(course.getCourseCode(), index, course.getAcademicUnits());
+            studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
 
             //Create a MailHandler object to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
-                      "You have been removed from a wait-list!",
-                          "Successful Registration of Course");
+                    "You have been removed from a wait-list!",
+                    "Successful Registration of Course");
         }
-    }
-
-    private void updateWaitList(Course course, Index index) {
-        index.addToWaitlist(currentStudent.getMatricNum());
-        currentStudent.addCourseToWaitList(course.getCourseCode(), index.getIndexNum());
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {

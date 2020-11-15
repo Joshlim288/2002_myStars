@@ -176,7 +176,7 @@ public class StudentInterface extends UserInterface {
             System.out.println("You have selected to drop: \n" +
                     courseCode + " " + courseSelected.getCourseName() + "\n" +
                     "Index Number: " + index);
-            studHandler.dropCourse(courseSelected, index);
+            studHandler.dropCourse(studHandler.currentStudent, courseSelected, index);
             System.out.println("Successfully dropped " + index + "!");
             waitForEnterInput();
         } catch (EscapeException e) {
@@ -245,6 +245,7 @@ public class StudentInterface extends UserInterface {
 
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
             printStatusOfAddCourse(status, indexSelected);
+            studHandler.refreshWaitList(courseSelected, indexToDrop);
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -302,7 +303,8 @@ public class StudentInterface extends UserInterface {
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
                 //Perform the swap. AddCourse() also drops the current index they were previously in
-                //TODO: To ensure wait-list of indexes not triggered in the middle of swap
+                //TODO: Wait-list of index should not be triggered because I separated the refreshing of wait-list
+                //TODO: to a different method that is not called here. But should still test
                 int status1 = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut);
                 int status2 = studHandler.addCourse(studHandler.otherStudent, courseSelected, indexToSwapOut, indexToSwapIn);
                 System.out.println("For current student: ");
