@@ -34,24 +34,59 @@ public class StudentHandler {
         return currentStudent.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
-    //TODO: Improve input validation
+    /**
+     * Version 2 of hasClash() yay :D
+     * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
+     * @param indexToAdd The index to be checked against the student's timetable.
+     * @param studentToCheck The student who is trying to add the new index.
+     * @param indexToExclude Used for swapping of indexes, to exclude the index it is swapping from.
+     * (e.g. Swapping from index 33333 to index 44444, index 33333 should not be included in the check)
+     * @return The index in the timetable that has clashed with the new index, otherwise null if no clashes. */
+    public String hasClash(Index indexToAdd, Student studentToCheck, Index indexToExclude) {
 
-    // Used for both changing/swapping index and adding new course
-    // For changing/swapping index, indexToDrop will be the one to drop
-    // For adding new course, indexToDrop will be null
-    // If clash found, returns the index new course clashed with through
-    // Converts course index as integer first for switch statement of printStatusOfAddCourse
-    //TODO: To improve, feels like it can be done better
+        HashMap<String, String> timetable = studentToCheck.getCoursesRegistered();
+        timetable.putAll(studentToCheck.getWaitList());
+        ArrayList<Lesson> newLessons = indexToAdd.getLessons();
+        ArrayList<Lesson> oldLessons = new ArrayList<Lesson>();
+
+        /* For all currently registered indexes, retrieve their lessons and then compare with lessons of
+         *  the new index. Comparison only done if the lessons fall on the same day and the index is not
+         *  the index to be excluded. */
+        for (Map.Entry<String, String> entry : timetable.entrySet()) {
+            for (Index index : cdm.getCourse(entry.getKey()).getIndexes())
+                if (!index.equals(indexToExclude)){
+                    oldLessons.addAll(index.getLessons());
+                    for (Lesson oldLesson : oldLessons)
+                        for (Lesson newLesson : newLessons)
+                            if (newLesson.getDay().equals(oldLesson.getDay())) {
+                                LocalTime oldStart = oldLesson.getStartTime();
+                                LocalTime oldEnd = oldLesson.getEndTime();
+                                LocalTime newStart = newLesson.getStartTime();
+                                LocalTime newEnd = newLesson.getEndTime();
+
+                                /* Account for all 3 scenarios that could result in a clash */
+                                if ((oldStart.isBefore(newEnd) && oldStart.isAfter(newStart)) ||
+                                        (oldEnd.isBefore(newEnd) && oldStart.isAfter(newStart)) ||
+                                        (oldStart.equals(newStart) && oldEnd.equals(newEnd)))
+                                    return index.getIndexNum();
+                            }
+                }
+        }
+        return null;
+    }
+
+    //TODO: Consider whether to split the dropping and adding of course for swapping indexes
+    //TODO: Currently there is alr a separate dropCourse() that is called within this addCourse()
+    /** Version 2 of addCourse() yay :D
+     * Adds the selected index to the selected student.
+     * @param student The student whose timetable to add the index to.
+     * @param course The course of the index to be added.
+     * @param indexToAdd The index to be added.
+     * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping indexes.
+     * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
+     * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop) {
-        String clashWithRegistered = hasClash(indexToAdd, student.getCoursesRegistered());
-        String clashWithWaitList = hasClash(indexToAdd, student.getWaitList());
-
-        if(clashWithRegistered != null)
-            return Integer.parseInt(clashWithRegistered);
-        if(clashWithWaitList != null)
-            return Integer.parseInt(clashWithWaitList);
-
-        else if (indexToAdd.isAtMaxCapacity()) {
+        if (indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(course, indexToDrop.getIndexNum());
             updateWaitList(course, indexToAdd);
             return 1;
@@ -88,35 +123,6 @@ public class StudentHandler {
     private void updateWaitList(Course course, Index index) {
         index.addToWaitlist(currentStudent.getMatricNum());
         currentStudent.addCourseToWaitList(course.getCourseCode(), index.getIndexNum());
-    }
-
-    private String hasClash(Index indexToAdd, HashMap<String,String> coursesRegistered) {
-        //Retrieve lessons to be added for new index
-        ArrayList<Lesson> lessonsToCheck = indexToAdd.getLessons();
-
-        // For all indexes registered for the student
-        for (Map.Entry<String, String> entry : coursesRegistered.entrySet()) {
-            Course courseIndexBelongsTo = cdm.getCourse(entry.getKey());
-            //For each lesson in index to check against
-            for (Lesson existingLesson : courseIndexBelongsTo.getIndex(entry.getValue()).getLessons()) {
-                //For each lesson in new index
-                for (Lesson newLesson : lessonsToCheck) {
-                    LocalTime startTime = newLesson.getStartTime();
-                    LocalTime endTime = newLesson.getEndTime();
-
-                    //Return clashing index and break if found
-                    if (startTime.isBefore(existingLesson.getEndTime()) &&
-                            startTime.isAfter(existingLesson.getStartTime()))
-                        return entry.getValue();
-
-                    //Return clashing index and break if found
-                    if (endTime.isBefore(existingLesson.getEndTime()) &&
-                            endTime.isAfter(existingLesson.getStartTime()))
-                        return entry.getValue();
-                }
-            }
-        }
-        return null;
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {
