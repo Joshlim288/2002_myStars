@@ -1,20 +1,8 @@
-import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Control class for handling student matters
- * Try not to ask for input here, get input using scanner in AdminInterface
- * Then pass the input as arguments
- *
- * Return types also no need to remain void, change to your requirements
- *
- * If you need any data, you can call the static methods in FileHandler with the class name
- * e.g. FileHandler.getStudent(name)
- *
- * Try to add JavaDocs as you go
- */
 public class StudentHandler {
     Student currentStudent;
     Student otherStudent;
@@ -28,10 +16,6 @@ public class StudentHandler {
         cdm.load();
         this.currentStudent = sdm.getStudent(matricNum);
         this.otherStudent = null;
-    }
-
-    public boolean studentInCourse(Course courseSelected){
-        return currentStudent.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
     /**
@@ -157,5 +141,52 @@ public class StudentHandler {
     public void close() {
         sdm.save();
         cdm.save();
+    }
+
+    public Index retrieveIndex(Course courseSelected, String indexNum){
+        Index indexSelected = courseSelected.getIndex(indexNum);
+
+        if (indexSelected == null)
+            System.out.println("Index does not exist in this course!\n" +
+                    "Please re-enter index again.");
+        return indexSelected;
+    }
+
+    public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
+        if (indexSelected == null) return false;
+        String indexClashed = hasClash(indexSelected, studentToCheck, indexToExclude);
+        if (indexClashed != null) {
+            System.out.println("There is a clash with Index " + indexClashed + "!");
+            System.out.println("Please choose another index!");
+            return false;
+        }
+        return true;
+    }
+
+    public Course retrieveCourse(String courseCode){
+        Course courseSelected = cdm.getCourse(courseCode);
+        if (courseSelected == null)
+            System.out.println("Course does not exist in the database!\n" +
+                    "Please re-enter course again.\n");
+        return courseSelected;
+    }
+
+    public boolean checkValidCourse(Course courseSelected){
+        if (courseSelected == null) return false;
+        if (willGoOverMaxAU(courseSelected))
+            System.out.println("Cannot register for course, will exceed maximum AUs!\n");
+        else return true;
+        return false;
+    }
+
+    public boolean checkIfRegistered(Student student, Course courseSelected){
+        if (courseSelected == null) return false;
+        if (student.retrieveIndex(courseSelected.getCourseCode()) != null)
+            return false;
+        return true;
+    }
+
+    public boolean studentInCourse(Student student, Course courseSelected){
+        return student.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 }
