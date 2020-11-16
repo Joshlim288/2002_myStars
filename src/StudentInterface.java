@@ -163,6 +163,7 @@ public class StudentInterface extends UserInterface {
                     }
             } while (!validCourse);
 
+            Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
             String index = studHandler.currentStudent.retrieveIndex(courseSelected.getCourseCode());
             System.out.println("Enter \"Y\" to confirm that you would like to drop this index: \n" +
                                courseSelected.getCourseCode() + " " + courseSelected.getCourseName() +
@@ -172,6 +173,7 @@ public class StudentInterface extends UserInterface {
             if (ans == 'Y' || ans == 'y') {
                 studHandler.dropCourse(studHandler.currentStudent, courseSelected, index);
                 System.out.println("Successfully dropped " + index + "!");
+                studHandler.refreshWaitList(courseSelected, indexToDrop);
             }
             else System.out.println("Index not dropped.");
             waitForEnterInput();

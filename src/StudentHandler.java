@@ -190,13 +190,15 @@ public class StudentHandler {
     public void refreshWaitList(Course course, Index index) {
         if (!index.getWaitlist().isEmpty()) {
             Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
+            System.out.println("Student removed is " + studentRemoved.getName());
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
             studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
+            index.addToEnrolledStudents(studentRemoved.getMatricNum());
 
             //Uses MailHandler utility class to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
-                    "You have been removed from a wait-list!",
-                    "Successful Registration of Course");
+                    "You have been removed from the wait-list and added to the course!",
+                    "Successful Registration for " + course.getCourseName());
         }
     }
 
