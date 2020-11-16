@@ -86,4 +86,13 @@ public class StudentDataManager implements DataManager{
     public ArrayList<Student> getStudentList(){
         return studentList;
     }
+
+    public String generateStudentOverview(){
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<Student> studentList = getStudentList();
+        for (Student student: studentList)
+            stringBuilder.append("\n" + student);
+
+        return stringBuilder.toString();
+    }
 }

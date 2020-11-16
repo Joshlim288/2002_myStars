@@ -130,6 +130,7 @@ public class StudentInterface extends UserInterface {
 
         try {
             do {
+                System.out.println(studHandler.getCourseOverview(1));
                 System.out.print("Enter course to add (e.g. CZ2002): ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
@@ -168,11 +169,11 @@ public class StudentInterface extends UserInterface {
     private void dropCourse() {
         String courseCode;
         Course courseSelected;
-        checkRegisteredCourses();
         boolean validCourse = false;
 
         try {
             do{
+                checkRegisteredCourses();
                 System.out.print("Enter course to drop (e.g. CZ2002):");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
@@ -210,6 +211,7 @@ public class StudentInterface extends UserInterface {
             Course courseSelected;
 
             do {
+                System.out.println(studHandler.getCourseOverview(1));
                 System.out.print("Enter course code to check (e.g. CZ2002): ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
@@ -228,7 +230,7 @@ public class StudentInterface extends UserInterface {
 
         //TODO: Very spaghetti, some parts seem repetitive
         try {
-            System.out.println(studHandler.getRegisteredCourses());
+            checkRegisteredCourses();
             Course courseSelected = null;
             while (courseSelected == null) {
                 System.out.print("Choose course for changing of index (e.g. CZ2002):");
@@ -268,7 +270,7 @@ public class StudentInterface extends UserInterface {
 
         //TODO: Very spaghetti
         try {
-            System.out.println(studHandler.getRegisteredCourses());
+            checkRegisteredCourses();
             Course courseSelected = null;
             while (courseSelected == null) {
                 System.out.print("Choose course for swapping of index (e.g. CZ2002):");
@@ -294,7 +296,7 @@ public class StudentInterface extends UserInterface {
                         System.out.println(e.getMessage());
                     }
                     validUser = checkIfRegistered(studHandler.otherStudent, courseCode);
-            } while (validUser == false);
+            } while (!validUser);
 
             Index indexToSwapIn = getIndexInputAndCheck(courseSelected, studHandler.otherStudent.retrieveIndex(courseCode));
 
