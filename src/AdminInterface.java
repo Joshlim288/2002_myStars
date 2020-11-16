@@ -197,7 +197,7 @@ public class AdminInterface extends UserInterface {
             System.out.print("Enter venue: ");
             venue = getInput(typeOfInput.STANDARD);
 
-            while (true) {
+            do {
                 System.out.print("Enter teaching weeks (1-13), separated with a comma: ");
                 inputWeeks = getInput(typeOfInput.STANDARD).split(",");
                 teachingWeeks = new ArrayList<>();
@@ -209,10 +209,7 @@ public class AdminInterface extends UserInterface {
                         break;
                     }
                 }
-                if (inputWeeks.length == teachingWeeks.size()) {
-                    break;
-                }
-            }
+            } while (inputWeeks.length != teachingWeeks.size());
         } while (!adHandler.addLesson(courseCode, indexNum, lessonType, day, startTime, endTime,
                 venue, teachingWeeks));
     }
@@ -253,7 +250,7 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter userID: ");
                 userid = getInput(typeOfInput.USERID);
 
-                System.out.print("Enter password: "); //TODO: put restrictions on password?
+                System.out.print("Enter password: ");
                 password = new String(System.console().readPassword());
 
                 System.out.print("Enter major: ");
@@ -464,7 +461,7 @@ public class AdminInterface extends UserInterface {
                     break;
                 }
                 System.out.println("Index number not found");
-            };
+            }
 
             do {
                 System.out.println("\nWhat attribute would you like to edit?");
@@ -496,9 +493,7 @@ public class AdminInterface extends UserInterface {
                             changedValue = getInput(typeOfInput.GROUP_NAME);
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
                     }
-                    case (4) -> {
-                        createLesson(courseCode, indexNum);
-                    }
+                    case (4) -> createLesson(courseCode, indexNum);
                     case (5) -> editLesson(courseCode, indexNum);
                     case (6) -> System.out.println("Exiting update index...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
@@ -532,7 +527,7 @@ public class AdminInterface extends UserInterface {
                     break;
                 }
                 System.out.println("Index out of range, enter lesson number < "+ i);
-            };
+            }
 
             do {
                 System.out.println("\nWhat attribute would you like to edit?");
