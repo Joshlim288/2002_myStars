@@ -13,7 +13,7 @@ public class AdminHandler{
     private CourseDataManager cdm;
     private StudentDataManager sdm;
     private UserDataManager udm;
-    private Course tempCourse;
+//    private Course tempCourse;
 
     public AdminHandler(Admin currentAdmin) {
         this.currentAdmin = currentAdmin; //TODO: remove?? dont think its used
@@ -95,7 +95,7 @@ public class AdminHandler{
      * Retrieve the course based on coursecode. Then edits and saves the new details
      */
     public boolean editCourse(String courseCode, String input, int choice){
-        tempCourse = cdm.getCourse(courseCode);
+        Course tempCourse = cdm.getCourse(courseCode);
         switch(choice){
             case(1)->{
                 if (checkCourseExists(input)) {
@@ -289,11 +289,10 @@ public class AdminHandler{
         }
 
         if(hasExam)
-            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, examStart, examEnd);
+            cdm.addCourse(new Course(courseCode, courseName,courseType, academicUnits,school, examStart, examEnd));
         else
-            tempCourse = new Course(courseCode, courseName,courseType, academicUnits,school, null, null);
+            cdm.addCourse(new Course(courseCode, courseName,courseType, academicUnits,school, null, null));
         return true;
-
     }
 
     /**
@@ -303,35 +302,35 @@ public class AdminHandler{
      * @param group
      * @return
      */
-    public boolean addIndex(String indexNum, int indexVacancies, String group) {
+    public boolean addIndex(String courseCode, String indexNum, int indexVacancies, String group) {
         if (checkIndexExists(indexNum)) {
             System.out.println("Index with this index number already exists");
             return false;
         }
 
-        for (Index idx: tempCourse.getIndexes()){
+        for (Index idx: cdm.getCourse(courseCode).getIndexes()){
             if (idx.getIndexNum().equals(indexNum)){
                 System.out.println("You have previously created this index");
                 return false;
             }
         }
-        tempCourse.addIndex(indexNum, indexVacancies, group);
+        cdm.getCourse(courseCode).addIndex(indexNum, indexVacancies, group);
         return true;
     }
 
-    public boolean addLesson(String indexNum, String lessonType, String day,
+    public boolean addLesson(String courseCode, String indexNum, String lessonType, String day,
                           String startTime, String endTime, String venue, ArrayList<Integer>teachingWeeks) {
-        if (checkClash(tempCourse.getIndex(indexNum).getLessons(), day, new LocalTime[]{LocalTime.parse(startTime), LocalTime.parse(endTime)}))
+        if (checkClash(cdm.getCourse(courseCode).getIndex(indexNum).getLessons(), day, new LocalTime[]{LocalTime.parse(startTime), LocalTime.parse(endTime)}))
             return false;
 
-        tempCourse.getIndex(indexNum).addLesson(lessonType, day, startTime, endTime, venue, teachingWeeks);
+        cdm.getCourse(courseCode).getIndex(indexNum).addLesson(lessonType, day, startTime, endTime, venue, teachingWeeks);
         return true;
     }
 
-    public void finalizeCourse(){
-        cdm.addCourse(tempCourse);
-        tempCourse = null;
-    }
+//    public void finalizeCourse(){
+//        cdm.addCourse(tempCourse);
+//        tempCourse = null;
+//    }
 
     /**
      * Check the number of available slot for an index number

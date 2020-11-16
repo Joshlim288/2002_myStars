@@ -22,7 +22,7 @@ public class AdminInterface extends UserInterface {
         int choice;
         boolean exitFlag = false;
         do{
-            System.out.println("What would you like to do today?");
+            System.out.println("\nWhat would you like to do today?");
             System.out.println("--------------------------------------------------------");
             System.out.println("1. Add a new Student");
             System.out.println("2. Add a new Course");
@@ -85,15 +85,15 @@ public class AdminInterface extends UserInterface {
 //    }
 
     private void createCourse() {
+        String courseCode = null;
+        String school;
+        String courseName;
+        String courseType;
+        String examStart;
+        String examEnd;
+        boolean hasExams;
+        int aus;
         try {
-            String courseCode;
-            String school;
-            String courseName;
-            String courseType;
-            String examStart;
-            String examEnd;
-            boolean hasExams;
-            int aus;
             do {
                 System.out.print("Enter course code: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
@@ -133,18 +133,19 @@ public class AdminInterface extends UserInterface {
             int numIndexes = Integer.parseInt(getInput(typeOfInput.INT));
             for (int i = 0; i < numIndexes; i++) {
                 System.out.printf("\nCreating Index %d:\n", i + 1);
-                createIndex();
+                createIndex(courseCode);
             }
-            adHandler.finalizeCourse();
+//            adHandler.finalizeCourse();
             System.out.println("Course successfully added");
             adHandler.getOverview(2);
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
+            adHandler.removeCourse(courseCode);
         }
     }
 
-    private void createIndex() throws EscapeException {
+    private void createIndex(String courseCode) throws EscapeException {
         String indexNum;
         int indexVacancies;
         int numLessons;
@@ -158,17 +159,17 @@ public class AdminInterface extends UserInterface {
 
             System.out.print("Enter group name for the index: ");
             group = getInput(typeOfInput.GROUP_NAME);
-        } while (!adHandler.addIndex(indexNum, indexVacancies, group));
+        } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies, group));
 
         System.out.print("Enter number of lessons: ");
         numLessons = Integer.parseInt(getInput(typeOfInput.INT));
         for (int i = 0; i < numLessons; i++) {
-            System.out.printf("Creating lesson %d:\n", i + 1);
-            createLesson(indexNum);
+            System.out.printf("\nCreating lesson %d:\n", i + 1);
+            createLesson(courseCode, indexNum);
         }
     }
 
-    private void createLesson(String indexNum) throws EscapeException{
+    private void createLesson(String courseCode, String indexNum) throws EscapeException{
         String lessonType;
         String day;
         String startTime;
@@ -210,7 +211,7 @@ public class AdminInterface extends UserInterface {
                     break;
                 }
             }
-        } while (!adHandler.addLesson(indexNum, lessonType, day, startTime, endTime,
+        } while (!adHandler.addLesson(courseCode, indexNum, lessonType, day, startTime, endTime,
                 venue, teachingWeeks));
     }
 
@@ -688,6 +689,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println("Student not found");
             }
             adHandler.removeStudent(matricNum);
+            System.out.println("Student "+matricNum+" has been removed");
             waitForEnterInput();
         } catch (EscapeException e){
             System.out.println(e.getMessage());
@@ -707,9 +709,10 @@ public class AdminInterface extends UserInterface {
                 System.out.println("Course not found");
             }
             adHandler.removeCourse(courseCode);
+            System.out.println("Course "+courseCode+" has been removed");
             waitForEnterInput();
         } catch(EscapeException e) {
-            System.out.printf(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
