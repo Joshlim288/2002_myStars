@@ -367,7 +367,7 @@ public class AdminInterface extends UserInterface {
 
             do {
                 System.out.println("\nWhat attribute would you like to edit?");
-                System.out.println("\n1: courseCode\n" +
+                System.out.println("1: courseCode\n" +
                         "2: courseName\n" +
                         "3: courseType\n" +
                         "4: academicUnits\n" +
