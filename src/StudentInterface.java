@@ -78,7 +78,7 @@ public class StudentInterface extends UserInterface {
         }
     }
 
-    //Used in addCourse(), dropCourse(), changeIndex() and swapIndex()
+    //To be deleted
     private Course getCourseInputAndCheck(String courseCode){
         Course courseSelected = studHandler.cdm.getCourse(courseCode);
 
@@ -89,7 +89,7 @@ public class StudentInterface extends UserInterface {
         return courseSelected;
     }
 
-    //Used in addCourse(), changeIndex() and swapIndex()
+    //To be deleted
     private Index getIndexInputAndCheck(Course courseSelected, String indexNum){
         Index indexSelected = courseSelected.getIndex(indexNum);
 
@@ -100,6 +100,7 @@ public class StudentInterface extends UserInterface {
         return indexSelected;
     }
 
+    //To be deleted
     private boolean checkForClash(Index indexSelected, Student studentToCheck, Index indexToExclude){
         String indexClashed = studHandler.hasClash(indexSelected, studentToCheck, indexToExclude);
         if (indexClashed != null) {
@@ -111,8 +112,10 @@ public class StudentInterface extends UserInterface {
         return false;
     }
 
-    private boolean checkIfRegistered(Student studentToCheck, String courseToCheck){
-        if(!studentToCheck.getCoursesRegistered().containsKey(courseToCheck)){
+    //To be deleted
+    private boolean checkIfRegistered(Student studentToCheck, Course courseToCheck){
+        if(courseToCheck == null) return false;
+        if(!studentToCheck.getCoursesRegistered().containsKey(courseToCheck.getCourseCode())){
             System.out.println("Student not enrolled in this course!");
             return false;
         }
@@ -125,35 +128,29 @@ public class StudentInterface extends UserInterface {
     }
 
     private void addCourse() {
-        String courseCode, indexNum;
         Course courseSelected;
         Index indexSelected;
-        boolean validCourse = false, validIndex = false;
+        boolean validCourse, validIndex;
 
         try {
             System.out.println(studHandler.getCourseOverview(1));
             do {
                 System.out.print("Enter course to add (e.g. CZ2002): ");
-                courseCode = getInput(typeOfInput.COURSE_CODE);
-                courseSelected = getCourseInputAndCheck(courseCode);
-
-                if (courseSelected == null) continue;
-                else if (studHandler.willGoOverMaxAU(courseSelected))
-                    System.out.println("Cannot register for course, will exceed maximum AUs!\n");
-                else if (studHandler.studentInCourse(courseSelected))
-                    System.out.println("You are already enrolled in this course!\n");
-                else validCourse = true;
+                courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
+                validCourse = studHandler.checkValidCourse(courseSelected);
+                if (studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected)) {
+                    System.out.println("You are already enrolled in this course!");
+                    validCourse = false;
+                }
             } while (!validCourse);
 
             showIndexesInCourse(courseSelected);
             do {
                 System.out.println("Enter the index you would like to enroll in.\n" +
                         "You will be added to wait-list if you choose an index with no vacancies:");
-                indexNum = getInput(typeOfInput.INDEX_NUM);
-                indexSelected = getIndexInputAndCheck(courseSelected, indexNum);
-                if (!checkForClash(indexSelected, studHandler.currentStudent, null))
-                    validIndex = true;
-            } while (validIndex);
+                indexSelected = studHandler.retrieveIndex(courseSelected, getInput(typeOfInput.INDEX_NUM));
+                validIndex = studHandler.checkValidIndex(indexSelected, studHandler.currentStudent, null);
+            } while (!validIndex);
 
             System.out.println("\nYou have selected to add : \n" +
                                courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
@@ -169,26 +166,23 @@ public class StudentInterface extends UserInterface {
     }
 
     private void dropCourse() {
-        String courseCode;
         Course courseSelected;
-        boolean validCourse = false;
+        boolean validCourse;
 
         try {
+            checkRegisteredCourses();
             do{
-                checkRegisteredCourses();
                 System.out.print("Enter course to drop (e.g. CZ2002):");
-                courseCode = getInput(typeOfInput.COURSE_CODE);
-                courseSelected = getCourseInputAndCheck(courseCode);
-
-                if (courseSelected == null) continue;
-                else if(checkIfRegistered(studHandler.currentStudent, courseCode))
-                    validCourse = true;
-
+                courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
+                validCourse = studHandler.checkValidCourse(courseSelected);
+                if (!checkIfRegistered(studHandler.currentStudent, courseSelected))
+                    validCourse = false;
             } while (!validCourse);
 
-            String index = studHandler.currentStudent.retrieveIndex(courseCode);
+            String index = studHandler.currentStudent.retrieveIndex(courseSelected.getCourseCode());
             System.out.println("Enter \"Y\" to confirm that you would like to drop this index: \n" +
-                               courseCode + " " + courseSelected.getCourseName() + ", Index Number: " + index);
+                               courseSelected.getCourseCode() + " " + courseSelected.getCourseName() +
+                               ", Index Number: " + index);
 
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
@@ -211,13 +205,14 @@ public class StudentInterface extends UserInterface {
         try {
             String courseCode;
             Course courseSelected;
+            boolean validCourse;
 
             do {
                 System.out.println(studHandler.getCourseOverview(1));
                 System.out.print("Enter course code to check (e.g. CZ2002): ");
-                courseCode = getInput(typeOfInput.COURSE_CODE);
-                courseSelected = getCourseInputAndCheck(courseCode);
-            } while (courseSelected == null);
+                courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
+                validCourse = studHandler.checkValidCourse(courseSelected);
+            } while (!validCourse);
 
             showIndexesInCourse(courseSelected);
             waitForEnterInput();
@@ -240,7 +235,7 @@ public class StudentInterface extends UserInterface {
                 courseSelected = getCourseInputAndCheck(courseCode);
                 if (courseSelected == null)
                     continue;
-                if (!checkIfRegistered(studHandler.currentStudent, courseCode))
+                if (!checkIfRegistered(studHandler.currentStudent, courseSelected))
                     courseSelected = null;
             }
 
@@ -280,7 +275,7 @@ public class StudentInterface extends UserInterface {
                 courseSelected = getCourseInputAndCheck(courseCode);
                 if (courseSelected == null)
                     continue;
-                if (!checkIfRegistered(studHandler.currentStudent, courseCode))
+                if (!checkIfRegistered(studHandler.currentStudent, courseSelected))
                     courseSelected = null;
             }
 
@@ -297,7 +292,7 @@ public class StudentInterface extends UserInterface {
                     } catch (AccessDeniedException e){
                         System.out.println(e.getMessage());
                     }
-                    validUser = checkIfRegistered(studHandler.otherStudent, courseCode);
+                    validUser = checkIfRegistered(studHandler.otherStudent, courseSelected);
             } while (!validUser);
 
             Index indexToSwapIn = getIndexInputAndCheck(courseSelected, studHandler.otherStudent.retrieveIndex(courseCode));
