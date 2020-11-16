@@ -54,6 +54,7 @@ public class AdminInterface extends UserInterface {
                 case (9)-> deleteStudent();
                 case (10)-> deleteCourse();
                 case (11)-> exitFlag = logout();
+                default -> System.out.println("ERROR: Invalid menu option selected.");
             }
         } while (!exitFlag);
     }
@@ -408,6 +409,8 @@ public class AdminInterface extends UserInterface {
                         } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editCourse(courseCode, newStart+"&"+newEnd, choice));
                     }
+                    case (8) -> System.out.println("Exiting update course...");
+                    default -> System.out.println("ERROR: Invalid menu option selected");
                 }
             } while (choice != 8);
             System.out.println("Successfully changed");
@@ -468,6 +471,8 @@ public class AdminInterface extends UserInterface {
                         createLesson(courseCode, indexNum);
                     }
                     case (5) -> editLesson(courseCode, indexNum);
+                    case (6) -> System.out.println("Exiting update index...");
+                    default -> System.out.println("ERROR: Invalid menu option selected");
                 }
             } while (choice != 6);
             System.out.println("Successfully changed");
@@ -502,8 +507,9 @@ public class AdminInterface extends UserInterface {
                         "2: day\n" +
                         "3: lesson time\n" +
                         "4: venue\n" +
-                        "5: remove this lesson\n" +
-                        "6: exit");
+                        "5: teaching weeks\n" +
+                        "6: remove this lesson\n" +
+                        "7: exit");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit lesson type
@@ -554,6 +560,8 @@ public class AdminInterface extends UserInterface {
                         adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice);
                     }
                     case (6) -> adHandler.editLesson(courseCode, indexNum, lessonIndex, null, choice);
+                    case (7) -> System.out.println("Exiting update lesson...");
+                    default -> System.out.println("ERROR: Invalid menu option selected");
                 }
             } while (choice != 7);
             System.out.println("Successfully changed");
@@ -662,6 +670,8 @@ public class AdminInterface extends UserInterface {
                         } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editStudent(matric, newStart+"&"+newEnd, choice));
                     }
+                    case (11) -> System.out.println("Exiting update student...");
+                    default -> System.out.println("ERROR: Invalid menu option selected");
                 }
             } while (choice != 11);
             waitForEnterInput();
@@ -684,6 +694,7 @@ public class AdminInterface extends UserInterface {
                 case (2) -> System.out.println(adHandler.getCourseOverview(1));
                 case (3) -> System.out.println(adHandler.getCourseOverview(2));
                 case (4) -> System.out.println(adHandler.getCourseOverview(3));
+                default -> System.out.println("ERROR: Invalid menu option selected");
             }
             waitForEnterInput();
         } catch (EscapeException e) {

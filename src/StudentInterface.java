@@ -50,6 +50,7 @@ public class StudentInterface extends UserInterface {
                 case (5) -> changeIndex();
                 case (6) -> swapIndex();
                 case (7) -> exitFlag = logout();
+                default -> System.out.println("ERROR: Invalid menu option selected.");
             }
         } while (!exitFlag);
     }
