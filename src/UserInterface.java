@@ -40,7 +40,7 @@ public abstract class UserInterface {
             String input;
             input = sc.nextLine();
             if (input.equals("~")) {
-                throw new EscapeException("Exiting to main menu");
+                throw new EscapeException("Exiting to previous menu...");
             } else {
                 if (validateInput(input, inputType))
                     return input;
