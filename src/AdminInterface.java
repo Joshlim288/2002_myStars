@@ -12,7 +12,7 @@ public class AdminInterface extends UserInterface {
     public AdminInterface (User currentUser, Scanner sc) {
         super(sc);
         adHandler = new AdminHandler((Admin)currentUser);
-        System.out.println("\nWelcome, Admin " + currentUser.getName() + "!");
+        System.out.println("\nWelcome, " + currentUser.getName() + "!");
     }
 
     /**
@@ -20,6 +20,7 @@ public class AdminInterface extends UserInterface {
      */
     public void start() {
         int choice;
+        boolean exitFlag = false;
         do{
             System.out.println("What would you like to do today?");
             System.out.println("--------------------------------------------------------");
@@ -54,34 +55,34 @@ public class AdminInterface extends UserInterface {
                 case (8)-> printOverview();
                 case (9)-> deleteStudent();
                 case (10)-> deleteCourse();
-                case (11)-> logout();
+                case (11)-> exitFlag = logout();
             }
-        } while (choice != 11);
+        } while (!exitFlag);
     }
 
-    @Deprecated
-    private void editAccessPeriod() {
-        try {
-            LocalDateTime[] accessTime = null;
-            String newStart;
-            String newEnd;
-            System.out.print("Enter student matriculation number: ");
-            String matricNum = getInput(typeOfInput.MATRIC_NUM);
-
-            do {
-                System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(dateTimeFormatter), accessTime[1].format(dateTimeFormatter));
-                System.out.print("Enter new access start date: ");
-                newStart = getInput(typeOfInput.DATETIME);
-
-                System.out.print("Enter new access end date: ");
-                newEnd = getInput(typeOfInput.DATETIME);
-
-            } while (!userValidator.validateDateTimePeriod(newStart, newEnd) || !adHandler.editAccessPeriod(matricNum, newStart, newEnd));
-            System.out.println("Access time successfully changed");
-        } catch (EscapeException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    @Deprecated
+//    private void editAccessPeriod() {
+//        try {
+//            LocalDateTime[] accessTime = null;
+//            String newStart;
+//            String newEnd;
+//            System.out.print("Enter student matriculation number: ");
+//            String matricNum = getInput(typeOfInput.MATRIC_NUM);
+//
+//            do {
+//                System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(dateTimeFormatter), accessTime[1].format(dateTimeFormatter));
+//                System.out.print("Enter new access start date: ");
+//                newStart = getInput(typeOfInput.DATETIME);
+//
+//                System.out.print("Enter new access end date: ");
+//                newEnd = getInput(typeOfInput.DATETIME);
+//
+//            } while (!userValidator.validateDateTimePeriod(newStart, newEnd) || !adHandler.editAccessPeriod(matricNum, newStart, newEnd));
+//            System.out.println("Access time successfully changed");
+//        } catch (EscapeException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     private void createCourse() {
         try {
@@ -195,7 +196,7 @@ public class AdminInterface extends UserInterface {
 
             while (true) {
                 System.out.print("Enter teaching weeks, separated with a comma (1-13): ");
-                inputWeeks = sc.nextLine().split(",");
+                inputWeeks = getInput(typeOfInput.STANDARD).split(",");
                 teachingWeeks = new ArrayList<>();
                 for (String week : inputWeeks) {
                     if (courseValidator.validateTeachingWeek(week)) {
@@ -274,7 +275,6 @@ public class AdminInterface extends UserInterface {
 
     private void checkIndex() {
         try {
-            Index index;
             String indexNum;
             do {
                 System.out.print("\nEnter index number: ");
@@ -718,10 +718,15 @@ public class AdminInterface extends UserInterface {
         }
     }
 
-    private void logout() {
-        System.out.println("\nSaving data...");
-        adHandler.close();
-        System.out.println("Thank you for using MyStars!");
-        System.out.println("Goodbye!");
+    private boolean logout() {
+        if (exit()) {
+            System.out.println("\nSaving data...");
+            adHandler.close();
+            System.out.println("Thank you for using MyStars!");
+            System.out.println("Goodbye!");
+            return true;
+        } else {
+            return false;
+        }
     }
 }
