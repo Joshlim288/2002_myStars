@@ -161,16 +161,18 @@ public class StudentHandler {
      * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping indexes.
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
      * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
-    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop) {
-        if (indexToAdd.isAtMaxCapacity()) {
-            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
-            indexToAdd.addToWaitlist(currentStudent.getMatricNum());
-            currentStudent.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
-            return 1;
-        } else{
+    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
+
+        if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
+            return 1;
+        }
+        else{
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
+            indexToAdd.addToWaitlist(student.getMatricNum());
+            student.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
             return 2;
         }
     }

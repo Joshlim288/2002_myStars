@@ -90,8 +90,8 @@ public class StudentInterface extends UserInterface {
     //Default when an integer representing clash is returned
     private void printStatusOfAddCourse(int status, Index indexSelected){
         switch (status) {
-            case (1) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + " successfully!\n");
-            case (2) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + " successfully!\n");
+            case (1) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + " successfully!\n");
+            case (2) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + " successfully!\n");
         }
     }
 
@@ -137,7 +137,7 @@ public class StudentInterface extends UserInterface {
                                courseSelected.getCourseCode() + " " + courseSelected.getCourseName() + "\n" +
                                "Index Number: " + indexSelected.getIndexNum());
 
-            int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null);
+            int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null, true);
             printStatusOfAddCourse(status, indexSelected);
 
             waitForEnterInput();
@@ -241,7 +241,7 @@ public class StudentInterface extends UserInterface {
 
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
-                int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop);
+                int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop, true);
                 printStatusOfAddCourse(status, indexSelected);
                 System.out.println("\n");
                 studHandler.refreshWaitList(courseSelected, indexToDrop);
@@ -304,10 +304,8 @@ public class StudentInterface extends UserInterface {
 
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
-                //TODO: Fix bug, if index at max vacancy, student will be added to waitlist because
-                //TODO: vacancy checked before it is updated.
-                int status1 = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut);
-                int status2 = studHandler.addCourse(otherStudent, courseSelected, indexToSwapOut, indexToSwapIn);
+                int status1 = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut, false);
+                int status2 = studHandler.addCourse(otherStudent, courseSelected, indexToSwapOut, indexToSwapIn, false);
                 System.out.println("\nFor " + studHandler.currentStudent.getName() + " :");
                 printStatusOfAddCourse(status1, indexToSwapIn);
                 System.out.println("For " + otherStudent.getName() + " :");
