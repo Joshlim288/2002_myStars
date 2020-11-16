@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class StudentHandler {
 
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
-        if(hasClash(indexSelected, studentToCheck, indexToExclude))
+        if(hasTimetableClash(indexSelected, studentToCheck, indexToExclude))
             return false;
         return true;
     }
@@ -76,15 +77,36 @@ public class StudentHandler {
         return stringBuilder.toString();
     }
 
+    public boolean hasExamClash(Course courseSelected){
+        LocalDateTime[] newExamTime = cdm.getCourse(courseSelected.getCourseCode()).getExamDateTime();
+        LocalDateTime[] oldExamTime;
+
+        HashMap<String, String> timetable = currentStudent.getCoursesRegistered();
+        timetable.putAll(currentStudent.getWaitList());
+        ArrayList<Course> coursesToCheck = new ArrayList<Course>();
+        for(Map.Entry<String, String> entry : timetable.entrySet())
+            coursesToCheck.add(cdm.getCourse(entry.getKey()));
+
+        for (Course courseToCheck : coursesToCheck) {
+            oldExamTime = courseToCheck.getExamDateTime();
+            if (newExamTime[0].isBefore(oldExamTime[1]) && newExamTime[1].isAfter(oldExamTime[0])) {
+                System.out.println("\nUnable to add " + courseSelected.getCourseCode() + "!");
+                System.out.println(courseSelected.getCourseCode() + "'s exam clashes with" + courseToCheck.getCourseCode() + "'s exam!\n");
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
-     * Version 3 of hasClash() -.-
+     * Version 3 of hasTimetableClash() -.-
      * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
      * @param indexToExclude Used for swapping of indexes, to exclude the index it is swapping from.
      * (e.g. Swapping from index 33333 to index 44444, index 33333 should not be included in the check)
      * @return The index in the timetable that has clashed with the new index, otherwise null if no clashes. */
-    public boolean hasClash(Index indexToAdd, Student studentToCheck, Index indexToExclude) {
+    public boolean hasTimetableClash(Index indexToAdd, Student studentToCheck, Index indexToExclude) {
 
         /* Combine courses registered and waitlist for the student into a HashMap.
          * We then retrieve all the actual indexes the student is enrolled in and put
