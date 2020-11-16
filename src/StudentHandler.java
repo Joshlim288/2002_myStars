@@ -150,6 +150,10 @@ public class StudentHandler {
                       "Successful Swap of Indexes for " + courseSelected.getCourseName());
     }
 
+    public String getCourseOverview(int choice){
+        return cdm.generateCourseOverview(choice);
+    }
+
     public void close() {
         sdm.save();
         cdm.save();

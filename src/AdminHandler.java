@@ -423,51 +423,12 @@ public class AdminHandler{
         return true;
     }
 
-    public String getOverview(int choice){
-        StringBuilder stringBuilder = new StringBuilder();
-        switch(choice) {
-            case (1) -> {
-                ArrayList<Student> studentList = sdm.getStudentList();
-                for (Student student: studentList)
-                    stringBuilder.append("\n" + student);
-            }
-            case (2) -> {
-                stringBuilder.append("-----------------------------------");
-                ArrayList<Course> courseList = cdm.getCourseList();
-                for (Course course: courseList)
-                    stringBuilder.append("\n" + course);
-                stringBuilder.append("-----------------------------------");
-            }
-            case (3) -> {
-                ArrayList<Course> courseList = cdm.getCourseList();
-                stringBuilder.append("-----------------------------------");
-                for (Course course: courseList) {
-                    stringBuilder.append("\n" + course);
-                    ArrayList<Index> indexList = course.getIndexes();
-                    for (Index index : indexList)
-                        stringBuilder.append("\n" + index);
-                    stringBuilder.append("-----------------------------------");
-                }
-            }
-            case (4) -> {
-                ArrayList<Course> courseList = cdm.getCourseList();
-                stringBuilder.append("-----------------------------------");
-                stringBuilder.append("-----------------------------------");
-                for (Course course: courseList) {
-                    stringBuilder.append("\n" + course);
-                    ArrayList<Index> indexList = course.getIndexes();
-                    for (Index index: indexList) {
-                        stringBuilder.append("\n" + index);
-                        ArrayList<Lesson> lessonList = index.getLessons();
-                        for (Lesson lesson: lessonList)
-                            stringBuilder.append("\n" + lesson);
-                        stringBuilder.append("-----------------------------------");
-                    }
-                    stringBuilder.append("-----------------------------------");
-                }
-            }
-        }
-        return stringBuilder.toString();
+    public String getStudentOverview(){
+        return sdm.generateStudentOverview();
+    }
+
+    public String getCourseOverview(int choice){
+        return cdm.generateCourseOverview(choice);
     }
 
     public void removeStudent(String matricNum){

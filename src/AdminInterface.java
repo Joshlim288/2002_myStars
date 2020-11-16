@@ -137,7 +137,7 @@ public class AdminInterface extends UserInterface {
             }
 //            adHandler.finalizeCourse();
             System.out.println("Course successfully added");
-            adHandler.getOverview(2);
+            System.out.println(adHandler.getCourseOverview(1));
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -558,7 +558,7 @@ public class AdminInterface extends UserInterface {
             String updatedValue;
             int choice;
 
-            System.out.println(adHandler.getOverview(1));
+            System.out.println(adHandler.getStudentOverview());
 
             while(true) {
                 System.out.print("Enter Matriculation Number of Student: ");
@@ -669,7 +669,12 @@ public class AdminInterface extends UserInterface {
                                "3) Print all Courses + Indexes\n" +
                                "4) Print all Courses + Indexes + Lessons");
             choice = Integer.parseInt(getInput(typeOfInput.INT));
-            System.out.println(adHandler.getOverview(choice));
+            switch (choice) {
+                case (1) -> System.out.println(adHandler.getStudentOverview());
+                case (2) -> System.out.println(adHandler.getCourseOverview(1));
+                case (3) -> System.out.println(adHandler.getCourseOverview(2));
+                case (4) -> System.out.println(adHandler.getCourseOverview(3));
+            }
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -679,7 +684,7 @@ public class AdminInterface extends UserInterface {
     private void deleteStudent(){
         try{
             String matricNum;
-            adHandler.getOverview(1);
+            System.out.println(adHandler.getStudentOverview());
             while (true) {
                 System.out.print("Enter Matriculation number of student to delete: ");
                 matricNum = getInput(typeOfInput.MATRIC_NUM);
@@ -699,7 +704,7 @@ public class AdminInterface extends UserInterface {
     private void deleteCourse(){
         try{
             String courseCode;
-            adHandler.getOverview(2);
+            System.out.println(adHandler.getCourseOverview(1));
             while (true) {
                 System.out.print("Enter course code of course to delete: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);

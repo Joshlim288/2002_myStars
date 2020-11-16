@@ -80,4 +80,46 @@ public class CourseDataManager implements DataManager{
     public ArrayList<Course> getCourseList(){
         return courseList;
     }
+
+    public String generateCourseOverview(int choice){
+        StringBuilder stringBuilder = new StringBuilder();
+        switch (choice){
+            case(1) -> {
+                stringBuilder.append("-----------------------------------");
+                ArrayList<Course> courseList = getCourseList();
+                for (Course course: courseList)
+                    stringBuilder.append("\n" + course);
+                stringBuilder.append("-----------------------------------");
+            }
+            case(2) -> {
+                ArrayList<Course> courseList = getCourseList();
+                stringBuilder.append("-----------------------------------");
+                for (Course course: courseList) {
+                    stringBuilder.append("\n" + course);
+                    ArrayList<Index> indexList = course.getIndexes();
+                    for (Index index : indexList)
+                        stringBuilder.append("\n" + index);
+                    stringBuilder.append("-----------------------------------");
+                }
+            }
+            case(3) -> {
+                ArrayList<Course> courseList = getCourseList();
+                stringBuilder.append("-----------------------------------");
+                stringBuilder.append("-----------------------------------");
+                for (Course course: courseList) {
+                    stringBuilder.append("\n" + course);
+                    ArrayList<Index> indexList = course.getIndexes();
+                    for (Index index: indexList) {
+                        stringBuilder.append("\n" + index);
+                        ArrayList<Lesson> lessonList = index.getLessons();
+                        for (Lesson lesson: lessonList)
+                            stringBuilder.append("\n" + lesson);
+                        stringBuilder.append("-----------------------------------");
+                    }
+                    stringBuilder.append("-----------------------------------");
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
 }
