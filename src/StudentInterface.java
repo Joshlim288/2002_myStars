@@ -96,7 +96,7 @@ public class StudentInterface extends UserInterface {
     }
 
     private void showRegisteredCourses(){
-        System.out.println("\nHere are your currently registered courses:");
+        System.out.println("\nThese are your currently registered courses and indexes:");
         System.out.println(studHandler.getRegisteredCourses());
     }
 
@@ -172,10 +172,11 @@ public class StudentInterface extends UserInterface {
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
                 studHandler.dropCourse(studHandler.currentStudent, courseSelected, index);
-                System.out.println("Successfully dropped " + index + "!");
+                System.out.println("Dropping index " + index + ", please wait a moment...");
                 studHandler.refreshWaitList(courseSelected, indexToDrop);
+                System.out.println("Successfully dropped index" + index + "!");
             }
-            else System.out.println("Index not dropped.");
+            else System.out.println("Index not dropped. Returning to main menu.");
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());

@@ -67,18 +67,24 @@ public class StudentHandler {
         return retrieveIndex(courseSelected, student.retrieveIndex(courseSelected.getCourseCode()));
     }
 
+    //TODO: Include waitlisted courses
     public String getRegisteredCourses() {
-        //Get list of courses student is registered in.
+        Course course;
+        Index index;
         HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
 
-
-
-        //Use StringBuilder to create required output and return to StudentInterface
         StringBuilder stringBuilder = new StringBuilder();
         if (coursesRegistered.isEmpty())
-                stringBuilder.append("No registered courses currently.\n");
+                stringBuilder.append("\nNo registered courses currently.\n");
         else
-            coursesRegistered.forEach((course, index) -> stringBuilder.append(course + " " + ": Index " + index + "\n"));
+            stringBuilder.append("\nCourse | Index | AUs | Course Type\n");
+            stringBuilder.append("-----------------------------------\n");
+            for (Map.Entry<String, String> pair : coursesRegistered.entrySet()) {
+                course = cdm.getCourse(pair.getKey());
+                index = cdm.getCourse(pair.getKey()).getIndex(pair.getValue());
+                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
+                        + "  | " + course.getCourseType() + "\n");
+            }
         return stringBuilder.toString();
     }
 
@@ -190,7 +196,6 @@ public class StudentHandler {
     public void refreshWaitList(Course course, Index index) {
         if (!index.getWaitlist().isEmpty()) {
             Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
-            System.out.println("Student removed is " + studentRemoved.getName());
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
             studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
             index.addToEnrolledStudents(studentRemoved.getMatricNum());
