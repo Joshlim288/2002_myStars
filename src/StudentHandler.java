@@ -18,6 +18,7 @@ public class StudentHandler {
         this.otherStudent = null;
     }
 
+    //TODO: Something is broken here
     /**
      * Version 2 of hasClash() yay :D
      * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
@@ -26,7 +27,7 @@ public class StudentHandler {
      * @param indexToExclude Used for swapping of indexes, to exclude the index it is swapping from.
      * (e.g. Swapping from index 33333 to index 44444, index 33333 should not be included in the check)
      * @return The index in the timetable that has clashed with the new index, otherwise null if no clashes. */
-    public String hasClash(Index indexToAdd, Student studentToCheck, Index indexToExclude) {
+    public boolean hasClash(Index indexToAdd, Student studentToCheck, Index indexToExclude) {
 
         HashMap<String, String> timetable = studentToCheck.getCoursesRegistered();
         timetable.putAll(studentToCheck.getWaitList());
@@ -45,11 +46,14 @@ public class StudentHandler {
                             if (newLesson.getDay().equals(oldLesson.getDay()))
                                 /* Start of new lesson < End of old lesson && End of new lesson > Start of old lesson */
                                 if(newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
-                                        newLesson.getEndTime().isAfter(oldLesson.getStartTime()))
-                                    return index.getIndexNum();
+                                        newLesson.getEndTime().isAfter(oldLesson.getStartTime())) {
+                                    System.out.println("There is a clash with Index " + index.getIndexNum() + "!");
+                                    System.out.println("Please choose another index!");
+                                    return true;
+                                }
                 }
         }
-        return null;
+        return false;
     }
 
     //TODO: Consider whether to split the dropping and adding of course for swapping indexes
@@ -97,13 +101,6 @@ public class StudentHandler {
                     "You have been removed from a wait-list!",
                     "Successful Registration of Course");
         }
-    }
-
-    public boolean willGoOverMaxAU(Course courseSelected) {
-        int totalAUs = currentStudent.getCurrentAUs();
-        for (Map.Entry<String, String> entry : currentStudent.getWaitList().entrySet())
-            totalAUs += cdm.getCourse(entry.getKey()).getAcademicUnits();
-        return (totalAUs + courseSelected.getAcademicUnits()) > currentStudent.getMaxAUs();
     }
 
     public String getRegisteredCourses() {
@@ -154,12 +151,8 @@ public class StudentHandler {
 
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
-        String indexClashed = hasClash(indexSelected, studentToCheck, indexToExclude);
-        if (indexClashed != null) {
-            System.out.println("There is a clash with Index " + indexClashed + "!");
-            System.out.println("Please choose another index!");
+        if(hasClash(indexSelected, studentToCheck, indexToExclude))
             return false;
-        }
         return true;
     }
 
@@ -179,14 +172,17 @@ public class StudentHandler {
         return false;
     }
 
+    public boolean willGoOverMaxAU(Course courseSelected) {
+        int totalAUs = currentStudent.getCurrentAUs();
+        for (Map.Entry<String, String> entry : currentStudent.getWaitList().entrySet())
+            totalAUs += cdm.getCourse(entry.getKey()).getAcademicUnits();
+        return (totalAUs + courseSelected.getAcademicUnits()) > currentStudent.getMaxAUs();
+    }
+
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
         if (student.retrieveIndex(courseSelected.getCourseCode()) != null)
-            return false;
-        return true;
-    }
-
-    public boolean studentInCourse(Student student, Course courseSelected){
-        return student.retrieveIndex(courseSelected.getCourseCode()) != null;
+            return true;
+        return false;
     }
 }
