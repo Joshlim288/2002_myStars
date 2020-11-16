@@ -194,7 +194,7 @@ public class AdminInterface extends UserInterface {
             venue = getInput(typeOfInput.STANDARD);
 
             while (true) {
-                System.out.print("Enter teaching weeks, separated with a comma (1-13): ");
+                System.out.print("Enter teaching weeks (1-13), separated with a comma: ");
                 inputWeeks = getInput(typeOfInput.STANDARD).split(",");
                 teachingWeeks = new ArrayList<>();
                 for (String week : inputWeeks) {
@@ -377,28 +377,24 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter new course name: ");
                             changedValue = getInput(typeOfInput.NAME);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (3) -> { // edit course type
                         do {
                             System.out.print("Enter new course type (CORE, MPE, GER, UE): ");
                             changedValue = getInput(typeOfInput.COURSE_TYPE);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (4) -> { // edit academic units
                         do {
                             System.out.print("Enter new academic units: ");
                             changedValue = getInput(typeOfInput.INT);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (5) -> { // edit school
                         do {
                             System.out.print("Enter new school name: ");
                             changedValue = getInput(typeOfInput.NAME);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (6) -> editIndex(courseCode); // edit index
                     case (7) -> {
@@ -411,10 +407,10 @@ public class AdminInterface extends UserInterface {
                             newEnd = getInput(typeOfInput.DATETIME);
                         } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editCourse(courseCode, newStart+"&"+newEnd, choice));
-                        System.out.println("Successfully changed");
                     }
                 }
             } while (choice != 8);
+            System.out.println("Successfully changed");
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -444,8 +440,9 @@ public class AdminInterface extends UserInterface {
                 System.out.println("1: indexNum\n" +
                         "2: indexVacancy\n" +
                         "3: group\n" +
-                        "4: lessons\n" +
-                        "5: exit");
+                        "4. add a new lesson\n" +
+                        "5: lessons details\n" +
+                        "6: exit");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit index num
@@ -453,7 +450,6 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter new index number: ");
                             changedValue = getInput(typeOfInput.INDEX_NUM);
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
-                        System.out.println("Successfully changed");
                         indexNum = changedValue; // to allow further edits of same index in the same method call
                     }
                     case (2) -> {
@@ -461,18 +457,20 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter new index vacancies: ");
                             changedValue = getInput(typeOfInput.INT);
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (3) -> {
                         do { // edit group number
                             System.out.print("Enter new group number for index: ");
                             changedValue = getInput(typeOfInput.GROUP_NAME);
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
-                    case (4) -> editLesson(courseCode, indexNum);
+                    case (4) -> {
+                        createLesson(courseCode, indexNum);
+                    }
+                    case (5) -> editLesson(courseCode, indexNum);
                 }
-            } while (choice != 5);
+            } while (choice != 6);
+            System.out.println("Successfully changed");
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -504,7 +502,8 @@ public class AdminInterface extends UserInterface {
                         "2: day\n" +
                         "3: lesson time\n" +
                         "4: venue\n" +
-                        "5: exit");
+                        "5: remove this lesson\n" +
+                        "6: exit");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit lesson type
@@ -512,14 +511,12 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter new lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
                             changedValue = getInput(typeOfInput.LESSON_TYPE);
                         } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (2) -> { // edit day
                         do {
                             System.out.print("Enter new lesson day: ");
                             changedValue = getInput(typeOfInput.DAY);
                         } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (3) -> { // edit time
                         String newStart;
@@ -531,25 +528,40 @@ public class AdminInterface extends UserInterface {
                             newEnd = getInput(typeOfInput.TIME);
                         } while (!courseValidator.validateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editLesson(courseCode, indexNum, lessonIndex, newStart+"&"+newEnd, choice));
-                        System.out.println("Successfully changed");
                     }
                     case (4) -> { // edit venue
                         do {
                             System.out.println("Enter new venue: ");
                             changedValue = getInput(typeOfInput.STANDARD);
                         } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
-                        System.out.println("Successfully changed");
                     }
+                    case (5) -> { // edit teaching weeks
+                        String[] inputWeeks;
+                        boolean validWeeks;
+                        do {
+                            System.out.print("Enter new teaching weeks, separated with a comma (1-13): ");
+                            changedValue = getInput(typeOfInput.STANDARD);
+                            inputWeeks = changedValue.split(",");
+                            validWeeks = true;
+                            for (String week : inputWeeks) {
+                                if (!courseValidator.validateTeachingWeek(week)) {
+                                    System.out.println("Please enter the teaching weeks again.");
+                                    validWeeks = false;
+                                    break;
+                                }
+                            }
+                        } while (!validWeeks);
+                        adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice);
+                    }
+                    case (6) -> adHandler.editLesson(courseCode, indexNum, lessonIndex, null, choice);
                 }
-            } while (choice != 5);
+            } while (choice != 7);
+            System.out.println("Successfully changed");
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    /**
-     * todo bring in update access time
-     */
     private void updateStudent(){
         try {
             String matric;
