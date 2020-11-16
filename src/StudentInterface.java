@@ -13,7 +13,7 @@ public class StudentInterface extends UserInterface {
         super(sc);
         String matricNum = ((Student)currentUser).getMatricNum();
         studHandler = new StudentHandler(matricNum);
-        System.out.println("\nWelcome, Student " + currentUser.getName() + "!");
+        System.out.println("\nWelcome, " + currentUser.getName() + "!");
     }
 
     /**
@@ -23,16 +23,18 @@ public class StudentInterface extends UserInterface {
         int choice;
 
         do {
-            System.out.println("What would you like to do today?");
-            System.out.println("--------------------------------------------------------");
-            System.out.println("1. Add New Course");
-            System.out.println("2. Drop Registered Course");
-            System.out.println("3. Check Currently Registered Courses");
-            System.out.println("4. Check Vacancies of Course");
-            System.out.println("5. Change Index of Registered Course");
-            System.out.println("6. Swap Index of Registered Course with Another Student");
-            System.out.println("7. Log Out of MyStars");
-            System.out.println("(Enter ~ at any time to return back to main menu)");
+            System.out.println("--------------------------------------------------------------");
+            System.out.println("| What would you like to do today?                           |");
+            System.out.println("--------------------------------------------------------------");
+            System.out.println("| 1. Add New Course                                          |");
+            System.out.println("| 2. Drop Registered Course                                  |");
+            System.out.println("| 3. Check Currently Registered Courses                      |");
+            System.out.println("| 4. Check Vacancies of Course                               |");
+            System.out.println("| 5. Change Index of Registered Course                       |");
+            System.out.println("| 6. Swap Index of Registered Course with Another Student    |");
+            System.out.println("| 7. Log Out of MyStars                                      |");
+            System.out.println("| (Enter ~ at any time to return back to main menu)          |");
+            System.out.println("--------------------------------------------------------------");
 
             try {
                 System.out.print("Please enter your choice: ");
@@ -129,8 +131,8 @@ public class StudentInterface extends UserInterface {
         boolean validCourse = false, validIndex = false;
 
         try {
+            System.out.println(studHandler.getCourseOverview(1));
             do {
-                System.out.println(studHandler.getCourseOverview(1));
                 System.out.print("Enter course to add (e.g. CZ2002): ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 courseSelected = getCourseInputAndCheck(courseCode);
@@ -143,8 +145,8 @@ public class StudentInterface extends UserInterface {
                 else validCourse = true;
             } while (!validCourse);
 
+            showIndexesInCourse(courseSelected);
             do {
-                showIndexesInCourse(courseSelected);
                 System.out.println("Enter the index you would like to enroll in.\n" +
                         "You will be added to wait-list if you choose an index with no vacancies:");
                 indexNum = getInput(typeOfInput.INDEX_NUM);

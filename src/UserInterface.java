@@ -103,7 +103,7 @@ public abstract class UserInterface {
     public boolean exit() {
             int waitPeriodMillis = 10*1000;
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Confirm logout? automatically logging out in 10 seconds\n" +
+            System.out.println("Confirm logout? Automatically logging out in 10 seconds.\n" +
                                 "Type \"Y\" or \"N\" then enter: ");
             long startTime = System.currentTimeMillis();
             try {
