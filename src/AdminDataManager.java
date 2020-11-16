@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * DataManager for Admin data
+ * Handles the loading, holding, editing and storing of Admin objects from the data/users/adminData.dat
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
+ */
 public class AdminDataManager implements DataManager{
     private ArrayList<Admin> adminList;
     public AdminDataManager() {
@@ -8,7 +15,8 @@ public class AdminDataManager implements DataManager{
     }
 
     /**
-     * Load adminList from data/adminData.dat
+     * Loads Admin objects from data/users/adminData.dat into adminList
+     * Initializes the file if it has not yet been created
      */
     public void load() {
         try {
@@ -29,7 +37,8 @@ public class AdminDataManager implements DataManager{
     }
 
     /**
-     * Save adminList to data/adminData.dat
+     * Writes back the edited adminList to data/adminData.dat
+     * Must be called when exiting the program or updated data will not be retained between executions of the program
      */
     public void save() {
         try {
@@ -83,6 +92,10 @@ public class AdminDataManager implements DataManager{
         return true;
     }
 
+    /**
+     * Retrieves the entire list of admins
+     * @return current adminList
+     */
     public ArrayList<Admin> getAdminList(){
         return adminList;
     }

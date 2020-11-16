@@ -16,6 +16,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 
 /**
+ * Class used for encryption of passwords, was found online at https://www.mindrot.org/projects/jBCrypt/
+ *
  * BCrypt implements OpenBSD-style Blowfish password hashing using
  * the scheme described in "A Future-Adaptable Password Scheme" by
  * Niels Provos and David Mazieres.

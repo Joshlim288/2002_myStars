@@ -1,16 +1,27 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * DataManager for Student data
+ * Handles the loading, and holding of User objects from the data/users
+ * It aggregates all data within the users folder, and is only meant for examining the data
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
+ */
 public class UserDataManager implements DataManager{
-    private ArrayList<User> userList;
+    private final ArrayList<User> userList;
+
+    /**
+     * Constructor for UserDataManager, instantiates the list of Users
+     */
     public UserDataManager(){
         this.userList = new ArrayList<>();
     }
 
     /**
      * Load userList from data/users
-     * Will check all files within the data/users folders, read in all .dat files
-     * Appending all Users to the userList
+     * Will check all files within the data/users folders, read in all .dat files, appending all Users to the userList
      */
     public void load() {
         FileInputStream fileIn;
@@ -54,6 +65,10 @@ public class UserDataManager implements DataManager{
         return null;
     }
 
+    /**
+     * Retrieves the List of all Users currently in the database
+     * @return ArrayList of all Users
+     */
     public ArrayList<User> getUserList(){
         return userList;
     }

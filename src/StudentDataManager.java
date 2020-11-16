@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * DataManager for Student data
+ * Handles the loading, holding, editing and storing of Admin objects from the data/users/studentData.dat
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
+ */
 public class StudentDataManager implements DataManager{
     private ArrayList<Student> studentList;
     public StudentDataManager() {
@@ -8,7 +15,7 @@ public class StudentDataManager implements DataManager{
     }
 
     /**
-     * Load studentList from data/studentData.dat
+     * Load studentList from data/users/studentData.dat
      */
     public void load() {
         try {
@@ -29,7 +36,7 @@ public class StudentDataManager implements DataManager{
     }
 
     /**
-     * Save studentList to data/studentData.dat
+     * Save studentList to data/users/studentData.dat
      */
     public void save() {
         try {
@@ -83,10 +90,18 @@ public class StudentDataManager implements DataManager{
         return true;
     }
 
+    /**
+     * Retrieves list of all Students currently in the database
+     * @return ArrayList of all Students
+     */
     public ArrayList<Student> getStudentList(){
         return studentList;
     }
 
+    /**
+     * Generates an overview of all Student data
+     * @return String containing overview of the data
+     */
     public String generateStudentOverview(){
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<Student> studentList = getStudentList();

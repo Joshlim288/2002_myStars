@@ -59,6 +59,13 @@ public class MailHandler {
 		}
 	}
 
+	/**
+	 * Retrieves credentials for email account used to send emails from the system
+	 * Credentials can be edited in the mailCredentials.txt file in the data folder
+	 * @return String containing the credentials to be used. Must follow the given format in the txt file
+	 * Username:example@gmail.com
+	 * Password:example_password
+	 */
 	private static String readCredentials() {
 		try {
 			File file = new File("data/mailCredentials.txt");// Input credentials in mailCredentials.txt in data folder
