@@ -74,9 +74,9 @@ public class AdminHandler{
         }
         return false;
     }
-    public ArrayList<Index> getTempIndexes() {
-        return new ArrayList<>(tempCourse.getIndexes());
-    }
+//    public ArrayList<Index> getTempIndexes() {
+//        return new ArrayList<>(tempCourse.getIndexes());
+//    }
 //    public boolean checkLessonExists(String courseCode, String indexNum, String group){
 //        if (checkIndexExists(indexNum)) {
 //            for (Lesson lsn: cdm.getCourse(courseCode).getIndex(indexNum).getLessons()){
@@ -124,7 +124,6 @@ public class AdminHandler{
                 tempCourse.setExamDateTime(newStart, newEnd);
             }
         }
-        //tempCourse = null; // this doesn't destroy the course... right?
         return true;
     }
 
@@ -147,8 +146,6 @@ public class AdminHandler{
                 }
             }
             case(2)-> {
-                // im very tired is this correct
-                // maybe just shove the whole thing to index
                 int newVacancy = Integer.parseInt(input);
                 if (newVacancy < tempIndex.getIndexVacancy()-tempIndex.getCurrentVacancy()) {
                     return false;
@@ -341,14 +338,14 @@ public class AdminHandler{
      * @param  course, indexnum
      * @return int number of vacancies
      */
-    public int checkSlot(String course, String indexnum){
-        Index index = cdm.getCourse(course).getIndex(indexnum);
-        if (index == null) {
-            System.out.println("Index not found");
-            return -1;
-        }
-        return index.getCurrentVacancy();
-    }
+//    public int checkSlot(String course, String indexnum){
+//        Index index = cdm.getCourse(course).getIndex(indexnum);
+//        if (index == null) {
+//            System.out.println("Index not found");
+//            return -1;
+//        }
+//        return index.getCurrentVacancy();
+//    }
 
     /**
      * Prints student list in the index specified by the admin
@@ -400,17 +397,16 @@ public class AdminHandler{
         return null;
     }
 
-    //TODO: Use validator method instead in the interface
-    @Deprecated
-    public boolean editAccessPeriod(String matricNum, String start, String end){
-        // check start time < end time
-        if (end.compareTo(start) > 0) {
-            sdm.getStudent(matricNum).setAccessTime(start, end);
-            return true;
-        }
-        System.out.println("ERROR: End of access period cannot be earlier or same as start of access period.");
-        return false;
-    }
+//    @Deprecated
+//    public boolean editAccessPeriod(String matricNum, String start, String end){
+//        // check start time < end time
+//        if (end.compareTo(start) > 0) {
+//            sdm.getStudent(matricNum).setAccessTime(start, end);
+//            return true;
+//        }
+//        System.out.println("ERROR: End of access period cannot be earlier or same as start of access period.");
+//        return false;
+//    }
 
     public boolean addStudent(String userid, String password, String studentName, String studentMatric, String email,
                               String gender, String nationality, String major, int maxAUs, String startAccessPeriod,
