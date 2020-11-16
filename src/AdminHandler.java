@@ -169,7 +169,14 @@ public class AdminHandler{
             case(3)-> tempCourse.setCourseType(input); // edit course type
             case(4)-> tempCourse.setAcademicUnits(Integer.parseInt(input)); // edit Academic Units
             case(5)-> tempCourse.setSchool(input); // edit school
-            case(7)-> { // edit exam datetime
+            case(8)-> {
+                if (tempCourse.getIndex(input) == null){
+                    System.out.println("Index number not found");
+                    return false;
+                }
+                removeIndex(courseCode, input);
+            }
+            case(9)-> { // edit exam datetime
                 String newStart = input.split("&")[0];
                 String newEnd = input.split("&")[1];
                 tempCourse.setExamDateTime(newStart, newEnd);
@@ -228,6 +235,13 @@ public class AdminHandler{
                     }
                 }
                 tempIndex.setGroup(input);
+            }
+            case(6)->{
+                if (tempIndex.getLessons().size() < Integer.parseInt(input)){
+                    System.out.println("Index out of range");
+                    return false;
+                }
+                removeLesson(courseCode, indexNum, Integer.parseInt(input));
             }
         }
         return true;
@@ -609,6 +623,29 @@ public class AdminHandler{
             }
         }
         cdm.removeCourse(courseCode);
+    }
+
+    /**
+     * Used to remove an Index from a Course
+     * Not allowed while students are enrolled
+     * @param courseCode Course code of Course containing Index to be removed
+     * @param indexNum Index number of Index to be removed
+     */
+    public void removeIndex(String courseCode, String indexNum){
+        ArrayList<Index> toRemove = cdm.getCourse(courseCode).getIndexes();
+        toRemove.removeIf(idx -> idx.getIndexNum().equals(indexNum));
+    }
+
+    /**
+     * Used to remove a Lesson from a Course
+     * Not allowed while students are enrolled
+     * @param courseCode Course code of Course containing relevant Index
+     * @param indexNum Index number of Index containing relevant Lesson
+     * @param index Index of Lesson in Lesson ArrayList to be removed
+     */
+    public void removeLesson(String courseCode, String indexNum, int index) {
+        ArrayList<Lesson> toRemove = cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
+        toRemove.remove(index);
     }
 
     /**
