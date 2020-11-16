@@ -581,7 +581,7 @@ public class AdminHandler{
         Student toAdd;
         Index tempIndex = cdm.getCourse(courseCode).getIndex(indexNum);
         // enroll students from waitlist if slots are now available
-        while (tempIndex.getCurrentVacancy() > 0 && tempIndex.getWaitlist() != null){
+        while (tempIndex.getCurrentVacancy() > 0 && !tempIndex.getWaitlist().isEmpty()){
             matricNum = tempIndex.removeFromWaitlist();
             toAdd = sdm.getStudent(matricNum);
             tempIndex.addToEnrolledStudents(matricNum);

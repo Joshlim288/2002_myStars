@@ -32,7 +32,7 @@ public class AdminInterface extends UserInterface {
         do{
             System.out.println("\n-------------------------------------------------------");
             System.out.println("| What would you like to do today?                    |");
-            System.out.println("|------------------------------------------------------");
+            System.out.println("-------------------------------------------------------");
             System.out.println("| 1. Add a new Student                                |");
             System.out.println("| 2. Add a new Course                                 |");
             System.out.println("| 3. Check vacancy of an Index                        |");
@@ -362,21 +362,15 @@ public class AdminInterface extends UserInterface {
             while (true) {
                 System.out.print("Enter course to edit: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
-                if (!adHandler.checkCourseExists(courseCode)) {
-                    System.out.println("Course does not exist");
-                    continue;
+                if (adHandler.checkCourseExists(courseCode)) {
+                    break;
                 }
-
-                if (adHandler.checkCourseOccupied(courseCode)) {
-                    System.out.println("Course already has students enrolled, cannot be changed");
-                    continue;
-                }
-                break;
+                System.out.println("Course does not exist");
             }
 
             do {
-                System.out.println("Choose attribute to edit:");
-                System.out.println("1: courseCode\n" +
+                System.out.println("\nWhat attribute would you like to edit?");
+                System.out.println("\n1: courseCode\n" +
                         "2: courseName\n" +
                         "3: courseType\n" +
                         "4: academicUnits\n" +
@@ -384,6 +378,7 @@ public class AdminInterface extends UserInterface {
                         "6: indexes\n" +
                         "7: examDate\n" +
                         "8: exit");
+                System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit course code
@@ -472,13 +467,14 @@ public class AdminInterface extends UserInterface {
             };
 
             do {
-                System.out.println("Choose attribute to edit:");
+                System.out.println("\nWhat attribute would you like to edit?");
                 System.out.println("1: indexNum\n" +
                         "2: indexVacancy\n" +
                         "3: group\n" +
                         "4. add a new lesson\n" +
                         "5: lessons details\n" +
                         "6: exit");
+                System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit index num
@@ -539,7 +535,7 @@ public class AdminInterface extends UserInterface {
             };
 
             do {
-                System.out.println("Choose attribute to edit:");
+                System.out.println("\nWhat attribute would you like to edit?");
                 System.out.println("1: lessonType\n" +
                         "2: day\n" +
                         "3: lesson time\n" +
@@ -547,6 +543,7 @@ public class AdminInterface extends UserInterface {
                         "5: teaching weeks\n" +
                         "6: remove this lesson\n" +
                         "7: exit");
+                System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // edit lesson type
