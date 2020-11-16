@@ -102,9 +102,7 @@ public class StudentHandler {
          *  the new index. Comparison only done if the lessons fall on the same day and the index is not
          *  the index to be excluded. */
         for (Index indexToCheck : indexesToCheck) {
-            System.out.println("Index that is to be checked against: " + indexToCheck.getIndexNum());
             if (!indexToCheck.equals(indexToExclude)) {
-                System.out.println(indexToCheck.getIndexNum() + "is not" + indexToExclude.getIndexNum());
                 oldLessons.addAll(indexToCheck.getLessons());
                 for (Lesson oldLesson : oldLessons)
                     for (Lesson newLesson : newLessons)
