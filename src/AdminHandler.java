@@ -189,6 +189,16 @@ public class AdminHandler{
                 tempLesson.setEndTime(endTime);
             }
             case(4)->tempLesson.setVenue(input); // need to check if being used at the time?????
+            case(5)->{
+                String[] inputWeeks = input.split(",");
+                ArrayList<Integer> teachingWeeks = new ArrayList<>();
+                for (String week : inputWeeks)
+                    teachingWeeks.add(Integer.parseInt(week));
+                tempLesson.setTeachingWeeks(teachingWeeks);
+            }
+            case(6)-> {
+                return true; // since lesson was temporarily removed, we return early so we don't add back the lesson
+            }
         }
         allIndexLesson.add(lessonIndex, tempLesson); // add back the lesson we removed, after the changes are accepted
         return true;
