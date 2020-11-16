@@ -141,7 +141,11 @@ public class Lesson implements Serializable {
         stringBuilder.append("Venue: " + venue + " | ");
         stringBuilder.append(day + ", " + startTime + " - " + endTime + "\n");
         stringBuilder.append("Teaching Weeks: ");
-        teachingWeeks.forEach((week) -> stringBuilder.append(week + ", "));
+        for (int i = 0; i < teachingWeeks.size(); i++)
+            if (i < teachingWeeks.size() - 1)
+                stringBuilder.append(teachingWeeks.get(i) + ", ");
+            else
+                stringBuilder.append(teachingWeeks.get(i));
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }

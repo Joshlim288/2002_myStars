@@ -51,7 +51,7 @@ public abstract class UserInterface {
             String input;
             input = sc.nextLine();
             if (input.equals("~")) {
-                throw new EscapeException("Exiting to main menu");
+                throw new EscapeException("Exiting to previous menu...");
             } else {
                 if (validateInput(input, inputType))
                     return input;
@@ -121,7 +121,7 @@ public abstract class UserInterface {
     public boolean exit() {
             int waitPeriodMillis = 10*1000;
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Confirm logout? automatically logging out in 10 seconds\n" +
+            System.out.println("Confirm logout? Automatically logging out in 10 seconds.\n" +
                                 "Type \"Y\" or \"N\" then enter: ");
             long startTime = System.currentTimeMillis();
             try {

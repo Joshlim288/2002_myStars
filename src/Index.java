@@ -190,8 +190,8 @@ public class Index implements Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Index " + indexNum + "  | " + "Group " + group + "\n" +
-                "Vacancies: " + currentVacancy + "/" + indexVacancy + "\n");
+        stringBuilder.append("Index " + indexNum + "  |  " + "Group " + group + "\n" +
+                "Remaining Vacancies: " + currentVacancy + "/" + indexVacancy + "\n");
         stringBuilder.append("Number of students currently in wait list: " + waitlist.size() + "\n");
         return stringBuilder.toString();
     }

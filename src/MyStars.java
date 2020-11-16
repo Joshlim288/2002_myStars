@@ -19,14 +19,14 @@ public class MyStars {
         String menuChoice;
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("  __  __         ____  _                 \n" +
-                            " |  \\/  |_   _  / ___|| |_ __ _ _ __ ___ \n" +
-                            " | |\\/| | | | | \\___ \\| __/ _` | '__/ __|\n" +
-                            " | |  | | |_| |  ___) | || (_| | |  \\__ \\\n" +
-                            " |_|  |_|\\__, | |____/ \\__\\__,_|_|  |___/\n" +
-                            "         |___/                           ");
 
         do{
+            System.out.println("  __  __         ____  _                 \n" +
+                    " |  \\/  |_   _  / ___|| |_ __ _ _ __ ___ \n" +
+                    " | |\\/| | | | | \\___ \\| __/ _` | '__/ __|\n" +
+                    " | |  | | |_| |  ___) | || (_| | |  \\__ \\\n" +
+                    " |_|  |_|\\__, | |____/ \\__\\__,_|_|  |___/\n" +
+                    "         |___/                           ");
             AccessControl.initialize();
             System.out.print("\n------------------------------------------\n" +
                             "|          Welcome to MyStars!           |\n" +
@@ -68,9 +68,9 @@ public class MyStars {
      */
     public static User login(Scanner sc) throws AccessDeniedException{
         String userId, password;
-        System.out.print("Enter your user ID (case sensitive): ");
+        System.out.print("Enter user ID (case sensitive): ");
         userId = sc.nextLine();
-        System.out.print("Enter your password (case sensitive): ");
+        System.out.print("Enter password (case sensitive): ");
         password = new String(System.console().readPassword());
         return AccessControl.validate(userId, password);
     }

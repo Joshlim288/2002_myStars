@@ -1,8 +1,5 @@
-
-import java.io.File;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -274,6 +271,16 @@ public class AdminHandler{
                 tempLesson.setEndTime(endTime);
             }
             case(4)->tempLesson.setVenue(input); // edit lesson venue
+            case(5)->{
+                String[] inputWeeks = input.split(",");
+                ArrayList<Integer> teachingWeeks = new ArrayList<>();
+                for (String week : inputWeeks)
+                    teachingWeeks.add(Integer.parseInt(week));
+                tempLesson.setTeachingWeeks(teachingWeeks);
+            }
+            case(6)-> {
+                return true; // since lesson was temporarily removed, we return early so we don't add back the lesson
+            }
         }
         return true;
     }
