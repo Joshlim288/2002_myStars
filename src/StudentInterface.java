@@ -118,6 +118,8 @@ public class StudentInterface extends UserInterface {
                         System.out.println("You are already enrolled in this course!");
                         validCourse = false;
                     }
+                    if (studHandler.hasExamClash(courseSelected))
+                        validCourse = false;
             } while (!validCourse);
 
             showIndexesInCourse(courseSelected);
@@ -270,8 +272,8 @@ public class StudentInterface extends UserInterface {
                 waitForEnterInput();
             }
 
-            boolean currentStudentClash = studHandler.hasClash(indexToSwapIn, studHandler.currentStudent, indexToSwapOut);
-            boolean otherStudentClash = studHandler.hasClash(indexToSwapOut, otherStudent, indexToSwapIn);
+            boolean currentStudentClash = studHandler.hasTimetableClash(indexToSwapIn, studHandler.currentStudent, indexToSwapOut);
+            boolean otherStudentClash = studHandler.hasTimetableClash(indexToSwapOut, otherStudent, indexToSwapIn);
             if (currentStudentClash || otherStudentClash) {
                 System.out.println("\nERROR! Swap not performed due to clashes in timetable for one or more students.");
                 System.out.println("Returning to main menu!");
