@@ -18,7 +18,7 @@ public class AdminInterface extends UserInterface {
         int choice;
         boolean exitFlag = false;
         do{
-            System.out.println("\n-----------------------------------------------------");
+            System.out.println("\n-------------------------------------------------------");
             System.out.println("| What would you like to do today?                    |");
             System.out.println("|------------------------------------------------------");
             System.out.println("| 1. Add a new Student                                |");
