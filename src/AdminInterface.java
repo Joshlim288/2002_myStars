@@ -18,22 +18,22 @@ public class AdminInterface extends UserInterface {
         int choice;
         boolean exitFlag = false;
         do{
-            System.out.println("\n---------------------------------------------------");
-            System.out.println("| What would you like to do today?                |");
-            System.out.println("|--------------------------------------------------");
-            System.out.println("| 1. Add a new Student                            |");
-            System.out.println("| 2. Add a new Course                             |");
-            System.out.println("| 3. Check vacancy of an Index                    |");
-            System.out.println("| 4. Check students registered in an Index        |");
-            System.out.println("| 5. Check students registered in a Course        |");
-            System.out.println("| 6. Update a Course's Details                    |");
-            System.out.println("| 7. Update a Student's Details                   |");
-            System.out.println("| 8. Print Overview of Database                   |");
-            System.out.println("| 9. Delete a Student from Database               |");
-            System.out.println("| 10. Delete a Course from Database               |");
-            System.out.println("| 11. Log Out of MyStars                          |");
-            System.out.println("| (Enter ~ at any time to exit back to menu)      |");
-            System.out.println("---------------------------------------------------");
+            System.out.println("\n-----------------------------------------------------");
+            System.out.println("| What would you like to do today?                    |");
+            System.out.println("|------------------------------------------------------");
+            System.out.println("| 1. Add a new Student                                |");
+            System.out.println("| 2. Add a new Course                                 |");
+            System.out.println("| 3. Check vacancy of an Index                        |");
+            System.out.println("| 4. Check students registered in an Index            |");
+            System.out.println("| 5. Check students registered in a Course            |");
+            System.out.println("| 6. Update a Course's Details                        |");
+            System.out.println("| 7. Update a Student's Details                       |");
+            System.out.println("| 8. Print Overview of Database                       |");
+            System.out.println("| 9. Delete a Student from Database                   |");
+            System.out.println("| 10. Delete a Course from Database                   |");
+            System.out.println("| 11. Log Out of MyStars                              |");
+            System.out.println("| (Enter ~ at any time to exit back to previous menu) |");
+            System.out.println("-------------------------------------------------------");
 
             try {
                 System.out.print("Please enter your choice: ");
