@@ -21,7 +21,7 @@ public class StudentInterface extends UserInterface {
      */
     public void start() {
         int choice;
-
+        boolean exitFlag = false;
         do {
             System.out.println("What would you like to do today?");
             System.out.println("--------------------------------------------------------");
@@ -48,9 +48,9 @@ public class StudentInterface extends UserInterface {
                 case (4) -> checkIndexVacancies();
                 case (5) -> changeIndex();
                 case (6) -> swapIndex();
-                case (7) -> logout();
+                case (7) -> exitFlag = logout();
             }
-        } while (choice != 7);
+        } while (!exitFlag);
     }
 
     //Used in adding of course, changing index and swapping index
@@ -333,10 +333,15 @@ public class StudentInterface extends UserInterface {
         }
     }
 
-    private void logout(){
-        System.out.println("\nSaving Data...");
-        studHandler.close();
-        System.out.println("Thank you for using MyStars!");
-        System.out.println("Goodbye!");
+    private boolean logout(){
+        if (exit()) {
+            System.out.println("\nSaving Data...");
+            studHandler.close();
+            System.out.println("Thank you for using MyStars!");
+            System.out.println("Goodbye!");
+            return true;
+        } else {
+            return false;
+        }
     }
 }

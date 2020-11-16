@@ -108,7 +108,7 @@ public abstract class UserInterface {
             long startTime = System.currentTimeMillis();
             try {
                 while ((System.currentTimeMillis() - startTime) < waitPeriodMillis && !in.ready());
-                return !in.ready() || !in.readLine().equals("N");
+                return !in.ready() || !in.readLine().toUpperCase().equals("N");
             } catch (IOException e){
                 System.out.println(e.getMessage());
                 return false;
