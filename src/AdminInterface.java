@@ -4,6 +4,8 @@ import java.util.ArrayList;
 /**
  * Control class to display to the Admin what functions are available to them
  * Gets input for performing these functions and passes them to the handler to be executed
+ * TODO allow forceful adding of student to course
+ * TODO test deletion of index and lesson
  * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
  * @version 1.0
  * @since 2020-10-24
@@ -146,22 +148,27 @@ public class AdminInterface extends UserInterface {
         int indexVacancies;
         int numLessons;
         String group;
-        do {
-            System.out.print("Enter index number: ");
-            indexNum = getInput(typeOfInput.INDEX_NUM);
 
-            System.out.print("Enter number of vacancies: ");
-            indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
+            do {
+                System.out.print("Enter index number: ");
+                indexNum = getInput(typeOfInput.INDEX_NUM);
 
-            System.out.print("Enter group name for the index: ");
-            group = getInput(typeOfInput.GROUP_NAME);
-        } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies, group));
+                System.out.print("Enter number of vacancies: ");
+                indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
 
-        System.out.print("Enter number of lessons: ");
-        numLessons = Integer.parseInt(getInput(typeOfInput.INT));
-        for (int i = 0; i < numLessons; i++) {
-            System.out.printf("\nCreating lesson %d:\n", i + 1);
-            createLesson(courseCode, indexNum);
+                System.out.print("Enter group name for the index: ");
+                group = getInput(typeOfInput.GROUP_NAME);
+            } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies, group));
+        try {
+            System.out.print("Enter number of lessons: ");
+            numLessons = Integer.parseInt(getInput(typeOfInput.INT));
+            for (int i = 0; i < numLessons; i++) {
+                System.out.printf("\nCreating lesson %d:\n", i + 1);
+                createLesson(courseCode, indexNum);
+            }
+        } catch (EscapeException e) {
+            adHandler.removeIndex(courseCode, indexNum);
+            throw e;
         }
     }
 
@@ -367,14 +374,16 @@ public class AdminInterface extends UserInterface {
 
             do {
                 System.out.println("\nWhat attribute would you like to edit?");
-                System.out.println("1: courseCode\n" +
-                        "2: courseName\n" +
-                        "3: courseType\n" +
-                        "4: academicUnits\n" +
-                        "5: school\n" +
-                        "6: indexes\n" +
-                        "7: examDate\n" +
-                        "8: exit");
+                System.out.println(" 1: courseCode\n" +
+                        " 2: courseName\n" +
+                        " 3: courseType\n" +
+                        " 4: academicUnits\n" +
+                        " 5: school\n" +
+                        " 6: edit existing indexes\n" +
+                        " 7: add new index\n" +
+                        " 8: delete an index\n" +
+                        " 9: examDate\n" +
+                        "10: exit");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -415,7 +424,21 @@ public class AdminInterface extends UserInterface {
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
                     }
                     case (6) -> editIndex(courseCode); // edit index
-                    case (7) -> {
+                    case (7) -> createIndex(courseCode); // create index
+                    case (8) -> {
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Indexes cannot be deleted");
+                            continue;
+                        }
+                        for (Index idx: adHandler.getIndexes(courseCode)) {
+                            System.out.println(idx);
+                        }
+                        do {
+                            System.out.print("Enter index number to delete: ");
+                            changedValue = getInput(typeOfInput.INDEX_NUM);
+                        } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    }
+                    case (9) -> { // edit finals
                         if(adHandler.checkCourseOccupied(courseCode)){
                             System.out.println("Course already has students enrolled, Final exams cannot be changed");
                             continue;
@@ -430,11 +453,11 @@ public class AdminInterface extends UserInterface {
                         } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editCourse(courseCode, newStart+"&"+newEnd, choice));
                     }
-                    case (8) -> System.out.println("Exiting update course...");
+                    case (10) -> System.out.println("Exiting update course..."); // exit
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-            } while (choice != 8);
-            System.out.println("Successfully changed");
+                if (choice >= 0 && choice < 10) System.out.println("Successfully changed");
+            } while (choice != 10);
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -469,8 +492,9 @@ public class AdminInterface extends UserInterface {
                         "2: indexVacancy\n" +
                         "3: group\n" +
                         "4. add a new lesson\n" +
-                        "5: lessons details\n" +
-                        "6: exit");
+                        "5: edit existing lessons\n" +
+                        "6: remove a lesson\n" +
+                        "7: exit");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -495,11 +519,27 @@ public class AdminInterface extends UserInterface {
                     }
                     case (4) -> createLesson(courseCode, indexNum);
                     case (5) -> editLesson(courseCode, indexNum);
-                    case (6) -> System.out.println("Exiting update index...");
+                    case (6) -> {
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Lessons cannot be deleted");
+                            continue;
+                        }
+                        int i = 1;
+                        for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)) {
+                            System.out.println("\n"+i+":");
+                            System.out.println(lsn);
+                        }
+                        do {
+                            System.out.print("Enter number of lesson to delete: ");
+                            changedValue = getInput(typeOfInput.INT);
+                        } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    }
+                    case (7) -> System.out.println("Exiting update index...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-            } while (choice != 6);
-            System.out.println("Successfully changed");
+                if (choice >= 0 && choice < 7) System.out.println("Successfully changed");
+            } while (choice != 7);
+
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -592,8 +632,8 @@ public class AdminInterface extends UserInterface {
                     case (7) -> System.out.println("Exiting update lesson...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
+                if (choice >= 0 && choice < 7) System.out.println("Successfully changed");
             } while (choice != 7);
-            System.out.println("Successfully changed");
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -705,6 +745,7 @@ public class AdminInterface extends UserInterface {
                     case (11) -> System.out.println("Exiting update student...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
+                if (choice >= 0 && choice < 11) System.out.println("Successfully changed");
             } while (choice != 11);
             waitForEnterInput();
         } catch (EscapeException e) {
