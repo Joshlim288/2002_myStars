@@ -71,15 +71,23 @@ public class StudentHandler {
         //Get list of courses student is registered in.
         HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
 
+
+
         //Use StringBuilder to create required output and return to StudentInterface
         StringBuilder stringBuilder = new StringBuilder();
-        coursesRegistered.forEach((course, index) -> stringBuilder.append(course + " " + ": Index " + index + "\n"));
+        if (coursesRegistered.isEmpty())
+                stringBuilder.append("No registered courses currently.\n");
+        else
+            coursesRegistered.forEach((course, index) -> stringBuilder.append(course + " " + ": Index " + index + "\n"));
         return stringBuilder.toString();
     }
 
     public boolean hasExamClash(Course courseSelected){
-        LocalDateTime[] newExamTime = cdm.getCourse(courseSelected.getCourseCode()).getExamDateTime();
+
         LocalDateTime[] oldExamTime;
+        LocalDateTime[] newExamTime = cdm.getCourse(courseSelected.getCourseCode()).getExamDateTime();
+        if (newExamTime[0] == null)
+            return false;
 
         HashMap<String, String> timetable = currentStudent.getCoursesRegistered();
         timetable.putAll(currentStudent.getWaitList());
@@ -87,11 +95,13 @@ public class StudentHandler {
         for(Map.Entry<String, String> entry : timetable.entrySet())
             coursesToCheck.add(cdm.getCourse(entry.getKey()));
 
+
         for (Course courseToCheck : coursesToCheck) {
             oldExamTime = courseToCheck.getExamDateTime();
+            if (!(oldExamTime[0] == null))
             if (newExamTime[0].isBefore(oldExamTime[1]) && newExamTime[1].isAfter(oldExamTime[0])) {
                 System.out.println("\nUnable to add " + courseSelected.getCourseCode() + "!");
-                System.out.println(courseSelected.getCourseCode() + "'s exam clashes with" + courseToCheck.getCourseCode() + "'s exam!\n");
+                System.out.println(courseSelected.getCourseCode() + "'s exam clashes with " + courseToCheck.getCourseCode() + "'s exam!\n");
                 return true;
             }
         }
@@ -204,7 +214,7 @@ public class StudentHandler {
     }
 
     //Send email to other student if a swap has been performed successfully
-    public void emailOtherStudent(Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
+    public void emailStudent(Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
         MailHandler.sendMail(otherStudent.getEmail(),
                   currentStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
                              " " + courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
