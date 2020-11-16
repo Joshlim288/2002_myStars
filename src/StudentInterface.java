@@ -28,10 +28,11 @@ public class StudentInterface extends UserInterface {
             System.out.println("| 1. Add New Course                                          |");
             System.out.println("| 2. Drop Registered Course                                  |");
             System.out.println("| 3. Check Currently Registered Courses                      |");
-            System.out.println("| 4. Check Vacancies of Course                               |");
-            System.out.println("| 5. Change Index of Registered Course                       |");
-            System.out.println("| 6. Swap Index of Registered Course with Another Student    |");
-            System.out.println("| 7. Log Out of MyStars                                      |");
+            System.out.println("| 4. Check Vacancies for A Course                            |");
+            System.out.println("| 5. Print Overview of Course Database                       |");
+            System.out.println("| 6. Change Index of Registered Course                       |");
+            System.out.println("| 7. Swap Index of Registered Course with Another Student    |");
+            System.out.println("| 8. Log Out of MyStars                                      |");
             System.out.println("| (Enter ~ at any time to return back to previous menu)      |");
             System.out.println("--------------------------------------------------------------");
 
@@ -47,13 +48,30 @@ public class StudentInterface extends UserInterface {
                 case (2) -> dropCourse();
                 case (3) -> getRegisteredCourses();
                 case (4) -> checkIndexVacancies();
-                case (5) -> changeIndex();
-                case (6) -> swapIndex();
-                case (7) -> exitFlag = logout();
+                case (5) -> printOverview();
+                case (6) -> changeIndex();
+                case (7) -> swapIndex();
+                case (8) -> exitFlag = logout();
             }
         } while (!exitFlag);
     }
 
+    private void printOverview(){
+        try{
+            int choice;
+            do {
+            System.out.println("Choose overview :");
+            System.out.println("1) Print all Courses\n" +
+                    "2) Print all Courses + Indexes\n" +
+                    "3) Print all Courses + Indexes + Lessons");
+                choice = Integer.parseInt(getInput(typeOfInput.INT));
+            } while (choice > 3 || choice == 0);
+            System.out.println(studHandler.getCourseOverview(choice));
+            waitForEnterInput();
+        } catch (EscapeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     //Used in adding of course, changing index and swapping index
     private void showIndexesInCourse(Course courseSelected){
 
