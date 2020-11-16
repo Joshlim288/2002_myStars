@@ -1,6 +1,20 @@
 import java.util.Scanner;
 
+/**
+ * Main class for the application
+ * Contains the functionality for the start menu, handles user input for logging in
+ *
+ * @author Josh
+ * @version 1.0
+ * @since 16/11/2020
+ */
 public class MyStars {
+    /**
+     * Starts the program
+     * Allows user to login to or exit the program
+     * If login has failed, message will be printed stating the reason
+     * @param args
+     */
     public static void main(String[] args){
         String menuChoice;
         Scanner sc = new Scanner(System.in);
@@ -37,7 +51,7 @@ public class MyStars {
                         }
                         ui.start();
                     } catch (AccessDeniedException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println(e.getMessage()); // prints out the reason for being denied
                     }
                 }
                 case(2) -> System.out.println("Exiting MyStars!");
@@ -48,10 +62,9 @@ public class MyStars {
 
     /**
      * Handles the login
-     *
-     * Gets userID and password, hashes the password, then sends it to AccessControl for validation
-     * @param sc
-     * Main scanner passed down
+     * Gets userID and password, sends it to AccessControl for validation
+     * @param sc Main scanner passed down
+     * @throws AccessDeniedException When login has failed, exception will be thrown with the reason as the message
      */
     public static User login(Scanner sc) throws AccessDeniedException{
         String userId, password;

@@ -108,7 +108,7 @@ public class StudentHandler {
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
             studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
 
-            //Create a MailHandler object to send an email to student removed from wait-list
+            //Uses MailHandler utility class to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
                     "You have been removed from a wait-list!",
                     "Successful Registration of Course");

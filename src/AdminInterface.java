@@ -5,18 +5,30 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Control class to display to the Admin what functions are available to them
+ * Gets input for performing these functions and passes them to the handler to be executed
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
+ */
 public class AdminInterface extends UserInterface {
 
     private final AdminHandler adHandler;
 
+    /**
+     * Constructor for the Admin Interface, called from UserInterfaceCreator
+     * @param currentUser User which has logged in
+     * @param sc Scanner to be used for getting input
+     */
     public AdminInterface (User currentUser, Scanner sc) {
         super(sc);
-        adHandler = new AdminHandler((Admin)currentUser);
+        adHandler = new AdminHandler();
         System.out.println("\nWelcome, " + currentUser.getName() + "!");
     }
 
     /**
-     * Admin UI is displayed here
+     * Menu for Admins is displayed here
      */
     public void start() {
         int choice;
@@ -60,30 +72,11 @@ public class AdminInterface extends UserInterface {
         } while (!exitFlag);
     }
 
-//    @Deprecated
-//    private void editAccessPeriod() {
-//        try {
-//            LocalDateTime[] accessTime = null;
-//            String newStart;
-//            String newEnd;
-//            System.out.print("Enter student matriculation number: ");
-//            String matricNum = getInput(typeOfInput.MATRIC_NUM);
-//
-//            do {
-//                System.out.printf("Student %s current access period is from %s to %s", matricNum, accessTime[0].format(dateTimeFormatter), accessTime[1].format(dateTimeFormatter));
-//                System.out.print("Enter new access start date: ");
-//                newStart = getInput(typeOfInput.DATETIME);
-//
-//                System.out.print("Enter new access end date: ");
-//                newEnd = getInput(typeOfInput.DATETIME);
-//
-//            } while (!userValidator.validateDateTimePeriod(newStart, newEnd) || !adHandler.editAccessPeriod(matricNum, newStart, newEnd));
-//            System.out.println("Access time successfully changed");
-//        } catch (EscapeException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
+    /**
+     * Get input for the creation of a new Course object
+     * Escape exception is handled within this method as we need to remove the added Course object from the database
+     * if the user wishes to abort creation of the Course
+     */
     private void createCourse() {
         String courseCode = null;
         String school;
@@ -135,16 +128,20 @@ public class AdminInterface extends UserInterface {
                 System.out.printf("\nCreating Index %d:\n", i + 1);
                 createIndex(courseCode);
             }
-//            adHandler.finalizeCourse();
             System.out.println("Course successfully added");
             System.out.println(adHandler.getCourseOverview(1));
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
-            adHandler.removeCourse(courseCode);
+            adHandler.removeCourse(courseCode); // Removes the unfinished Course object from the database
         }
     }
 
+    /**
+     * Get input for the creation of a new Index object
+     * @param courseCode Course Code of the Course where the Index is to be created
+     * @throws EscapeException Occurs when the User enters "~" to abort function
+     */
     private void createIndex(String courseCode) throws EscapeException {
         String indexNum;
         int indexVacancies;
@@ -169,6 +166,12 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Get input for the creation of a new Lesson object
+     * @param courseCode Course Code for Course that contains the relevant Index
+     * @param indexNum Index number of Index to create the new Lesson object in
+     * @throws EscapeException Occurs when the User enters "~" to abort function
+     */
     private void createLesson(String courseCode, String indexNum) throws EscapeException{
         String lessonType;
         String day;
@@ -215,6 +218,9 @@ public class AdminInterface extends UserInterface {
                 venue, teachingWeeks));
     }
 
+    /**
+     * Get input for the creation of a new Student object
+     */
     private void createStudent() {
         try {
             String studentName;
@@ -274,6 +280,9 @@ public class AdminInterface extends UserInterface {
         waitForEnterInput();
     }
 
+    /**
+     * Displays the vacancies of an Index
+     */
     private void checkIndex() {
         try {
             String indexNum;
@@ -288,6 +297,9 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Prints the list of Students from a specified Index
+     */
     private void printByIndex() {
         try {
             String indexNum;
@@ -309,6 +321,9 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Prints the list of Students from a specified Course
+     */
     private void printByCourse() {
         try {
             String courseCode;
@@ -330,6 +345,12 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Get input for updating a Course object
+     * Will relay the user's input and which attribute of the Course the user wishes to edit to the handler
+     * Some parameters cannot be edited if there are Students already enrolled in the course
+     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
+     */
     private void updateCourse() {
         try {
             String courseCode;
@@ -389,6 +410,10 @@ public class AdminInterface extends UserInterface {
                         System.out.println("Successfully changed");
                     }
                     case (4) -> { // edit academic units
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, AUs cannot be changed");
+                            continue;
+                        }
                         do {
                             System.out.print("Enter new academic units: ");
                             changedValue = getInput(typeOfInput.INT);
@@ -404,6 +429,10 @@ public class AdminInterface extends UserInterface {
                     }
                     case (6) -> editIndex(courseCode); // edit index
                     case (7) -> {
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Final exams cannot be changed");
+                            continue;
+                        }
                         String newStart;
                         String newEnd;
                         do {
@@ -423,6 +452,10 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Get input for updating an index object
+     * @param courseCode Course code of Course object which contains the Index we wish to edit
+     */
     private void editIndex(String courseCode) {
         try {
             String changedValue;
@@ -479,7 +512,11 @@ public class AdminInterface extends UserInterface {
             System.out.println(e.getMessage());
         }
     }
-
+    /**
+     * Get input for updating a Lesson object
+     * @param courseCode Course code of Course object which contains the Index we wish to edit
+     * @param indexNum Index Number of Index object which contains the Lesson we wish to edit
+     */
     private void editLesson(String courseCode, String indexNum) {
         try {
             String changedValue;
@@ -550,7 +587,7 @@ public class AdminInterface extends UserInterface {
     }
 
     /**
-     * todo bring in update access time
+     * Get input for updating a Student object
      */
     private void updateStudent(){
         try {
@@ -660,6 +697,9 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Allows the user to prints an overview of the current data
+     */
     private void printOverview(){
         try{
             int choice;
@@ -681,6 +721,9 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Removes a Student from the database
+     */
     private void deleteStudent(){
         try{
             String matricNum;
@@ -701,6 +744,9 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Removes a Course from the database
+     */
     private void deleteCourse(){
         try{
             String courseCode;
@@ -721,6 +767,11 @@ public class AdminInterface extends UserInterface {
         }
     }
 
+    /**
+     * Initiates logout process, confirms if user wants to logout
+     * saves data back to file by closing the handler
+     * @return true if user wishes to logout, false otherwise
+     */
     private boolean logout() {
         if (exit()) {
             System.out.println("\nSaving data...");

@@ -11,7 +11,10 @@ enum typeOfInput{
 
 /**
  * Abstract class that defines a general userInterface that would show the menu for a particular type of user
- * Also contains input getters that force users to enter correct input, or abort the function with the ~ character
+ * Also contains an input getter that force users to enter correct input, or abort the function with the ~ character
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-11-16
  */
 public abstract class UserInterface {
     protected Scanner sc;
@@ -20,6 +23,10 @@ public abstract class UserInterface {
     protected DateTimeFormatter dateTimeFormatter;
     protected DateTimeFormatter timeFormatter;
 
+    /**
+     * Constructor for UserInterface, creates Validators and Formatters for formatting of input
+     * @param sc Scanner used to get input
+     */
     public UserInterface(Scanner sc){
         this.sc = sc;
         userValidator = new UserValidator();
@@ -28,6 +35,10 @@ public abstract class UserInterface {
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     }
 
+    /**
+     * Function which every UserInterface must implement
+     * Shows the menu and handles the control logic for the particular User type
+     */
     public abstract void start();
 
     /**
@@ -94,12 +105,19 @@ public abstract class UserInterface {
         }
     }
 
+    /**
+     * Used to allow User to read the results of their chosen function before returning to the menu
+     */
     public void waitForEnterInput(){
         System.out.println("Press Enter to continue...");
         System.console().readPassword();
 
     }
-    // TODO test this function, allow user to abort logout
+
+    /**
+     * Asks the User to confirm logout, automatically logs out in 10 seconds
+     * @return true if user wishes to logout, false otherwise
+     */
     public boolean exit() {
             int waitPeriodMillis = 10*1000;
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -115,37 +133,4 @@ public abstract class UserInterface {
             }
      }
 
-//    /**
-//     * Gets integer from user, allows user to abort function if they wish by entering "~"
-//     * @return int that the user entered
-//     * @throws EscapeException Used to abort function and return to main menu
-//     */
-//    public int getInt() throws EscapeException {
-//        int input;
-//        while(true) {
-//            try {
-//                input = Integer.parseInt(getString());
-//                return input;
-//            } catch (NumberFormatException e) {
-//                System.out.println("ERROR: Please enter a number.");
-//            }
-//        }
-//    }
-//
-//    public LocalDateTime getLocalDateTime(String datetime){
-//        while(true) {
-//            if (input.equals("~")) throw new EscapeException("Exiting to main menu");
-//            return LocalDateTime.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-//        }
-//    }
-//
-//    public LocalTime getLocalTime() throws EscapeException{
-//        String input;
-//        while(true) {
-//            input = sc.nextLine();
-//            if (input.equals("~")) throw new EscapeException("Exiting to main menu");
-//            return LocalTime.parse(input, DateTimeFormatter.ofPattern("HH:mm"));
-//            }
-//        }
-//    }
 }
