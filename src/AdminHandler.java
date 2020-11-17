@@ -136,6 +136,7 @@ public class AdminHandler{
      * @return true if the edit was successful, false otherwise
      */
     public boolean editCourse(String courseCode, String input, int choice){
+        System.out.println("Editing Course...");
         Course tempCourse = cdm.getCourse(courseCode);
         switch(choice){
             case(1)->{ // edit courseCode
@@ -194,6 +195,7 @@ public class AdminHandler{
      * @return true if the edit was successful, false otherwise
      */
     public boolean editIndex(String courseCode, String indexNum, String input, int choice){
+        System.out.println("Editing Index...");
         Index tempIndex = cdm.getCourse(courseCode).getIndex(indexNum);
 
         switch(choice){
@@ -222,8 +224,7 @@ public class AdminHandler{
                 if (newVacancy < tempIndex.getIndexVacancy()-tempIndex.getCurrentVacancy()) {
                     return false;
                 }
-                // set new current vacancy to be new vacancy - (num of people already registered)
-                tempIndex.setCurrentVacancy(newVacancy - (tempIndex.getIndexVacancy() - tempIndex.getCurrentVacancy()));
+                // set new indexVacancy
                 tempIndex.setIndexVacancy(newVacancy);
                 updateWaitlist(courseCode, indexNum);
             }
@@ -237,11 +238,11 @@ public class AdminHandler{
                 tempIndex.setGroup(input);
             }
             case(6)->{
-                if (tempIndex.getLessons().size() < Integer.parseInt(input)){
+                if (tempIndex.getLessons().size() < Integer.parseInt(input)-1){
                     System.out.println("Index out of range");
                     return false;
                 }
-                removeLesson(courseCode, indexNum, Integer.parseInt(input));
+                removeLesson(courseCode, indexNum, Integer.parseInt(input)-1);
             }
         }
         return true;
@@ -257,6 +258,7 @@ public class AdminHandler{
      * @return true if the edit was successful, false otherwise
      */
     public boolean editLesson(String courseCode, String indexNum, int lessonIndex, String input, int choice) {
+        System.out.println("Editing Lesson...");
         ArrayList<Lesson> allIndexLesson = cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
         Lesson tempLesson = allIndexLesson.get(lessonIndex);
 
@@ -327,6 +329,7 @@ public class AdminHandler{
      * @return true if the edit was successful, false otherwise
      */
     public boolean editStudent(String matricNum, String updatedValue, int choice){
+        System.out.println("Editing Student...");
         Student tempStudent = sdm.getStudent(matricNum);
         switch(choice){
             case(1)-> { // edit userID
@@ -469,16 +472,23 @@ public class AdminHandler{
     /**
      * Retrieves student list for the Index specified by the admin
      * @param indexNum Index number of the Index we want to get the Students of
+     * @param byWaitlist true if want to list waitListed students only, false for only registered waitlist
      * @return ArrayList of Students who are enrolled in the Index
      */
-    public ArrayList<Student> getStudentListByIndex(String indexNum){
+    public ArrayList<Student> getStudentListByIndex(String indexNum, boolean byWaitlist){
         if (checkIndexExists(indexNum)) {
             for (Course curCourse : cdm.getCourseList()) {
                 Index foundIndex = curCourse.getIndex(indexNum);
                 if (foundIndex != null) {
                     ArrayList<Student> studentList = new ArrayList<>();
-                    for(String matricNum: foundIndex.getEnrolledStudents()) {
-                        studentList.add(sdm.getStudent(matricNum));
+                    if (byWaitlist){
+                        for(String matricNum: foundIndex.getWaitlist()) {
+                            studentList.add(sdm.getStudent(matricNum));
+                        }
+                    } else {
+                        for (String matricNum : foundIndex.getEnrolledStudents()) {
+                            studentList.add(sdm.getStudent(matricNum));
+                        }
                     }
                     return studentList;
                 }
