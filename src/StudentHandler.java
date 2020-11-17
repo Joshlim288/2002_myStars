@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Control class that handles the logic for functions available to Students
+ * Operates on and uses the entity classes using DataManagers
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
+ */
 public class StudentHandler {
     Student currentStudent;
     StudentDataManager sdm;
@@ -15,6 +22,45 @@ public class StudentHandler {
         sdm.load();
         cdm.load();
         this.currentStudent = sdm.getStudent(matricNum);
+    }
+
+    /** Version 2 of addCourse() yay :D
+     * Adds the selected index to the selected student.
+     * @param student The student whose timetable to add the index to.
+     * @param course The course of the index to be added.
+     * @param indexToAdd The index to be added.
+     * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping indexes.
+     * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
+     * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
+    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
+        if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
+            indexToAdd.addToEnrolledStudents(student.getMatricNum());
+            student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
+            return 1;
+        }
+        else{
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
+            indexToAdd.addToWaitlist(student.getMatricNum());
+            student.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
+            return 2;
+        }
+    }
+
+    //Refreshing of waitlist in separate function
+    public void dropCourse(Student student, Course course, String index, boolean waitlisted) {
+
+        Index cIndex = course.getIndex(index);
+        if (!waitlisted) {
+            //Remove student from list of enrolled students in index
+            cIndex.removeFromEnrolledStudents(student.getMatricNum());
+            //Remove course from student's registered courses
+            student.removeCourse(course.getCourseCode(), course.getAcademicUnits());
+        }
+        else{
+            cIndex.removeFromWaitlist(student.getMatricNum());
+            student.removeCourseFromWaitList(course.getCourseCode());
+        }
     }
 
     public Index retrieveIndex(Course courseSelected, String indexNum){
@@ -41,6 +87,20 @@ public class StudentHandler {
 
     public boolean checkValidCourse(Course courseSelected){
         return courseSelected != null;
+    }
+
+    public Student retrieveOtherStudent(Scanner sc) {
+        try {
+            User targetUser = MyStars.login(sc);
+            while (targetUser.equals(currentStudent)) {
+                System.out.println("Error! You have chosen yourself.");
+                targetUser = MyStars.login(sc);
+            }
+            return sdm.getStudent(((Student) targetUser).getMatricNum());
+        } catch (AccessDeniedException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {
@@ -95,6 +155,10 @@ public class StudentHandler {
 
         }
         return stringBuilder.toString();
+    }
+
+    public String getCourseOverview(int choice){
+        return cdm.generateCourseOverview(choice);
     }
 
     public boolean hasExamClash(Course courseSelected){
@@ -170,45 +234,6 @@ public class StudentHandler {
         return false;
     }
 
-    /** Version 2 of addCourse() yay :D
-     * Adds the selected index to the selected student.
-     * @param student The student whose timetable to add the index to.
-     * @param course The course of the index to be added.
-     * @param indexToAdd The index to be added.
-     * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping indexes.
-     * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
-     * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
-    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
-        if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
-            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
-            indexToAdd.addToEnrolledStudents(student.getMatricNum());
-            student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
-            return 1;
-        }
-        else{
-            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
-            indexToAdd.addToWaitlist(student.getMatricNum());
-            student.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
-            return 2;
-        }
-    }
-
-    //Refreshing of waitlist in separate function
-    public void dropCourse(Student student, Course course, String index, boolean waitlisted) {
-
-        Index cIndex = course.getIndex(index);
-        if (!waitlisted) {
-            //Remove student from list of enrolled students in index
-            cIndex.removeFromEnrolledStudents(student.getMatricNum());
-            //Remove course from student's registered courses
-            student.removeCourse(course.getCourseCode(), course.getAcademicUnits());
-        }
-        else{
-            cIndex.removeFromWaitlist(student.getMatricNum());
-            student.removeCourseFromWaitList(course.getCourseCode());
-        }
-    }
-
     public void refreshWaitList(Course course, Index index) {
         if (!index.getWaitlist().isEmpty()) {
             Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
@@ -223,20 +248,6 @@ public class StudentHandler {
         }
     }
 
-    public Student retrieveOtherStudent(Scanner sc) {
-        try {
-            User targetUser = MyStars.login(sc);
-            while (targetUser.equals(currentStudent)) {
-                System.out.println("Error! You have chosen yourself.");
-                targetUser = MyStars.login(sc);
-            }
-            return sdm.getStudent(((Student) targetUser).getMatricNum());
-        } catch (AccessDeniedException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
     //Send email to other student if a swap has been performed successfully
     public void emailStudent(Student currentStudent, Student otherStudent,  Course courseSelected, Index oldIndex, Index newIndex){
         MailHandler.sendMail(currentStudent.getEmail(),
@@ -245,10 +256,6 @@ public class StudentHandler {
                              " has been updated to " + newIndex.getIndexNum() + ".",
                       "Successful Swap of Index for " + courseSelected.getCourseCode() + ", "
                              + courseSelected.getCourseName());
-    }
-
-    public String getCourseOverview(int choice){
-        return cdm.generateCourseOverview(choice);
     }
 
     public void close() {
