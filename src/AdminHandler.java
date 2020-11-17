@@ -167,7 +167,14 @@ public class AdminHandler{
             }
             case(2)-> tempCourse.setCourseName(input); // edit course name
             case(3)-> tempCourse.setCourseType(input); // edit course type
-            case(4)-> tempCourse.setAcademicUnits(Integer.parseInt(input)); // edit Academic Units
+            case(4)-> {
+                int newAUs = Integer.parseInt(input);
+                if (newAUs <= 0) {
+                    System.out.println("AUs cannot be negative or zero");
+                    return false;
+                }
+                tempCourse.setAcademicUnits(newAUs); // edit Academic Units
+            }
             case(5)-> tempCourse.setSchool(input); // edit school
             case(8)-> {
                 if (tempCourse.getIndex(input) == null){
@@ -221,6 +228,11 @@ public class AdminHandler{
                 int newVacancy = Integer.parseInt(input);
                 // Do not allow if the new vacancy is < number of students enrolled
                 if (newVacancy < tempIndex.getIndexVacancy()-tempIndex.getCurrentVacancy()) {
+                    System.out.println("New vacancies is smaller than the number of students enrolled!");
+                    return false;
+                }
+                if (newVacancy <= 0) {
+                    System.out.println("Vacancies cannot be negative or zero");
                     return false;
                 }
                 // set new indexVacancy
@@ -237,7 +249,8 @@ public class AdminHandler{
                 tempIndex.setGroup(input);
             }
             case(6)->{
-                if (tempIndex.getLessons().size() < Integer.parseInt(input)-1){
+                int lessonIndex = Integer.parseInt(input)-1;
+                if (tempIndex.getLessons().size() <= lessonIndex || lessonIndex < 0){
                     System.out.println("Index out of range");
                     return false;
                 }
@@ -379,8 +392,14 @@ public class AdminHandler{
             case(7)->tempStudent.setNationality(updatedValue); // edit nationality
             case(8)->tempStudent.setMajor(updatedValue); // edit major
             case(9)->{ // edit max AUs
-                if (Integer.parseInt(updatedValue) < tempStudent.getCurrentAUs()){
+                int newMaxAUs = Integer.parseInt(updatedValue);
+                if (newMaxAUs < tempStudent.getCurrentAUs()){
                     System.out.println("Student currently taking more than updated max AUs");
+                    return false;
+                }
+                if (newMaxAUs <= 0) {
+                    System.out.println("Max AUs cannot be negative or zero");
+                    return false;
                 }
                 tempStudent.setMaxAUs(Integer.parseInt(updatedValue));
             }
@@ -415,6 +434,10 @@ public class AdminHandler{
             System.out.println("Course with this course code already exists");
             return false;
         }
+        if (academicUnits <= 0) {
+            System.out.println("Academic units cannot be negative or zero");
+            return false;
+        }
 
         if(hasExam)
             cdm.addCourse(new Course(courseCode, courseName,courseType, academicUnits,school, examStart, examEnd));
@@ -443,6 +466,11 @@ public class AdminHandler{
                 System.out.println("You have previously created this index");
                 return false;
             }
+        }
+
+        if (indexVacancies <= 0) {
+            System.out.println("Vacancies cannot be negative or zero.");
+            return false;
         }
         cdm.getCourse(courseCode).addIndex(indexNum, indexVacancies, group);
         return true;
@@ -543,6 +571,10 @@ public class AdminHandler{
             System.out.println("Matriculation number already in use");
             System.out.println("Student creation failed");
             System.out.println("Please try again");
+            return false;
+        }
+        if (maxAUs <= 0) {
+            System.out.println("Max AUs cannot be negative or zero!");
             return false;
         }
         Student newStudent = new Student(userid, password, studentName, studentMatric, email,

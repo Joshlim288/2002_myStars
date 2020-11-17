@@ -123,8 +123,11 @@ public class AdminInterface extends UserInterface {
 
             } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examStart, examEnd));
 
-            System.out.print("Enter number of indexes: ");
-            int numIndexes = Integer.parseInt(getInput(typeOfInput.INT));
+            int numIndexes;
+            do {
+                System.out.print("Enter number of indexes: ");
+                numIndexes = Integer.parseInt(getInput(typeOfInput.INT));
+            } while (numIndexes <= 0);
             for (int i = 0; i < numIndexes; i++) {
                 System.out.printf("\nCreating Index %d:\n", i + 1);
                 createIndex(courseCode);
@@ -161,7 +164,9 @@ public class AdminInterface extends UserInterface {
             } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies, group));
         try {
             System.out.print("Enter number of lessons: ");
-            numLessons = Integer.parseInt(getInput(typeOfInput.INT));
+            do {
+                numLessons = Integer.parseInt(getInput(typeOfInput.INT));
+            } while (numLessons <= 0);
             for (int i = 0; i < numLessons; i++) {
                 System.out.printf("\nCreating lesson %d:\n", i + 1);
                 createLesson(courseCode, indexNum);
