@@ -24,13 +24,11 @@ enum typeOfLesson{
  * Lessons can have different venues, timings, and so on.
  * There are multiple lessons per index of a course.
  * Enumerations for day of lessons and type of lessons are also included.
- * @author Chong Shen Rui
+ * @author Josh, Jun Wei, Chong Shen Rui , Joshua, Daryl
  * @version 1.0
  * @since 2020-10-18
  */
 public class Lesson implements Serializable {
-
-    private static final long serialVersionUID = 6612746893184830119L;
 
     /**
      * This lesson's type (e.g. LEC, TUT, LAB)
@@ -80,60 +78,100 @@ public class Lesson implements Serializable {
                   String venue, ArrayList<Integer> teachingWeeks) {
         this.lessonType = typeOfLesson.valueOf(lessonType);
         this.day = dayOfWeek.valueOf(day);
-        this.startTime = LocalTime.parse(startTime); // kind of spaghetti here
+        this.startTime = LocalTime.parse(startTime);
         this.endTime = LocalTime.parse(endTime);
         this.venue = venue;
         this.teachingWeeks = teachingWeeks;
     }
 
+    /**
+     * @return Type of the Lesson, refer to the above enum for possible values
+     */
     public typeOfLesson getLessonType() {
         return lessonType;
     }
 
+    /**
+     * @param lessonType String equivalent of the new lessonType
+     */
     public void setLessonType(String lessonType) {
         this.lessonType = typeOfLesson.valueOf(lessonType);
     }
 
+    /**
+     * @return Day that the Lesson is conducted on, refer to above Enum for possible values
+     */
     public dayOfWeek getDay() {
         return day;
     }
 
+    /**
+     * @param day String equivalent for the dat that the Lesson is conducted on
+     */
     public void setDay(String day) {
         this.day = dayOfWeek.valueOf(day);
     }
 
+    /**
+     * @return Start time of the Lesson as LocalTime
+     */
     public LocalTime getStartTime() {
         return startTime;
     }
 
+    /**
+     * @param startTime Start time of the Lesson to change to
+     */
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
+    /**
+     * @return End time of the Lesson as LocalTime
+     */
     public LocalTime getEndTime() {
         return endTime;
     }
 
+    /**
+     * @param endTime End time of the Lesson to change to
+     */
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
+    /**
+     * @return Venue that the Lesson is conducted at as a string
+     */
     public String getVenue() {
         return venue;
     }
 
+    /**
+     * @param venue new venue that the Lesson is to be conducted at
+     */
     public void setVenue(String venue) {
         this.venue = venue;
     }
 
+    /**
+     * @return teaching weeks as an ArrayList of Integer objects, representing the teaching weeks that the Lesson
+     * is conducted on
+     */
     public ArrayList<Integer> getTeachingWeeks() {
         return teachingWeeks;
     }
 
+    /**
+     * @param teachingWeeks ArrayList of Integers that represents the teaching weeks the Lesson is conducted on
+     */
     public void setTeachingWeeks(ArrayList<Integer> teachingWeeks) {
                 this.teachingWeeks = teachingWeeks;
     }
 
+    /**
+     * @return Lesson details as a String, suitable for printing
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

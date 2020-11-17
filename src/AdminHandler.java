@@ -402,6 +402,7 @@ public class AdminHandler{
 
     /**
      * Adds a new course into the CourseDataManager
+     * Checks to ensure no other Course has the same courseCode
      * @param courseCode Course code for the new course
      * @param courseName Name of the new course
      * @param courseType CourseType of the new course
@@ -425,6 +426,7 @@ public class AdminHandler{
 
     /**
      * Adds a new Index to a Course object
+     * Checks to ensure the index number is unique within the database
      * @param courseCode Course the Index belongs to
      * @param indexNum Index number of new Index
      * @param indexVacancies Vacancies for the new index
@@ -449,7 +451,8 @@ public class AdminHandler{
 
 
     /**
-     * Adds a new Lesson to a n Index object
+     * Adds a new Lesson to a new Index object
+     * Checks to ensure it does not clash with any other Lessons in the Index
      * @param courseCode Course the Index belongs to
      * @param indexNum Index number of new Index
      * @param lessonType Type of Lesson
@@ -581,14 +584,13 @@ public class AdminHandler{
         for (String courseCode: waitlistMap.keySet()){
             regCourse = cdm.getCourse(courseCode);
             regIndex = regCourse.getIndex(waitlistMap.get(courseCode));
-            regIndex.getWaitlist().remove(matricNum);
+            regIndex.removeFromWaitlist(matricNum);
         }
         // remove student from registered courses
         for (String courseCode: registeredMap.keySet()){
             regCourse = cdm.getCourse(courseCode);
             regIndex = regCourse.getIndex(registeredMap.get(courseCode));
-            regIndex.getEnrolledStudents().remove(matricNum);
-            regIndex.setCurrentVacancy(regIndex.getCurrentVacancy()+1);
+            regIndex.removeFromEnrolledStudents(matricNum);
             updateWaitlist(courseCode, regIndex.getIndexNum());
         }
         sdm.removeStudent(matricNum);
