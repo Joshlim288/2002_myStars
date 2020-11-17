@@ -84,10 +84,9 @@ public class Admin extends User {
     }
 
     /**
-     * Checks if two Admin objects refer to the same admin
-     * Compares only the staffNum, which uniquely identifies an Admin
-     * @param o Object to compare this to
-     * @return false if the object is not an instance of Admin, or does not have the same staffNum
+     * Checks if two Admins are the same based on staffNum
+     * @param o the other Admin to compare against
+     * @return true if this Admins
      */
     @Override
     public boolean equals(Object o) {

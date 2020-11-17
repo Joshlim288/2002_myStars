@@ -55,7 +55,7 @@ public abstract class UserInterface {
             } else {
                 if (validateInput(input, inputType))
                     return input;
-                System.out.print("Please enter again: ");
+                System.out.print("Please enter input again: ");
             }
         }
     }

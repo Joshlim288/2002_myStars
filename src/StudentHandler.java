@@ -43,10 +43,7 @@ public class StudentHandler {
 
     public boolean checkValidCourse(Course courseSelected){
         if (courseSelected == null) return false;
-        if (willGoOverMaxAU(courseSelected))
-            System.out.println("Cannot register for course, will exceed maximum AUs!\n");
-        else return true;
-        return false;
+        return true;
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {
@@ -105,7 +102,7 @@ public class StudentHandler {
         if (newExamTime[0] == null)
             return false;
 
-        HashMap<String, String> timetable = currentStudent.getCoursesRegistered();
+        HashMap<String, String> timetable = (HashMap<String, String>) currentStudent.getCoursesRegistered().clone();
         timetable.putAll(currentStudent.getWaitList());
         ArrayList<Course> coursesToCheck = new ArrayList<Course>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
@@ -125,7 +122,7 @@ public class StudentHandler {
     }
 
     /**
-     * Version 3 of hasTimetableClash() -.-
+     * Version 4 of hasTimetableClash() >:)
      * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
@@ -137,7 +134,7 @@ public class StudentHandler {
         /* Combine courses registered and waitlist for the student into a HashMap.
          * We then retrieve all the actual indexes the student is enrolled in and put
          * them into a ArrayList<Index> to iterate through*/
-        HashMap<String, String> timetable = studentToCheck.getCoursesRegistered();
+        HashMap<String, String> timetable = (HashMap<String, String>) studentToCheck.getCoursesRegistered().clone();
         timetable.putAll(studentToCheck.getWaitList());
         ArrayList<Index> indexesToCheck = new ArrayList<Index>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
@@ -153,15 +150,19 @@ public class StudentHandler {
             if (!indexToCheck.equals(indexToExclude)) {
                 oldLessons.addAll(indexToCheck.getLessons());
                 for (Lesson oldLesson : oldLessons)
-                    for (Lesson newLesson : newLessons)
-                        if (newLesson.getDay().equals(oldLesson.getDay()))
+                    for (Lesson newLesson : newLessons) {
+                        if ((newLesson.getDay().equals(oldLesson.getDay()))) {
                             /* Start of new lesson < End of old lesson && End of new lesson > Start of old lesson */
+                            ArrayList<Integer> oldLessonWeeks = (ArrayList<Integer>) oldLesson.getTeachingWeeks().clone();
+                            oldLessonWeeks.retainAll(newLesson.getTeachingWeeks());
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
-                                    newLesson.getEndTime().isAfter(oldLesson.getStartTime())) {
+                                    newLesson.getEndTime().isAfter(oldLesson.getStartTime()) && !oldLessonWeeks.isEmpty()) {
                                 System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
-                                System.out.println("Please choose another index!");
+                                System.out.println("Please choose another index!\n");
                                 return true;
-                                }
+                            }
+                        }
+                    }
                 }
         }
         return false;
@@ -178,7 +179,6 @@ public class StudentHandler {
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
      * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
-
         if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
@@ -233,9 +233,9 @@ public class StudentHandler {
     }
 
     //Send email to other student if a swap has been performed successfully
-    public void emailStudent(Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
-        MailHandler.sendMail(otherStudent.getEmail(),
-                  currentStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
+    public void emailStudent(Student currentStudent, Student otherStudent,  Course courseSelected, Index oldIndex, Index newIndex){
+        MailHandler.sendMail(currentStudent.getEmail(),
+                  otherStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
                              " " + courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
                              " has been updated to " + newIndex.getIndexNum() + ".",
                       "Successful Swap of Index for " + courseSelected.getCourseCode() + ", "

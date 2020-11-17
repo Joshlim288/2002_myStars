@@ -38,6 +38,6 @@ public class AccessControl {
                 return account;
             }
         }
-        throw new AccessDeniedException("User id not found");
+        throw new AccessDeniedException("User ID not found!\n");
     }
 }
