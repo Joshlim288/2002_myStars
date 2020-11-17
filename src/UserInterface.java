@@ -4,6 +4,9 @@ import java.io.InputStreamReader;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+/**
+ * Indicates what types of inputs are allowed for getInput
+ */
 enum typeOfInput{
     NAME, INT, TIME, DATETIME, USERID, EMAIL, MATRIC_NUM, GENDER, STAFF_NUM,
     COURSE_CODE, COURSE_TYPE, INDEX_NUM, LESSON_TYPE, DAY, GROUP_NAME, STANDARD

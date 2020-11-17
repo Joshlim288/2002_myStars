@@ -37,16 +37,28 @@ public abstract class User implements Serializable {
         this.email = email;
     }
 
+    /**
+     * @return userID of the User as a String
+     */
     public String getUserID() {
         return userID;
     }
 
+    /**
+     * @return hashed password of the User as a String
+     */
     public String getHashedPassword() {
         return hashedPassword;
     }
 
+    /**
+     * @return Domain that the User belongs to (e.g. Student, Admin)
+     */
     public String getDomain() {return domain;}
 
+    /**
+     * @param userID String to change the User's userID to
+     */
     public void setUserID(String userID) {
         this.userID = userID;
     }
@@ -69,22 +81,41 @@ public abstract class User implements Serializable {
         this.hashedPassword = hash(password);
     }
 
+    /**
+     * @return email currently linked to the User
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * @param newEmail String to change the User's email to
+     */
     public void setEmail(String newEmail) {
         this.email = newEmail;
     }
 
+    /**
+     * @return Name of the User as a String
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * @param name String to change the User's name to
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Validates a login for a User object
+     * @param checkID userID to check if match
+     * @param checkpw unhashed password to check if match
+     * @return <code>true</code> if userID and password match, false if userID does not match
+     * @throws AccessDeniedException thrown when the userID matches, but the password entered is wrong
+     */
     public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException{
         if(checkID.equals(this.userID)) {
             if (BCrypt.checkpw(checkpw, hashedPassword)) {
@@ -93,9 +124,14 @@ public abstract class User implements Serializable {
                 throw new AccessDeniedException("Invalid password");
             }
         }
-        return  false;
+        return false;
     }
 
+    /**
+     * Compares this User with another User based on userID
+     * @param o The other User to compare with this User
+     * @return <code>true</code> if the other student has the same matriculation number as this student
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null) {
