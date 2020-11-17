@@ -16,6 +16,12 @@ public class StudentHandler {
     StudentDataManager sdm;
     CourseDataManager cdm;
 
+    /**
+     * Constructor for the handler
+     * Initializes the DataManagers and calls their load() methods to load in the required data from the data folder
+     * @see StudentDataManager#load()
+     * @see CourseDataManager#load()
+     */
     public StudentHandler(String matricNum) {
         this.sdm = new StudentDataManager();
         this.cdm = new CourseDataManager();
@@ -24,15 +30,22 @@ public class StudentHandler {
         this.currentStudent = sdm.getStudent(matricNum);
     }
 
-    /** Version 2 of addCourse() yay :D
-     * Adds the selected index to the selected student.
+    /** Adds the selected index to the student's list of registered courses.
+     * Student can be added to waitlist or list of enrolled students for the course.
+     * Updates student's registered courses and updates index's list of enrolled students/waitlist.
+     * Also drops any prior index if required before adding new index.
      * @param student The student whose timetable to add the index to.
      * @param course The course of the index to be added.
      * @param indexToAdd The index to be added.
-     * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping indexes.
+     * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping/changing indexes.
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
-     * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
+     * @return The status of adding the course, 1 if added to student's registered courses, 2 if added to waitlisted courses.
+     * */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
+
+        /* checkVacancy will be passed in as false only for swapIndex() in StudentInterface,
+        as we still want to be able to swap their indexes rather than add them to wait-list
+        even if their indexes are already at max vacancy at the time of swap. */
         if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
@@ -47,21 +60,78 @@ public class StudentHandler {
         }
     }
 
-    //Refreshing of waitlist in separate function
+    /** Drops the selected index from the student's list of registered courses/waitlisted courses.
+     *  Updates student's registered/waitlisted courses and updates index's list of enrolled students.
+     * @param student The student whose timetable to drop the index from.
+     * @param course The course of the index to be dropped.
+     * @param index The index to be dropped.
+     * @param waitlisted <code>true</code> if course is waitlisted for student, <code>false</code> if registered for student.
+     */
     public void dropCourse(Student student, Course course, String index, boolean waitlisted) {
-        Index cIndex = course.getIndex(index);
+        Index indexToDrop = course.getIndex(index);
         if (!waitlisted) {
-            //Remove student from list of enrolled students in index
-            cIndex.removeFromEnrolledStudents(student.getMatricNum());
-            //Remove course from student's registered courses
+            indexToDrop.removeFromEnrolledStudents(student.getMatricNum());
             student.removeCourse(course.getCourseCode(), course.getAcademicUnits());
         }
         else{
-            cIndex.removeFromWaitlist(student.getMatricNum());
+            indexToDrop.removeFromWaitlist(student.getMatricNum());
             student.removeCourseFromWaitList(course.getCourseCode());
         }
     }
 
+    /** Triggers update of waitlist for selected index and is only used after a student drops or changes a index.
+     * If waitlist is not empty, remove student at head of waitlist and register him for the course.
+     * Email will be sent to student's email informing the successful registration of course from waitlist.
+     * @param course The course of the index for updating of waitlist.
+     * @param index The index that contains the waitlist to be updated.
+     */
+    public void refreshWaitList(Course course, Index index) {
+        if (!index.getWaitlist().isEmpty()) {
+            Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
+            studentRemoved.removeCourseFromWaitList(course.getCourseCode());
+            studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
+            index.addToEnrolledStudents(studentRemoved.getMatricNum());
+
+            MailHandler.sendMail(studentRemoved.getEmail(),
+                    "Dear " + studentRemoved.getName() +
+                            ", you have been successfully removed from the wait-list for the following courses:\n\n" +
+                            course.getCourseCode() + ", " + course.getCourseName() + "\n" +
+                            "Index Registered: " + index.getIndexNum() +  "\n" +
+                            "Current AUs registered: " + studentRemoved.getCurrentAUs() ,
+                    "Successful Registration for " + course.getCourseCode() + ", " + course.getCourseName() +
+                            ": Index " + index.getIndexNum());
+        }
+    }
+
+    /**
+     * Retrieves course based on input from user with CourseDataManager.
+     * If course does not exist in database, user is prompted to enter a valid course.
+     * @param courseCode Course input from user to search database with.
+     * @return Course if it exists in database, otherwise <code>null</code> is returned.
+     * @see CourseDataManager#getCourse(String)
+     */
+    public Course retrieveCourse(String courseCode){
+        Course courseSelected = cdm.getCourse(courseCode);
+        if (courseSelected == null)
+            System.out.println("Course does not exist in the database!\n" +
+                    "Please re-enter course again.\n");
+        return courseSelected;
+    }
+
+    /** Checks if course selected exists in database and is used after calling <code>retrieveCourse</code>.
+     * @param courseSelected Course selected to check.
+     * @return <code>true</code> if course selected exists in database, <code>false</code> if it does not.
+     */
+    public boolean checkValidCourse(Course courseSelected){
+        return courseSelected != null;
+    }
+
+    /** Retrieves index based on input from user and course selected.
+     * If index does not exist in the selected course, user is prompted to enter a valid index.
+     * @param courseSelected Course selected to check.
+     * @param indexNum Index selected to check.
+     * @return Index if it exists in the course selected, otherwise <code>null</code> is returned.
+     */
     public Index retrieveIndex(Course courseSelected, String indexNum){
         Index indexSelected = courseSelected.getIndex(indexNum);
 
@@ -71,41 +141,35 @@ public class StudentHandler {
         return indexSelected;
     }
 
-    public Index getIndexRegistered(Student student, Course courseSelected){
-        return retrieveIndex(courseSelected, student.retrieveIndexFromRegistered(courseSelected.getCourseCode()));
-    }
-
+    /** Checks if index selected is in course previously selected and is used after calling <code>retrieveIndex</code>.
+     * Also checks if index will clash with current timetable of student through <code>hasTimetableClash</code>.
+     * @param indexSelected Index selected to check.
+     * @param studentToCheck Student to retrieve timetable and check for clashes.
+     * @param indexToExclude Index to exclude from checking for clashes with timetable. Useful for changing/swapping index.
+     * (e.g. For changing from index 33333 to index 44444, index 33333 should not be included in the check for clash)
+     * @return <code>true</code> if index selected is available to be added, otherwise <code>false</code> is returned.
+     */
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
         return !hasTimetableClash(indexSelected, studentToCheck, indexToExclude);
     }
 
-    public Course retrieveCourse(String courseCode){
-        Course courseSelected = cdm.getCourse(courseCode);
-        if (courseSelected == null)
-            System.out.println("Course does not exist in the database!\n" +
-                               "Please re-enter course again.\n");
-        return courseSelected;
+    /** Retrieves index that the student is registered in based on the course chosen.
+     * Uses <code>retrieveIndex</code> but indexNum passed in is retrieved from student's list of registered indexes instead.
+     * @param student Student to get index registered in.
+     * @param courseSelected Course to get index registered.
+     * @return Index that the student is registered in.
+     * @see #retrieveIndex(Course, String)
+     */
+    public Index getIndexRegistered(Student student, Course courseSelected){
+        return retrieveIndex(courseSelected, student.retrieveIndexFromRegistered(courseSelected.getCourseCode()));
     }
 
-    public boolean checkValidCourse(Course courseSelected){
-        return courseSelected != null;
-    }
-
-    public Student retrieveOtherStudent(Scanner sc) {
-        try {
-            User targetUser = MyStars.login(sc);
-            while (targetUser.equals(currentStudent)) {
-                System.out.println("Error! You have chosen yourself.");
-                targetUser = MyStars.login(sc);
-            }
-            return sdm.getStudent(((Student) targetUser).getMatricNum());
-        } catch (AccessDeniedException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
+    /** Checks if the student will go over maximum AUs after adding selected course.
+     * Adds AUs of courses registered and courses waitlisted with the course to be added to compare with max AUs allowed.
+     * @param courseSelected The course to be added by the student.
+     * @return <code>true</code> if student will go over max AUs allowed, otherwise <code>false</code>.
+     */
     public boolean willGoOverMaxAU(Course courseSelected) {
         int totalAUs = currentStudent.getCurrentAUs();
         for (Map.Entry<String, String> entry : currentStudent.getWaitList().entrySet())
@@ -113,52 +177,7 @@ public class StudentHandler {
         return (totalAUs + courseSelected.getAcademicUnits()) > currentStudent.getMaxAUs();
     }
 
-    public boolean checkIfRegistered(Student student, Course courseSelected){
-        if (courseSelected == null) return false;
-        return student.retrieveIndexFromRegistered(courseSelected.getCourseCode()) != null;
-    }
-
-    public boolean checkIfWaitListed(Student student, Course courseSelected){
-        if (courseSelected == null) return false;
-        return student.retrieveIndexFromWaitList(courseSelected.getCourseCode()) != null;
-    }
-
-    public String getRegisteredCourses() {
-        Course course;
-        Index index;
-        HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
-        HashMap<String, String> coursesWaitListed = currentStudent.getWaitList();
-        StringBuilder stringBuilder = new StringBuilder();
-
-        if (coursesRegistered.isEmpty())
-                stringBuilder.append("\nNo registered courses currently.\n");
-        else {
-            stringBuilder.append("\nCourse | Index | AUs |   Status   | Course Type\n");
-            stringBuilder.append("-------------------------------------------------\n");
-            for (Map.Entry<String, String> pair : coursesRegistered.entrySet()) {
-                course = cdm.getCourse(pair.getKey());
-                index = cdm.getCourse(pair.getKey()).getIndex(pair.getValue());
-                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
-                        + "  | REGISTERED |  " + course.getCourseType() + "\n");
-            }
-        }
-
-        if(!coursesWaitListed.isEmpty()) {
-            for (Map.Entry<String, String> pair2 : coursesWaitListed.entrySet()) {
-                course = cdm.getCourse(pair2.getKey());
-                index = cdm.getCourse(pair2.getKey()).getIndex(pair2.getValue());
-                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
-                        + "  | WAITLISTED |  " + course.getCourseType() + "\n");
-            }
-        }
-
-        return stringBuilder.toString();
-    }
-
-    public String getCourseOverview(int choice){
-        return cdm.generateCourseOverview(choice);
-    }
-
+    //Check for exam clashes and returns true if clash, otherwise false.
     public boolean hasExamClash(Course courseSelected){
 
         LocalDateTime[] oldExamTime;
@@ -185,9 +204,7 @@ public class StudentHandler {
         return false;
     }
 
-    /**
-     * Version 4 of hasTimetableClash() >:)
-     * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
+    /** Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
      * @param indexToExclude Used for swapping of indexes, to exclude the index it is swapping from.
@@ -233,23 +250,19 @@ public class StudentHandler {
         return false;
     }
 
-    public void refreshWaitList(Course course, Index index) {
-        if (!index.getWaitlist().isEmpty()) {
-            Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
-            studentRemoved.removeCourseFromWaitList(course.getCourseCode());
-            studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
-            index.addToEnrolledStudents(studentRemoved.getMatricNum());
-
-            //Uses MailHandler utility class to send an email to student removed from wait-list
-            MailHandler.sendMail(studentRemoved.getEmail(),
-                    "Dear " + studentRemoved.getName() +
-                                ", you have been successfully removed from the wait-list for the following courses:\n\n" +
-                                course.getCourseCode() + ", " + course.getCourseName() + "\n" +
-                                "Index Registered: " + index.getIndexNum() +  "\n" +
-                                "Current AUs registered: " + studentRemoved.getCurrentAUs() ,
-                         "Successful Registration for " + course.getCourseCode() + ", " + course.getCourseName() +
-                                ": Index " + index.getIndexNum());
+    //Retrieves other student for swapCourse()
+    public Student retrieveOtherStudent(Scanner sc) {
+        try {
+            User targetUser = MyStars.login(sc);
+            while (targetUser.equals(currentStudent)) {
+                System.out.println("Error! You have chosen yourself.");
+                targetUser = MyStars.login(sc);
+            }
+            return sdm.getStudent(((Student) targetUser).getMatricNum());
+        } catch (AccessDeniedException e) {
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     //Send email to other student if a swap has been performed successfully
@@ -262,6 +275,61 @@ public class StudentHandler {
                              + courseSelected.getCourseName());
     }
 
+    //Check if student registered in a course
+    public boolean checkIfRegistered(Student student, Course courseSelected){
+        if (courseSelected == null) return false;
+        return student.retrieveIndexFromRegistered(courseSelected.getCourseCode()) != null;
+    }
+
+    //Check if student waitlist4ed in a course
+    public boolean checkIfWaitListed(Student student, Course courseSelected){
+        if (courseSelected == null) return false;
+        return student.retrieveIndexFromWaitList(courseSelected.getCourseCode()) != null;
+    }
+
+    //Get all registered courses of a student
+    public String getRegisteredCourses() {
+        Course course;
+        Index index;
+        HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
+        HashMap<String, String> coursesWaitListed = currentStudent.getWaitList();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (coursesRegistered.isEmpty())
+            stringBuilder.append("\nNo registered courses currently.\n");
+        else {
+            stringBuilder.append("\nCourse | Index | AUs |   Status   | Course Type\n");
+            stringBuilder.append("-------------------------------------------------\n");
+            for (Map.Entry<String, String> pair : coursesRegistered.entrySet()) {
+                course = cdm.getCourse(pair.getKey());
+                index = cdm.getCourse(pair.getKey()).getIndex(pair.getValue());
+                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
+                        + "  | REGISTERED |  " + course.getCourseType() + "\n");
+            }
+        }
+
+        if(!coursesWaitListed.isEmpty()) {
+            for (Map.Entry<String, String> pair2 : coursesWaitListed.entrySet()) {
+                course = cdm.getCourse(pair2.getKey());
+                index = cdm.getCourse(pair2.getKey()).getIndex(pair2.getValue());
+                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
+                        + "  | WAITLISTED |  " + course.getCourseType() + "\n");
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
+    //Get course overview of all courses in database
+    public String getCourseOverview(int choice){
+        return cdm.generateCourseOverview(choice);
+    }
+
+    /**
+     * Saves any changed data back to file
+     * @see StudentDataManager#save()
+     * @see CourseDataManager#save()
+     */
     public void close() {
         sdm.save();
         cdm.save();

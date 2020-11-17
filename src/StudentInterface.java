@@ -380,7 +380,7 @@ public class StudentInterface extends UserInterface {
     /**
      * Checks if the student has any currently registered or wait-listed courses.
      * @return <code>true</code> if no currently registered/wait-listed courses and <code>false</code> otherwise.
-     * Used in <code>dropCourse</code>, <code>changeIndex</code> and <code>swapIndex</code>.
+     * Used in {@link StudentInterface#dropCourseOption()}, {@link StudentInterface#changeIndex()} and {@link StudentInterface#swapIndex()}.
      */
     private boolean noRegisteredCourses(){
         HashMap<String, String> coursesRegistered = studHandler.currentStudent.getCoursesRegistered();
@@ -396,7 +396,8 @@ public class StudentInterface extends UserInterface {
     /**
      * Prints the indexes that are in the course selected and the number of remaining vacancies.
      * @param courseSelected The course to check in the database.
-     * Used in <code>addCourse</code, <code>checkIndexVacancies</code> and <code>changeIndex</code>.
+     * Used in {@link StudentInterface#addCourseOption()}, {@link StudentInterface#checkIndexVacancies()}
+     * and {@link StudentInterface#changeIndex()}.
      */
     private void showIndexesInCourse(Course courseSelected){
         ArrayList<Index> indexList = courseSelected.getIndexes();
@@ -413,7 +414,8 @@ public class StudentInterface extends UserInterface {
 
     /**
      * Prints the courses and indexes that are currently registered or wait-listed for the student.
-     * Used in <code>dropCourse</code>, <code>getRegisteredCourses</code>, <code>changeIndex</code> and <code>swapIndex</code>.
+     * Used in {@link StudentInterface#dropCourseOption()}, {@link StudentInterface#getRegisteredCourses()},
+     * {@link StudentInterface#changeIndex()} and {@link StudentInterface#swapIndex()}.
      */
     private void showRegisteredCourses(){
         System.out.println("\nThese are your currently registered courses and indexes:");
@@ -423,7 +425,8 @@ public class StudentInterface extends UserInterface {
     /**
      * Prints the status of adding an index for the student.
      * Status is either registered for the index or added to wait-list for the index.
-     * Used in <code>addCourse</code>, <code>changeIndex</code> and <code>swapIndex</code>.
+     * Used in {@link StudentInterface#addCourseOption()}, {@link StudentInterface#changeIndex()}
+     * and {@link StudentInterface#swapIndex()}.
      */
     private void printStatusOfAddCourse(int status, Index indexSelected){
         switch (status) {
