@@ -1,12 +1,10 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class StudentInterface extends UserInterface {
 
-    private StudentHandler studHandler;
+    private final StudentHandler studHandler;
 
     public StudentInterface(User currentUser, Scanner sc) {
         super(sc);

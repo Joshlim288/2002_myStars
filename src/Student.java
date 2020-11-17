@@ -252,23 +252,4 @@ public class Student extends User {
         }
         return stringBuilder.toString();
     }
-
-    /**
-     * Displays course code, course name, course type, number of AUs, index number, and for each lesson in that index,
-     * the lesson information.
-     * KIV if to be placed here or handler
-     */
-    //TODO: Remove
-//    public void printRegisteredCoursesInfo() {
-//        System.out.println("Courses Registered For " + super.getName());
-//        for (String course : coursesRegistered.keySet()) {
-//            System.out.println(course.getCourseCode() + ": " + course.getCourseName());
-//            System.out.println(course.getCourseType() + "\tAUs: " + course.getAcademicUnits());
-//            Index index = coursesRegistered.get(course);
-//            System.out.println("Index: " + index.getIndexNum());
-//            for (Lesson lesson : index.getLessons()) {
-//                System.out.println(lesson);
-//            }
-//        }
-//    }
 }

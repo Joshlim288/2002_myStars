@@ -28,9 +28,7 @@ public class StudentHandler {
 
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
-        if(hasTimetableClash(indexSelected, studentToCheck, indexToExclude))
-            return false;
-        return true;
+        return !hasTimetableClash(indexSelected, studentToCheck, indexToExclude);
     }
 
     public Course retrieveCourse(String courseCode){
@@ -42,8 +40,7 @@ public class StudentHandler {
     }
 
     public boolean checkValidCourse(Course courseSelected){
-        if (courseSelected == null) return false;
-        return true;
+        return courseSelected != null;
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {
@@ -60,7 +57,7 @@ public class StudentHandler {
 
     public boolean checkIfWaitListed(Student student, Course courseSelected){
         if (courseSelected == null) return false;
-        return student.retrieveIndexWaitList(courseSelected.getCourseCode()) != null;
+        return student.retrieveIndexFromWaitList(courseSelected.getCourseCode()) != null;
     }
 
     public Index getIndexRegistered(Student student, Course courseSelected){
@@ -109,7 +106,7 @@ public class StudentHandler {
 
         HashMap<String, String> timetable = (HashMap<String, String>) currentStudent.getCoursesRegistered().clone();
         timetable.putAll(currentStudent.getWaitList());
-        ArrayList<Course> coursesToCheck = new ArrayList<Course>();
+        ArrayList<Course> coursesToCheck = new ArrayList<>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
             coursesToCheck.add(cdm.getCourse(entry.getKey()));
 
@@ -141,12 +138,12 @@ public class StudentHandler {
          * them into a ArrayList<Index> to iterate through*/
         HashMap<String, String> timetable = (HashMap<String, String>) studentToCheck.getCoursesRegistered().clone();
         timetable.putAll(studentToCheck.getWaitList());
-        ArrayList<Index> indexesToCheck = new ArrayList<Index>();
+        ArrayList<Index> indexesToCheck = new ArrayList<>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
             indexesToCheck.add(cdm.getCourse(entry.getKey()).getIndex(entry.getValue()));
 
         ArrayList<Lesson> newLessons = indexToAdd.getLessons();
-        ArrayList<Lesson> oldLessons = new ArrayList<Lesson>();
+        ArrayList<Lesson> oldLessons = new ArrayList<>();
 
         /* For all currently registered indexes, retrieve their lessons and then compare with lessons of
          *  the new index. Comparison only done if the lessons fall on the same day and the index is not
@@ -173,8 +170,6 @@ public class StudentHandler {
         return false;
     }
 
-    //TODO: Consider whether to split the dropping and adding of course for swapping indexes
-    //TODO: Currently there is alr a separate dropCourse() that is called within this addCourse()
     /** Version 2 of addCourse() yay :D
      * Adds the selected index to the selected student.
      * @param student The student whose timetable to add the index to.
@@ -235,8 +230,7 @@ public class StudentHandler {
                 System.out.println("Error! You have chosen yourself.");
                 targetUser = MyStars.login(sc);
             }
-            Student otherStudent = sdm.getStudent(((Student) targetUser).getMatricNum());
-            return otherStudent;
+            return sdm.getStudent(((Student) targetUser).getMatricNum());
         } catch (AccessDeniedException e) {
             System.out.println(e.getMessage());
         }
