@@ -120,13 +120,14 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Gets input to drop a course from the current student's registered courses or waitlist.
+     * Gets input to drop a course from the current student's registered/wait-listed courses.
      * Asks for input repeatedly if course/index input given is invalid.
      * Relays the user's input to studentHandler to drop student from selected index and outputs the outcome.
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void dropCourse() {
         Course courseSelected;
+        String index;
         boolean validCourse;
         boolean waitlistedCourse = false;
 
@@ -142,13 +143,12 @@ public class StudentInterface extends UserInterface {
                 if (validCourse)
                     if (!studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected) &&
                         !studHandler.checkIfWaitListed(studHandler.currentStudent, courseSelected)) {
-                        System.out.println("You are not enrolled in this course!\n");
+                        System.out.println("You are not enrolled in this course or waitlisted for this course!\n");
                         validCourse = false;
                     }
             } while (!validCourse);
 
-            Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
-            String index;
+            Index indexToDrop = studHandler.getIndexToDrop(studHandler.currentStudent, courseSelected);
 
             if (indexToDrop == null) {
                 waitlistedCourse = true;

@@ -72,6 +72,12 @@ public class StudentHandler {
         return indexSelected;
     }
 
+    //For dropping without searching of index in course
+    public Index getIndexToDrop(Student student, Course courseSelected){
+        String indexNum = student.retrieveIndex(courseSelected.getCourseCode());
+        return courseSelected.getIndex(indexNum);
+    }
+
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
         return !hasTimetableClash(indexSelected, studentToCheck, indexToExclude);
@@ -243,8 +249,12 @@ public class StudentHandler {
 
             //Uses MailHandler utility class to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
-                    "You have been removed from the wait-list and added to the course!",
-                    "Successful Registration for " + course.getCourseName());
+                    "Dear " + studentRemoved.getName() + ", you have been successfully removed from the wait-list for the following courses:\n\n" +
+                            course.getCourseCode() + ", " + course.getCourseName() + "\n" +
+                            "Index Registered: " + index.getIndexNum() +  "\n" +
+                            "Current AUs registered: " + studentRemoved.getCurrentAUs() ,
+                    "Successful Registration for " + course.getCourseCode() + ", " + course.getCourseName() +
+                    ": Index " + index.getIndexNum());
         }
     }
 
