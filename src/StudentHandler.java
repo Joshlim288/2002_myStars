@@ -102,7 +102,7 @@ public class StudentHandler {
         if (newExamTime[0] == null)
             return false;
 
-        HashMap<String, String> timetable = currentStudent.getCoursesRegistered();
+        HashMap<String, String> timetable = (HashMap<String, String>) currentStudent.getCoursesRegistered().clone();
         timetable.putAll(currentStudent.getWaitList());
         ArrayList<Course> coursesToCheck = new ArrayList<Course>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
