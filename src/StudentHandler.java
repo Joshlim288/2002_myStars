@@ -58,9 +58,7 @@ public class StudentHandler {
 
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
-        if (student.retrieveIndex(courseSelected.getCourseCode()) != null)
-            return true;
-        return false;
+        return student.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
     public Index getIndexRegistered(Student student, Course courseSelected){

@@ -45,7 +45,8 @@ public class AdminInterface extends UserInterface {
             System.out.println("| 8. Print Overview of Database                       |");
             System.out.println("| 9. Delete a Student from Database                   |");
             System.out.println("| 10. Delete a Course from Database                   |");
-            System.out.println("| 11. Log Out of MyStars                              |");
+            System.out.println("| 11. Force enroll Student on wait list               |");
+            System.out.println("| 12. Log Out of MyStars                              |");
             System.out.println("| (Enter ~ at any time to exit back to previous menu) |");
             System.out.println("-------------------------------------------------------");
 
@@ -67,7 +68,8 @@ public class AdminInterface extends UserInterface {
                 case (8)-> printOverview();
                 case (9)-> deleteStudent();
                 case (10)-> deleteCourse();
-                case (11)-> exitFlag = logout();
+                case (11)-> forceEnroll();
+                case (12)-> exitFlag = logout();
                 default -> System.out.println("ERROR: Invalid menu option selected.");
             }
         } while (!exitFlag);
@@ -576,8 +578,7 @@ public class AdminInterface extends UserInterface {
                         "3: lesson time\n" +
                         "4: venue\n" +
                         "5: teaching weeks\n" +
-                        "6: remove this lesson\n" +
-                        "7: exit");
+                        "6: exit");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -628,12 +629,11 @@ public class AdminInterface extends UserInterface {
                         } while (!validWeeks);
                         adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice);
                     }
-                    case (6) -> adHandler.editLesson(courseCode, indexNum, lessonIndex, null, choice);
-                    case (7) -> System.out.println("Exiting update lesson...");
+                    case (6) -> System.out.println("Exiting update lesson...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 7) System.out.println("Successfully changed");
-            } while (choice != 7);
+                if (choice >= 0 && choice < 6) System.out.println("Successfully changed");
+            } while (choice != 6);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -820,6 +820,37 @@ public class AdminInterface extends UserInterface {
             System.out.println("Course "+courseCode+" has been removed");
             waitForEnterInput();
         } catch(EscapeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Forcefully enroll a Student currently on a wait list into an Index
+     */
+    private void forceEnroll() {
+        String indexNum, matricNum;
+        try {
+            System.out.println(adHandler.getCourseOverview(2));
+            while (true) {
+                System.out.print("\nChoose an index to force enroll student: ");
+                indexNum = getInput(typeOfInput.INDEX_NUM);
+                if (!adHandler.checkIndexExists(indexNum)){
+                    System.out.println("Invalid index number");
+                    continue;
+                }
+                for (Student stud: adHandler.getStudentListByIndex(indexNum)){
+                    System.out.println(stud.getMatricNum() + ", "+ stud.getName());
+                }
+                System.out.print("\nChoose a student from waitlist to force enroll: ");
+                matricNum = getInput(typeOfInput.MATRIC_NUM);
+                if (!adHandler.forceEnrollStudent(indexNum, matricNum)){
+                    System.out.println("Student not found");
+                    continue;
+                }
+                System.out.println("Successfully enrolled student");
+                break;
+            }
+        } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
     }

@@ -649,6 +649,33 @@ public class AdminHandler{
     }
 
     /**
+     * Forcefully enroll a Student currently in the wait list of an index
+     * Will increase the current vacancy of an Index to accommodate the Student
+     * @param indexNum Index number of the Index to forcefully enroll the Student in
+     * @param matricNum Matriculation number of the Student to be enrolled. Must currently be on the wait list
+     * @return true if successful, false otherwise
+     */
+    public boolean forceEnrollStudent(String indexNum, String matricNum){
+        Index tempIndex;
+        Student tempStudent;
+        for (Course crs: cdm.getCourseList()){
+            tempIndex = crs.getIndex(indexNum);
+            if (tempIndex != null && tempIndex.getWaitlist().contains(matricNum)){
+                // Update Index object
+                tempIndex.setIndexVacancy(tempIndex.getIndexVacancy()+1);
+                tempIndex.getWaitlist().remove(matricNum);
+                tempIndex.addToEnrolledStudents(matricNum);
+                // Update Student object
+                tempStudent = sdm.getStudent(matricNum);
+                tempStudent.addCourse(crs.getCourseCode(), indexNum, crs.getAcademicUnits());
+                tempStudent.removeCourseFromWaitList(crs.getCourseCode());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Saves any changed data back to file
      */
     public void close() {
