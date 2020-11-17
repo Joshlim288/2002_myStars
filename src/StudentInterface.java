@@ -2,6 +2,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * Control class to display to the Student what functions are available to them
+ * Gets input for performing these functions and passes them to the handler to be executed
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
+ */
 public class StudentInterface extends UserInterface {
 
     private final StudentHandler studHandler;
@@ -55,50 +62,6 @@ public class StudentInterface extends UserInterface {
         } while (!exitFlag);
     }
 
-    private void printOverview(){
-        try{
-            int choice;
-            do {
-            System.out.println("Choose overview :");
-            System.out.println("1) Print all Courses\n" +
-                    "2) Print all Courses + Indexes\n" +
-                    "3) Print all Courses + Indexes + Lessons");
-                choice = Integer.parseInt(getInput(typeOfInput.INT));
-            } while (choice > 3 || choice == 0);
-            System.out.println(studHandler.getCourseOverview(choice));
-            waitForEnterInput();
-        } catch (EscapeException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-    //Used in adding of course, changing index and swapping index
-    private void showIndexesInCourse(Course courseSelected){
-
-        ArrayList<Index> indexList = courseSelected.getIndexes();
-
-        System.out.println("\nList of Indexes in " +
-                           courseSelected.getCourseName() + " - " +
-                           courseSelected.getCourseCode() + ":\n" +
-                           "Index Number | Remaining Vacancies\n" +
-                           "----------------------------------");
-
-        for (Index index : indexList)
-            System.out.println(index);
-    }
-
-    //Default when an integer representing clash is returned
-    private void printStatusOfAddCourse(int status, Index indexSelected){
-        switch (status) {
-            case (1) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + " successfully!\n");
-            case (2) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + " successfully!\n");
-        }
-    }
-
-    private void showRegisteredCourses(){
-        System.out.println("\nThese are your currently registered courses and indexes:");
-        System.out.println(studHandler.getRegisteredCourses());
-    }
-
     private void addCourse() {
         Course courseSelected;
         Index indexSelected;
@@ -145,22 +108,12 @@ public class StudentInterface extends UserInterface {
         }
     }
 
-    private boolean NoRegisteredCourses(){
-        HashMap<String, String> coursesRegistered = studHandler.currentStudent.getCoursesRegistered();
-        if (coursesRegistered.isEmpty()) {
-            System.out.println("ERROR! No currently registered courses.");
-            waitForEnterInput();
-            return true;
-        }
-        return false;
-    }
-
     private void dropCourse() {
         Course courseSelected;
         boolean validCourse;
         boolean waitlistedCourse = false;
 
-        if(NoRegisteredCourses())
+        if(noRegisteredCourses())
             return;
 
         try {
@@ -230,12 +183,29 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    private void printOverview(){
+        try{
+            int choice;
+            do {
+                System.out.println("Choose overview :");
+                System.out.println("1) Print all Courses\n" +
+                        "2) Print all Courses + Indexes\n" +
+                        "3) Print all Courses + Indexes + Lessons");
+                choice = Integer.parseInt(getInput(typeOfInput.INT));
+            } while (choice > 3 || choice == 0);
+            System.out.println(studHandler.getCourseOverview(choice));
+            waitForEnterInput();
+        } catch (EscapeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private void changeIndex() {
         Course courseSelected;
         Index indexSelected;
         boolean validCourse, validIndex;
 
-        if(NoRegisteredCourses())
+        if(noRegisteredCourses())
             return;
 
         try {
@@ -295,7 +265,7 @@ public class StudentInterface extends UserInterface {
         boolean validCourse, validOtherStudent = false;
         Student otherStudent;
 
-        if(NoRegisteredCourses())
+        if(noRegisteredCourses())
             return;
 
         try {
@@ -365,6 +335,44 @@ public class StudentInterface extends UserInterface {
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    private boolean noRegisteredCourses(){
+        HashMap<String, String> coursesRegistered = studHandler.currentStudent.getCoursesRegistered();
+        if (coursesRegistered.isEmpty()) {
+            System.out.println("ERROR! No currently registered courses.");
+            waitForEnterInput();
+            return true;
+        }
+        return false;
+    }
+
+    //Used in adding of course, changing index and swapping index
+    private void showIndexesInCourse(Course courseSelected){
+
+        ArrayList<Index> indexList = courseSelected.getIndexes();
+
+        System.out.println("\nList of Indexes in " +
+                courseSelected.getCourseName() + " - " +
+                courseSelected.getCourseCode() + ":\n" +
+                "Index Number | Remaining Vacancies\n" +
+                "----------------------------------");
+
+        for (Index index : indexList)
+            System.out.println(index);
+    }
+
+    private void showRegisteredCourses(){
+        System.out.println("\nThese are your currently registered courses and indexes:");
+        System.out.println(studHandler.getRegisteredCourses());
+    }
+
+    //Default when an integer representing clash is returned
+    private void printStatusOfAddCourse(int status, Index indexSelected){
+        switch (status) {
+            case (1) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + " successfully!\n");
+            case (2) -> System.out.println("Added to wait-list for Index " + indexSelected.getIndexNum() + " successfully!\n");
         }
     }
 
