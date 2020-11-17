@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -122,7 +121,6 @@ public class Index implements Serializable {
         return lessons;
     }
 
-    // TODO: Check if necessary to have set method for lessons as a whole
     public void addLesson(String type, String day, String startTime, String endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
         Lesson newLesson = new Lesson(type, day, startTime, endTime, venue, teachingWeeks);
@@ -133,18 +131,9 @@ public class Index implements Serializable {
         return waitlist;
     }
 
-    // TODO: Check if necessary to have set method for entire waitlist
-    public void setWaitlist(ArrayList<String> waitlist) {
-        this.waitlist = waitlist;
-    }
 
     public ArrayList<String> getEnrolledStudents() {
         return enrolledStudents;
-    }
-
-    // TODO: Check if necessary to have set method for entire enrolledStudents
-    public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
-        this.enrolledStudents = enrolledStudents;
     }
 
     /**

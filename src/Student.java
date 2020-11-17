@@ -120,18 +120,6 @@ public class Student extends User {
 
     public int getCurrentAUs() { return currentAUs; }
 
-    //TODO: Remove
-//    /**
-//     * Updates this student's current AUs, based on courses this student has registered.<br>
-//     * This method is called whenever a modification to this student's courses registered is performed.
-//     */
-//    private void updateCurrentAUs() {
-//        currentAUs = 0;
-//        for (Course course : coursesRegistered.keySet()) {
-//            currentAUs += course.getAcademicUnits();
-//        }
-//    }
-
     public String getMajor() { return major; }
 
     public void setMajor(String major) {
@@ -155,15 +143,6 @@ public class Student extends User {
 
     public HashMap<String, String> getCoursesRegistered() {
         return coursesRegistered;
-    }
-
-    /**
-     * Retrieves an index registered by this student.
-     * @param course The course code of the index to be retrieved
-     * @return <code>Index</code> object if the corresponding course exists; null otherwise.
-     */
-    public String retrieveIndex(String course){
-        return coursesRegistered.get(course);
     }
 
     /**
@@ -209,6 +188,15 @@ public class Student extends User {
      */
     public boolean removeCourseFromWaitList(String course) {
         return waitList.remove(course) != null;
+    }
+
+    /**
+     * Retrieves an index registered by this student.
+     * @param course The course code of the index to be retrieved
+     * @return <code>Index</code> object if the corresponding course exists; null otherwise.
+     */
+    public String retrieveIndex(String course){
+        return coursesRegistered.get(course);
     }
 
     /**

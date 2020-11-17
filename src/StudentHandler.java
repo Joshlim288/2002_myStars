@@ -58,6 +58,11 @@ public class StudentHandler {
         return student.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
+    public boolean checkIfWaitListed(Student student, Course courseSelected){
+        if (courseSelected == null) return false;
+        return student.retrieveIndexWaitList(courseSelected.getCourseCode()) != null;
+    }
+
     public Index getIndexRegistered(Student student, Course courseSelected){
         return retrieveIndex(courseSelected, student.retrieveIndex(courseSelected.getCourseCode()));
     }
@@ -180,13 +185,13 @@ public class StudentHandler {
      * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
         if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
-            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
             return 1;
         }
         else{
-            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
             indexToAdd.addToWaitlist(student.getMatricNum());
             student.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
             return 2;
@@ -194,13 +199,19 @@ public class StudentHandler {
     }
 
     //Refreshing of waitlist in separate function
-    public void dropCourse(Student student, Course course,String index) {
-        Index cIndex = course.getIndex(index);
-        //Remove student from list of enrolled students in index
-        cIndex.removeFromEnrolledStudents(student.getMatricNum());
+    public void dropCourse(Student student, Course course, String index, boolean waitlisted) {
 
-        //Remove course from student's registered courses
-        student.removeCourse(course.getCourseCode(), course.getAcademicUnits());
+        Index cIndex = course.getIndex(index);
+        if (!waitlisted) {
+            //Remove student from list of enrolled students in index
+            cIndex.removeFromEnrolledStudents(student.getMatricNum());
+            //Remove course from student's registered courses
+            student.removeCourse(course.getCourseCode(), course.getAcademicUnits());
+        }
+        else{
+            cIndex.removeFromWaitlist(student.getMatricNum());
+            student.removeCourseFromWaitList(course.getCourseCode());
+        }
     }
 
     public void refreshWaitList(Course course, Index index) {
