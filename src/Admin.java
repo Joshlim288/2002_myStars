@@ -7,22 +7,16 @@
  * @version 1.0
  * @since 2020-10-17
  */
-//TODO: add validations and error messages
+
 public class Admin extends User {
 
-    /**
-     * This admin's name.
-     */
+    /** * This admin's name. */
     private String adminName;
 
-    /**
-     * The faculty this admin belongs to.
-     */
+    /** * The faculty this admin belongs to. */
     private String faculty;
 
-    /**
-     * The admin's staff number. It is unique.
-     */
+    /** * The admin's staff number. It is unique. */
     private String staffNum;
 
     /**
@@ -65,6 +59,11 @@ public class Admin extends User {
         this.staffNum = staffNum;
     }
 
+    /**
+     * Checks if two Admins are the same based on staffNum
+     * @param o the other Admin to compare against
+     * @return true if this Admins
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) {

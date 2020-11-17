@@ -149,7 +149,7 @@ public class DataGenerator {
 
         lj9001.addIndex("12345", 10, "SS11");
         Index index12345 = lj9001.getIndex("12345");
-        index12345.addLesson("TUT", "WED", "13:00", "14:00", "TR15", evenWeeks);
+        index12345.addLesson("TUT", "MON", "13:00", "14:00", "TR15", oddWeeks);
 
         /* Adding Students to Courses */
 

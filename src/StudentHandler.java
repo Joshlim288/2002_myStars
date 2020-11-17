@@ -121,9 +121,8 @@ public class StudentHandler {
         return false;
     }
 
-    //TODO: BROKEN AGAIN
     /**
-     * Version 4 of hasTimetableClash() -.-
+     * Version 4 of hasTimetableClash() >:)
      * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
@@ -135,7 +134,7 @@ public class StudentHandler {
         /* Combine courses registered and waitlist for the student into a HashMap.
          * We then retrieve all the actual indexes the student is enrolled in and put
          * them into a ArrayList<Index> to iterate through*/
-        HashMap<String, String> timetable = studentToCheck.getCoursesRegistered();
+        HashMap<String, String> timetable = (HashMap<String, String>) studentToCheck.getCoursesRegistered().clone();
         timetable.putAll(studentToCheck.getWaitList());
         ArrayList<Index> indexesToCheck = new ArrayList<Index>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
@@ -152,17 +151,17 @@ public class StudentHandler {
                 oldLessons.addAll(indexToCheck.getLessons());
                 for (Lesson oldLesson : oldLessons)
                     for (Lesson newLesson : newLessons) {
-                        ArrayList<Integer> oldLessonWeeks = (ArrayList<Integer>) oldLesson.getTeachingWeeks().clone();
-                        oldLessonWeeks.retainAll(newLesson.getTeachingWeeks());
-                        //boolean noCommonWeek = (oldLesson.getTeachingWeeks().retainAll(newLesson.getTeachingWeeks())).isEmpty();
-                        if ((newLesson.getDay().equals(oldLesson.getDay())) && oldLessonWeeks.isEmpty())
+                        if ((newLesson.getDay().equals(oldLesson.getDay()))) {
                             /* Start of new lesson < End of old lesson && End of new lesson > Start of old lesson */
+                            ArrayList<Integer> oldLessonWeeks = (ArrayList<Integer>) oldLesson.getTeachingWeeks().clone();
+                            oldLessonWeeks.retainAll(newLesson.getTeachingWeeks());
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
-                                    newLesson.getEndTime().isAfter(oldLesson.getStartTime())) {
+                                    newLesson.getEndTime().isAfter(oldLesson.getStartTime()) && !oldLessonWeeks.isEmpty()) {
                                 System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
                                 System.out.println("Please choose another index!\n");
                                 return true;
                             }
+                        }
                     }
                 }
         }
@@ -180,7 +179,6 @@ public class StudentHandler {
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
      * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
-
         if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
