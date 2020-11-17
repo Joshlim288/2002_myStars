@@ -28,9 +28,7 @@ public class StudentHandler {
 
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
-        if(hasTimetableClash(indexSelected, studentToCheck, indexToExclude))
-            return false;
-        return true;
+        return !hasTimetableClash(indexSelected, studentToCheck, indexToExclude);
     }
 
     public Course retrieveCourse(String courseCode){
@@ -58,28 +56,40 @@ public class StudentHandler {
 
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
-        if (student.retrieveIndex(courseSelected.getCourseCode()) != null)
-            return true;
-        return false;
+        return student.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
     public Index getIndexRegistered(Student student, Course courseSelected){
         return retrieveIndex(courseSelected, student.retrieveIndex(courseSelected.getCourseCode()));
     }
 
+    //TODO: Include waitlisted courses
     public String getRegisteredCourses() {
-        //Get list of courses student is registered in.
+        Course course;
+        Index index;
         HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
 
-        //Use StringBuilder to create required output and return to StudentInterface
         StringBuilder stringBuilder = new StringBuilder();
-        coursesRegistered.forEach((course, index) -> stringBuilder.append(course + " " + ": Index " + index + "\n"));
+        if (coursesRegistered.isEmpty())
+                stringBuilder.append("\nNo registered courses currently.\n");
+        else
+            stringBuilder.append("\nCourse | Index | AUs | Course Type\n");
+            stringBuilder.append("-----------------------------------\n");
+            for (Map.Entry<String, String> pair : coursesRegistered.entrySet()) {
+                course = cdm.getCourse(pair.getKey());
+                index = cdm.getCourse(pair.getKey()).getIndex(pair.getValue());
+                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
+                        + "  | " + course.getCourseType() + "\n");
+            }
         return stringBuilder.toString();
     }
 
     public boolean hasExamClash(Course courseSelected){
-        LocalDateTime[] newExamTime = cdm.getCourse(courseSelected.getCourseCode()).getExamDateTime();
+
         LocalDateTime[] oldExamTime;
+        LocalDateTime[] newExamTime = cdm.getCourse(courseSelected.getCourseCode()).getExamDateTime();
+        if (newExamTime[0] == null)
+            return false;
 
         HashMap<String, String> timetable = currentStudent.getCoursesRegistered();
         timetable.putAll(currentStudent.getWaitList());
@@ -87,11 +97,13 @@ public class StudentHandler {
         for(Map.Entry<String, String> entry : timetable.entrySet())
             coursesToCheck.add(cdm.getCourse(entry.getKey()));
 
+
         for (Course courseToCheck : coursesToCheck) {
             oldExamTime = courseToCheck.getExamDateTime();
+            if (!(oldExamTime[0] == null))
             if (newExamTime[0].isBefore(oldExamTime[1]) && newExamTime[1].isAfter(oldExamTime[0])) {
                 System.out.println("\nUnable to add " + courseSelected.getCourseCode() + "!");
-                System.out.println(courseSelected.getCourseCode() + "'s exam clashes with" + courseToCheck.getCourseCode() + "'s exam!\n");
+                System.out.println(courseSelected.getCourseCode() + "'s exam clashes with " + courseToCheck.getCourseCode() + "'s exam!\n");
                 return true;
             }
         }
@@ -151,16 +163,18 @@ public class StudentHandler {
      * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping indexes.
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
      * @return The status of adding the course, to be used by printStatusOfAddCourse() in Student Interface */
-    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop) {
-        if (indexToAdd.isAtMaxCapacity()) {
-            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
-            indexToAdd.addToWaitlist(currentStudent.getMatricNum());
-            currentStudent.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
-            return 1;
-        } else{
+    public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
+
+        if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
             indexToAdd.addToEnrolledStudents(student.getMatricNum());
             student.addCourse(course.getCourseCode(), indexToAdd.getIndexNum(), course.getAcademicUnits());
+            return 1;
+        }
+        else{
+            if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum());
+            indexToAdd.addToWaitlist(student.getMatricNum());
+            student.addCourseToWaitList(course.getCourseCode(), indexToAdd.getIndexNum());
             return 2;
         }
     }
@@ -180,11 +194,12 @@ public class StudentHandler {
             Student studentRemoved = sdm.getStudent(index.removeFromWaitlist());
             studentRemoved.removeCourseFromWaitList(course.getCourseCode());
             studentRemoved.addCourse(course.getCourseCode(), index.getIndexNum(), course.getAcademicUnits());
+            index.addToEnrolledStudents(studentRemoved.getMatricNum());
 
             //Uses MailHandler utility class to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
-                    "You have been removed from a wait-list!",
-                    "Successful Registration of Course");
+                    "You have been removed from the wait-list and added to the course!",
+                    "Successful Registration for " + course.getCourseName());
         }
     }
 
@@ -204,7 +219,7 @@ public class StudentHandler {
     }
 
     //Send email to other student if a swap has been performed successfully
-    public void emailOtherStudent(Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
+    public void emailStudent(Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
         MailHandler.sendMail(otherStudent.getEmail(),
                   currentStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
                              " " + courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
