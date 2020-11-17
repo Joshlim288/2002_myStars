@@ -4,8 +4,6 @@ import java.util.ArrayList;
 /**
  * Control class to display to the Admin what functions are available to them
  * Gets input for performing these functions and passes them to the handler to be executed
- * TODO allow forceful adding of student to course
- * TODO test deletion of index and lesson
  * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
  * @version 1.0
  * @since 2020-10-24

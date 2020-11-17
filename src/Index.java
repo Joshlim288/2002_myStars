@@ -7,14 +7,11 @@ import java.util.ArrayList;
  * There can be multiple indexes per course, where the timings of the lessons may differ (except for LEC).
  * Contains an ArrayList of Lesson.
  * Contains two ArrayList of Student, one for students registered, the other for students in waitlist.
- * @author Chong Shen Rui
+ * @author Josh, Jun Wei, Chong Shen Rui, Joshua, Daryl
  * @version 1.2
  * @since 2020-10-18
  */
-
 public class Index implements Serializable {
-
-    private static final long serialVersionUID = 7335698930935614740L;
 
     /**
      * Uniquely identifies each index within a course.
@@ -29,11 +26,15 @@ public class Index implements Serializable {
     /**
      * Number of vacancies remaining for the index.
      * Once vacancies reaches 0, index is full and can no longer accept more students
+     * Is a calculated field, and thus does not have a setter
+     * Will be automatically updated when the relevant methods are called
      */
     private int currentVacancy;
 
     /**
      * Boolean variable showing if index is at max capacity
+     * Is a calculated field, and thus does not have a setter
+     * Will be automatically updated whent he relevant methods are called
      */
     private boolean atMaxCapacity;
 
@@ -77,79 +78,118 @@ public class Index implements Serializable {
         this.enrolledStudents = new ArrayList<>();
     }
 
+    /**
+     * @return Index Number of the Index object
+     */
     public String getIndexNum() {
         return indexNum;
     }
 
+    /**
+     * @param indexNum Index Number to change to
+     */
     public void setIndexNum(String indexNum) {
         this.indexNum = indexNum;
     }
 
+    /**
+     * @return Number of vacancies the Course has in total as an int
+     */
     public int getIndexVacancy() {
         return indexVacancy;
     }
 
+    /**
+     * Current vacancy of the Course is automatically updated
+     * @param newVacancy New number of vacancies the Course should have in total
+     */
     public void setIndexVacancy(int newVacancy) {
         this.currentVacancy += newVacancy - indexVacancy;
         this.indexVacancy = newVacancy;
+        this.atMaxCapacity = (currentVacancy == 0);
     }
 
+    /**
+     * @return Current number of Vacancies in the Index as an int
+     */
     public int getCurrentVacancy() {
         return currentVacancy;
     }
 
-    public void setCurrentVacancy(int currentVacancy) {
-        this.currentVacancy = currentVacancy;
-    }
-
+    /**
+     * @return true if Index is at max capcity, false otherwise
+     */
     public boolean isAtMaxCapacity() {
         return atMaxCapacity;
     }
 
-    private void setAtMaxCapacity(boolean atMaxCapacity) {
-        this.atMaxCapacity = atMaxCapacity;
-    }
-
+    /**
+     * @return Group name of the Index
+     */
     public String getGroup() {
         return group;
     }
 
+    /**
+     * @param group that the Group name of the Index is to be changed to
+     */
     public void setGroup(String group) {
         this.group = group;
     }
 
+    /**
+     * @return Lessons as an ArrayList of Lesson objects that the index currently has
+     */
     public ArrayList<Lesson> getLessons() {
         return lessons;
     }
 
-    // TODO: Check if necessary to have set method for lessons as a whole
+    /**
+     * Creates and adds a new Lesson object into the list of Lessons the index has
+     * @param type The Type of the new Lessons
+     * @param day Day the new Lesson is conducted on
+     * @param startTime Start time for the new Lesson
+     * @param endTime End time for the new Lesson
+     * @param venue Venue the new Lesson is conducted at
+     * @param teachingWeeks Teaching weeks that the Lesson is conducted on
+     */
+    // TODO: Check if necessary to have set method for lessons as a whole, maybe shift checkclash here
     public void addLesson(String type, String day, String startTime, String endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
         Lesson newLesson = new Lesson(type, day, startTime, endTime, venue, teachingWeeks);
         lessons.add(newLesson);
     }
 
+    /**
+     * @return Waitlist as an ArrayList of Matriculation Numbers (Strings)
+     */
     public ArrayList<String> getWaitlist() {
         return waitlist;
     }
 
-    // TODO: Check if necessary to have set method for entire waitlist
+
+    // TODO: Check if necessary to have set method for entire waitlist, remove if not used
     public void setWaitlist(ArrayList<String> waitlist) {
         this.waitlist = waitlist;
     }
 
+    /**
+     * @return EnrolledStudents as an ArrayList of Matriculation Numbers (Strings)
+     */
     public ArrayList<String> getEnrolledStudents() {
         return enrolledStudents;
     }
 
-    // TODO: Check if necessary to have set method for entire enrolledStudents
+    // TODO: Check if necessary to have set method for entire enrolledStudents, remove if not used
     public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
     }
 
+
     /**
      * Method to add a student to current waitlist
      * Student added to the back of the queue.
+     * @param matricNum Matriculation number of the Student to be added
      */
     public void addToWaitlist(String matricNum){
         waitlist.add(matricNum);
@@ -160,34 +200,53 @@ public class Index implements Serializable {
      * Student at front of queue removed
      * Exception handling if waitlist is already empty
      */
-    //TODO: Improve if possible (first draft)
     public String removeFromWaitlist(){
         try{
             return waitlist.remove(0);
         }
         catch(IndexOutOfBoundsException e){
-            System.out.println("Waitlist is empty!");
             return null;
         }
     }
 
+    /**
+     * Removes a Specified Student from the waitlist
+     * @param matricNum Matriculation Number of Student to be removed from the waitlist
+     * @return Matriculation number of Student removed if successful, null otherwise
+     */
+    public String removeFromWaitlist(String matricNum){
+        if (waitlist.remove(matricNum)){
+            currentVacancy += 1;
+            return matricNum;
+        }
+        return null;
+    }
 
+    /**
+     * @param matricNum Matriculation number of the Student to be added to enrolledStudents
+     */
     // TODO: Exception handling if at max capacity (added?)
     public void addToEnrolledStudents(String matricNum){
         enrolledStudents.add(matricNum);
         currentVacancy--;
         if (currentVacancy == 0)
-            setAtMaxCapacity(true);
+            this.atMaxCapacity = true;
     }
 
-
+    /**
+     *
+     * @param matricNum Matriculation number of the Student to be removed from enrolledStudents
+     */
     // TODO: Exception handling if at zero capacity
     public void removeFromEnrolledStudents(String matricNum){
             enrolledStudents.remove(matricNum);
             this.currentVacancy++;
-            setAtMaxCapacity(false);
+            this.atMaxCapacity = false;
     }
 
+    /**
+     * @return Index details as a String, suitable for printing
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -197,6 +256,12 @@ public class Index implements Serializable {
         return stringBuilder.toString();
     }
 
+    /**
+     * Checks if two Index objects refer to the same Index
+     * Compares only the staffNum, which uniquely identifies an Index
+     * @param o Object to compare this to
+     * @return false if the object is not an instance of Index, or does not have the same indexNum
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null) {

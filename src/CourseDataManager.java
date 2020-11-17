@@ -13,6 +13,12 @@ public class CourseDataManager implements DataManager{
         courseList = new ArrayList<>();
     }
 
+    /**
+     * Loads Course objects from data/courseData.dat into courseList
+     * Also contains the relevant Indexes and Lessons that each Course contains
+     *
+     * Initializes the file if it has not yet been created
+     */
     public void load() {
         try {
             FileInputStream fileIn = new FileInputStream("data/courseData.dat");
@@ -31,6 +37,10 @@ public class CourseDataManager implements DataManager{
         }
     }
 
+    /**
+     * Writes back the edited courseList to data/courseData.dat
+     * Must be called when exiting the program or updated data will not be retained between executions of the program
+     */
     public void save() {
         try {
             FileOutputStream fileOut = new FileOutputStream("data/courseData.dat");
@@ -83,10 +93,23 @@ public class CourseDataManager implements DataManager{
         return true;
     }
 
+    /**
+     * @return courseList as an ArrayList of Course objects
+     */
     public ArrayList<Course> getCourseList(){
         return courseList;
     }
 
+    /**
+     * Returns a string that contains an overview of Courses
+     * @param choice determines how much information should be included in the overview:
+     *               <ol>
+     *                  <li>Just Courses</li>
+     *                  <li>Courses + Indexes</li>
+     *                  <li>Courses + Indexes + Lessons</li>
+     *               </ol>
+     * @return String that contains the formatted overview
+     */
     public String generateCourseOverview(int choice){
         StringBuilder stringBuilder = new StringBuilder();
         switch (choice){

@@ -2,8 +2,10 @@
  * CourseValidator extends the Validator class and adds additional validation methods specialized for course-related
  * data in the system.
  * Assumes user knows what the input formats are (through a guide, manual, etc).
+ * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
+ * @version 1.0
+ * @since 2020-10-24
  */
-
 public class CourseValidator extends Validator {
 
     public boolean validateCourseCode(String courseCode) {
