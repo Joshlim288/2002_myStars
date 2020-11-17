@@ -35,15 +35,15 @@ public class AdminInterface extends UserInterface {
             System.out.println("\n-------------------------------------------------------");
             System.out.println("| What would you like to do today?                    |");
             System.out.println("-------------------------------------------------------");
-            System.out.println("| 1. Add a new Student                                |");
-            System.out.println("| 2. Add a new Course                                 |");
-            System.out.println("| 3. Check vacancy of an Index                        |");
-            System.out.println("| 4. Check students registered in an Index            |");
-            System.out.println("| 5. Check students registered in a Course            |");
-            System.out.println("| 6. Update a Course's Details                        |");
-            System.out.println("| 7. Update a Student's Details                       |");
-            System.out.println("| 8. Print Overview of Database                       |");
-            System.out.println("| 9. Delete a Student from Database                   |");
+            System.out.println("|  1. Add a new Student                               |");
+            System.out.println("|  2. Add a new Course                                |");
+            System.out.println("|  3. Check vacancy of an Index                       |");
+            System.out.println("|  4. Check students registered in an Index           |");
+            System.out.println("|  5. Check students registered in a Course           |");
+            System.out.println("|  6. Update a Course's Details                       |");
+            System.out.println("|  7. Update a Student's Details                      |");
+            System.out.println("|  8. Print Overview of Database                      |");
+            System.out.println("|  9. Delete a Student from Database                  |");
             System.out.println("| 10. Delete a Course from Database                   |");
             System.out.println("| 11. Force enroll Student on wait list               |");
             System.out.println("| 12. Log Out of MyStars                              |");
@@ -313,7 +313,7 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
 
-                studentList = adHandler.getStudentListByIndex(indexNum);
+                studentList = adHandler.getStudentListByIndex(indexNum, false);
             } while (studentList == null);
 
             System.out.println("\nStudents currently registered for Index " + indexNum + ": ");
@@ -366,7 +366,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println(crs);
             }
             while (true) {
-                System.out.print("Enter course to edit: ");
+                System.out.print("Enter course code to edit: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
                 if (adHandler.checkCourseExists(courseCode)) {
                     break;
@@ -385,7 +385,8 @@ public class AdminInterface extends UserInterface {
                         " 7: add new index\n" +
                         " 8: delete an index\n" +
                         " 9: examDate\n" +
-                        "10: exit");
+                        "10: exit\n" +
+                        "--------------------------");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -412,6 +413,7 @@ public class AdminInterface extends UserInterface {
                     case (4) -> { // edit academic units
                         if(adHandler.checkCourseOccupied(courseCode)){
                             System.out.println("Course already has students enrolled, AUs cannot be changed");
+                            waitForEnterInput();
                             continue;
                         }
                         do {
@@ -430,6 +432,7 @@ public class AdminInterface extends UserInterface {
                     case (8) -> {
                         if(adHandler.checkCourseOccupied(courseCode)){
                             System.out.println("Course already has students enrolled, Indexes cannot be deleted");
+                            waitForEnterInput();
                             continue;
                         }
                         for (Index idx: adHandler.getIndexes(courseCode)) {
@@ -443,6 +446,7 @@ public class AdminInterface extends UserInterface {
                     case (9) -> { // edit finals
                         if(adHandler.checkCourseOccupied(courseCode)){
                             System.out.println("Course already has students enrolled, Final exams cannot be changed");
+                            waitForEnterInput();
                             continue;
                         }
                         String newStart;
@@ -458,7 +462,10 @@ public class AdminInterface extends UserInterface {
                     case (10) -> System.out.println("Exiting update course..."); // exit
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 10) System.out.println("Successfully changed");
+                if (choice >= 0 && choice < 10) {
+                    System.out.println("Successfully changed");
+                    waitForEnterInput();
+                }
             } while (choice != 10);
             waitForEnterInput();
         } catch (EscapeException e) {
@@ -468,6 +475,9 @@ public class AdminInterface extends UserInterface {
 
     /**
      * Get input for updating an index object
+     * Will relay the user's input and which attribute of the Index the user wishes to edit to the handler
+     * Some parameters cannot be edited if there are Students already enrolled in the course
+     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      */
     private void editIndex(String courseCode) {
@@ -480,7 +490,7 @@ public class AdminInterface extends UserInterface {
                 System.out.println(idx);
             }
             while(true) {
-                System.out.print("Enter index to edit: ");
+                System.out.print("Enter index number to edit: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
                 if (adHandler.checkIndexExists(indexNum)){
                     break;
@@ -496,7 +506,8 @@ public class AdminInterface extends UserInterface {
                         "4. add a new lesson\n" +
                         "5: edit existing lessons\n" +
                         "6: remove a lesson\n" +
-                        "7: exit");
+                        "7: exit\n" +
+                        "--------------------------");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -519,17 +530,33 @@ public class AdminInterface extends UserInterface {
                             changedValue = getInput(typeOfInput.GROUP_NAME);
                         } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
                     }
-                    case (4) -> createLesson(courseCode, indexNum);
-                    case (5) -> editLesson(courseCode, indexNum);
+                    case (4) -> {
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Lessons cannot be added");
+                            waitForEnterInput();
+                            continue;
+                        }
+                        createLesson(courseCode, indexNum);
+                    }
+                    case (5) -> {
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Lessons cannot be edited");
+                            waitForEnterInput();
+                            continue;
+                        }
+                        editLesson(courseCode, indexNum);
+                    }
                     case (6) -> {
                         if(adHandler.checkCourseOccupied(courseCode)){
                             System.out.println("Course already has students enrolled, Lessons cannot be deleted");
+                            waitForEnterInput();
                             continue;
                         }
                         int i = 1;
                         for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)) {
                             System.out.println("\n"+i+":");
                             System.out.println(lsn);
+                            i++;
                         }
                         do {
                             System.out.print("Enter number of lesson to delete: ");
@@ -539,7 +566,10 @@ public class AdminInterface extends UserInterface {
                     case (7) -> System.out.println("Exiting update index...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 7) System.out.println("Successfully changed");
+                if (choice >= 0 && choice < 7) {
+                    System.out.println("Successfully changed");
+                    waitForEnterInput();
+                }
             } while (choice != 7);
 
         } catch (EscapeException e) {
@@ -548,6 +578,9 @@ public class AdminInterface extends UserInterface {
     }
     /**
      * Get input for updating a Lesson object
+     * Will relay the user's input and which attribute of the Lesson the user wishes to edit to the handler
+     * Lessons cannot be modified if there are Students already enrolled in the course
+     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      * @param indexNum Index Number of Index object which contains the Lesson we wish to edit
      */
@@ -563,7 +596,7 @@ public class AdminInterface extends UserInterface {
                 i++;
             }
             while(true) {
-                System.out.println("Enter lesson number to edit:");
+                System.out.print("Enter lesson number to edit:");
                 lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
                 if (lessonIndex<=i && lessonIndex>0){
                     break;
@@ -578,7 +611,8 @@ public class AdminInterface extends UserInterface {
                         "3: lesson time\n" +
                         "4: venue\n" +
                         "5: teaching weeks\n" +
-                        "6: exit");
+                        "6: exit\n"+
+                        "--------------------------");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -632,7 +666,10 @@ public class AdminInterface extends UserInterface {
                     case (6) -> System.out.println("Exiting update lesson...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 6) System.out.println("Successfully changed");
+                if (choice >= 0 && choice < 6) {
+                    System.out.println("Successfully changed");
+                    waitForEnterInput();
+                }
             } while (choice != 6);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -651,7 +688,7 @@ public class AdminInterface extends UserInterface {
             System.out.println(adHandler.getStudentOverview());
 
             while(true) {
-                System.out.print("Enter Matriculation Number of Student: ");
+                System.out.print("Enter Matriculation Number of Student to edit: ");
                 matric = getInput(typeOfInput.MATRIC_NUM);
                 if(adHandler.checkStudentExists(matric)){
                     break;
@@ -662,19 +699,19 @@ public class AdminInterface extends UserInterface {
             do {
                 System.out.println("Choose attribute to edit: ");
                 System.out.print(" 1: userID\n" +
-                        " 2: Password\n" +
-                        " 3: Name\n" +
-                        " 4: matricNum\n" +
-                        " 5: email\n" +
-                        " 6: gender\n" +
-                        " 7: nationality\n" +
-                        " 8: major\n" +
-                        " 9: maxAUs\n" +
-                        "10: access period\n" +
-                        "11: exit\n" +
-                        "Enter choice: ");
+                                 " 2: Password\n" +
+                                 " 3: Name\n" +
+                                 " 4: matricNum\n" +
+                                 " 5: email\n" +
+                                 " 6: gender\n" +
+                                 " 7: nationality\n" +
+                                 " 8: major\n" +
+                                 " 9: maxAUs\n" +
+                                 "10: access period\n" +
+                                 "11: exit\n" +
+                                 "--------------------------\n" +
+                                 "Enter choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
-
                 switch (choice) {
                     case (1) -> { // user id
                         do {
@@ -745,9 +782,11 @@ public class AdminInterface extends UserInterface {
                     case (11) -> System.out.println("Exiting update student...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 11) System.out.println("Successfully changed");
+                if (choice >= 0 && choice < 11) {
+                    System.out.println("Successfully changed");
+                    waitForEnterInput();
+                }
             } while (choice != 11);
-            waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
@@ -838,7 +877,7 @@ public class AdminInterface extends UserInterface {
                     System.out.println("Invalid index number");
                     continue;
                 }
-                for (Student stud: adHandler.getStudentListByIndex(indexNum)){
+                for (Student stud: adHandler.getStudentListByIndex(indexNum, true)){
                     System.out.println(stud.getMatricNum() + ", "+ stud.getName());
                 }
                 System.out.print("\nChoose a student from waitlist to force enroll: ");
@@ -853,6 +892,7 @@ public class AdminInterface extends UserInterface {
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
+        waitForEnterInput();
     }
 
     /**

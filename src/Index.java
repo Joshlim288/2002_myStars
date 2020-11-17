@@ -89,8 +89,9 @@ public class Index implements Serializable {
         return indexVacancy;
     }
 
-    public void setIndexVacancy(int indexVacancy) {
-        this.indexVacancy = indexVacancy;
+    public void setIndexVacancy(int newVacancy) {
+        this.currentVacancy += newVacancy - indexVacancy;
+        this.indexVacancy = newVacancy;
     }
 
     public int getCurrentVacancy() {
