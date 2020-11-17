@@ -28,7 +28,7 @@ public class AccessControl {
      * Our implementation requires userID to be unique among all users, regardless of domain
      * @param userId userId to be searched for
      * @param password unhashed password entered by user
-     * @return a User object if a matching account is found, null if not
+     * @return User object if a matching account is found, null if not
      */
     public static User validate(String userId, String password) throws AccessDeniedException{
         ArrayList<User> userList = udm.getUserList();
