@@ -49,7 +49,6 @@ public class StudentHandler {
 
     //Refreshing of waitlist in separate function
     public void dropCourse(Student student, Course course, String index, boolean waitlisted) {
-
         Index cIndex = course.getIndex(index);
         if (!waitlisted) {
             //Remove student from list of enrolled students in index
@@ -85,7 +84,7 @@ public class StudentHandler {
         Course courseSelected = cdm.getCourse(courseCode);
         if (courseSelected == null)
             System.out.println("Course does not exist in the database!\n" +
-                    "Please re-enter course again.\n");
+                               "Please re-enter course again.\n");
         return courseSelected;
     }
 
@@ -129,7 +128,6 @@ public class StudentHandler {
         Index index;
         HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
         HashMap<String, String> coursesWaitListed = currentStudent.getWaitList();
-
         StringBuilder stringBuilder = new StringBuilder();
 
         if (coursesRegistered.isEmpty())
@@ -152,8 +150,8 @@ public class StudentHandler {
                 stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
                         + "  | WAITLISTED |  " + course.getCourseType() + "\n");
             }
-
         }
+
         return stringBuilder.toString();
     }
 
@@ -174,14 +172,14 @@ public class StudentHandler {
         for(Map.Entry<String, String> entry : timetable.entrySet())
             coursesToCheck.add(cdm.getCourse(entry.getKey()));
 
-
         for (Course courseToCheck : coursesToCheck) {
             oldExamTime = courseToCheck.getExamDateTime();
             if (!(oldExamTime[0] == null))
-            if (newExamTime[0].isBefore(oldExamTime[1]) && newExamTime[1].isAfter(oldExamTime[0])) {
-                System.out.println("\nUnable to add " + courseSelected.getCourseCode() + "!");
-                System.out.println(courseSelected.getCourseCode() + "'s exam clashes with " + courseToCheck.getCourseCode() + "'s exam!\n");
-                return true;
+                if (newExamTime[0].isBefore(oldExamTime[1]) && newExamTime[1].isAfter(oldExamTime[0])) {
+                    System.out.println("\nUnable to add " + courseSelected.getCourseCode() + "!");
+                    System.out.println(courseSelected.getCourseCode() + "'s exam clashes with " +
+                                       courseToCheck.getCourseCode() + "'s exam!\n");
+                    return true;
             }
         }
         return false;
@@ -222,14 +220,15 @@ public class StudentHandler {
                             ArrayList<Integer> oldLessonWeeks = (ArrayList<Integer>) oldLesson.getTeachingWeeks().clone();
                             oldLessonWeeks.retainAll(newLesson.getTeachingWeeks());
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
-                                    newLesson.getEndTime().isAfter(oldLesson.getStartTime()) && !oldLessonWeeks.isEmpty()) {
+                                    newLesson.getEndTime().isAfter(oldLesson.getStartTime()) &&
+                                        !oldLessonWeeks.isEmpty()) {
                                 System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
                                 System.out.println("Please choose another index!\n");
                                 return true;
                             }
                         }
                     }
-                }
+            }
         }
         return false;
     }
@@ -243,12 +242,13 @@ public class StudentHandler {
 
             //Uses MailHandler utility class to send an email to student removed from wait-list
             MailHandler.sendMail(studentRemoved.getEmail(),
-                    "Dear " + studentRemoved.getName() + ", you have been successfully removed from the wait-list for the following courses:\n\n" +
-                            course.getCourseCode() + ", " + course.getCourseName() + "\n" +
-                            "Index Registered: " + index.getIndexNum() +  "\n" +
-                            "Current AUs registered: " + studentRemoved.getCurrentAUs() ,
-                    "Successful Registration for " + course.getCourseCode() + ", " + course.getCourseName() +
-                    ": Index " + index.getIndexNum());
+                    "Dear " + studentRemoved.getName() +
+                                ", you have been successfully removed from the wait-list for the following courses:\n\n" +
+                                course.getCourseCode() + ", " + course.getCourseName() + "\n" +
+                                "Index Registered: " + index.getIndexNum() +  "\n" +
+                                "Current AUs registered: " + studentRemoved.getCurrentAUs() ,
+                         "Successful Registration for " + course.getCourseCode() + ", " + course.getCourseName() +
+                                ": Index " + index.getIndexNum());
         }
     }
 

@@ -101,7 +101,7 @@ public class StudentInterface extends UserInterface {
             showIndexesInCourse(courseSelected);
             do {
                 System.out.println("Enter the index you would like to enroll in.\n" +
-                        "You will be added to wait-list if you choose an index with no vacancies:");
+                                   "You will be added to wait-list if an index with no vacancies is chosen:");
                 indexSelected = studHandler.retrieveIndex(courseSelected, getInput(typeOfInput.INDEX_NUM));
                 validIndex = studHandler.checkValidIndex(indexSelected, studHandler.currentStudent, null);
             } while (!validIndex);
@@ -112,7 +112,6 @@ public class StudentInterface extends UserInterface {
 
             int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, null, true);
             printStatusOfAddCourse(status, indexSelected);
-
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
@@ -128,8 +127,7 @@ public class StudentInterface extends UserInterface {
     private void dropCourseOption() {
         Course courseSelected;
         String indexCode;
-        boolean validCourse;
-        boolean waitListed = false;
+        boolean validCourse, waitListed = false;
 
         if(noRegisteredCourses())
             return;
@@ -189,10 +187,10 @@ public class StudentInterface extends UserInterface {
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void checkIndexVacancies(){
-        try {
-            Course courseSelected;
-            boolean validCourse;
+        Course courseSelected;
+        boolean validCourse;
 
+        try {
             System.out.println(studHandler.getCourseOverview(1));
             do {
                 System.out.print("Enter course code to check vacancies (e.g. CZ2002): ");
@@ -214,13 +212,14 @@ public class StudentInterface extends UserInterface {
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void printOverview(){
+        int choice;
+
         try{
-            int choice;
             do {
                 System.out.println("Choose overview :");
                 System.out.println("1) Print all Courses\n" +
-                        "2) Print all Courses + Indexes\n" +
-                        "3) Print all Courses + Indexes + Lessons");
+                                   "2) Print all Courses + Indexes\n" +
+                                   "3) Print all Courses + Indexes + Lessons");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
             } while (choice > 3 || choice == 0);
             System.out.println(studHandler.getCourseOverview(choice));
@@ -259,12 +258,11 @@ public class StudentInterface extends UserInterface {
             }while (!validCourse);
 
             Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
-            //Index indexToDrop = studHandler.retrieveIndex(courseSelected, studHandler.currentStudent)
             showIndexesInCourse(courseSelected);
 
             do {
                 System.out.println("Enter the index you would like to swap to.\n" +
-                            "You will be added to wait-list if you choose an index with no vacancies:");
+                                   "You will be added to wait-list if you choose an index with no vacancies:");
                 indexSelected = studHandler.retrieveIndex(courseSelected, getInput(typeOfInput.INDEX_NUM));
                 validIndex = studHandler.checkValidIndex(indexSelected, studHandler.currentStudent, indexToDrop);
 
@@ -273,9 +271,7 @@ public class StudentInterface extends UserInterface {
                     System.out.println("Please choose a different index.\n");
                     validIndex = false;
                 }
-
             } while (!validIndex);
-
 
             System.out.println("\nIndex change details for " + courseSelected.getCourseCode()+ ", " + courseSelected.getCourseName());
             System.out.println("Current index before swap: " + indexToDrop.getIndexNum());
@@ -363,9 +359,9 @@ public class StudentInterface extends UserInterface {
             if (ans == 'Y' || ans == 'y') {
                 int status1 = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut, false);
                 int status2 = studHandler.addCourse(otherStudent, courseSelected, indexToSwapOut, indexToSwapIn, false);
-                System.out.println("\nFor " + studHandler.currentStudent.getName() + " :");
+                System.out.println("\nFor " + studHandler.currentStudent.getName() + ":");
                 printStatusOfAddCourse(status1, indexToSwapIn);
-                System.out.println("For " + otherStudent.getName() + " :");
+                System.out.println("For " + otherStudent.getName() + ":");
                 printStatusOfAddCourse(status2, indexToSwapOut);
                 System.out.println("Updating database, please wait...");
                 //For current student
@@ -382,14 +378,15 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Checks if the student has any currently registered courses.
-     * @return <code>true</code> if no currently registered courses and <code>false</code> otherwise.
+     * Checks if the student has any currently registered or wait-listed courses.
+     * @return <code>true</code> if no currently registered/wait-listed courses and <code>false</code> otherwise.
      * Used in <code>dropCourse</code>, <code>changeIndex</code> and <code>swapIndex</code>.
      */
     private boolean noRegisteredCourses(){
         HashMap<String, String> coursesRegistered = studHandler.currentStudent.getCoursesRegistered();
-        if (coursesRegistered.isEmpty()) {
-            System.out.println("ERROR! No currently registered courses.");
+        HashMap<String, String> coursesWaitListed = studHandler.currentStudent.getWaitList();
+        if (coursesRegistered.isEmpty() && coursesWaitListed.isEmpty()) {
+            System.out.println("ERROR! No currently registered or waitlisted courses.");
             waitForEnterInput();
             return true;
         }
@@ -402,7 +399,6 @@ public class StudentInterface extends UserInterface {
      * Used in <code>addCourse</code, <code>checkIndexVacancies</code> and <code>changeIndex</code>.
      */
     private void showIndexesInCourse(Course courseSelected){
-
         ArrayList<Index> indexList = courseSelected.getIndexes();
 
         System.out.println("\nList of Indexes in " +
