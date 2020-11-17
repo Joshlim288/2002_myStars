@@ -83,61 +83,89 @@ public class Student extends User {
         this.waitList = new HashMap<>();
     }
 
+    /**
+     * @return Matriculation number of the Student
+     */
     public String getMatricNum() {
         return matricNum;
     }
 
+    /**
+     * @param matricNum Matriculation number to change to
+     */
     public void setMatricNum(String matricNum) {
         this.matricNum = matricNum;
         System.out.println("SUCCESS: New matriculation number saved.");
     }
 
+    /**
+     * @return Gender of the Student
+     */
     public typeOfGender getGender() {
         return gender;
     }
 
+    /**
+     * @param gender Gender to change the Student to
+     */
     public void setGender(String gender) {
         this.gender = typeOfGender.valueOf(gender);
         System.out.println("SUCCESS: New gender type saved.");
     }
 
+    /**
+     * @return Nationality of the Student as a String
+     */
     public String getNationality() {
         return nationality;
     }
 
+    /**
+     * @param nationality Nationality to change the Student to
+     */
     public void setNationality(String nationality) {
         this.nationality = nationality;
         System.out.println("SUCCESS: New nationality saved.");
     }
 
+    /**
+     * @return Maximum Academic Units the Student is allowed to take
+     */
     public int getMaxAUs() {
         return maxAUs;
     }
 
+    /**
+     * @param maxAUs Maximum Academic Units to allow the Student to take
+     */
     public void setMaxAUs(int maxAUs) {
         this.maxAUs = maxAUs;
     }
 
+    /**
+     * @return Number of Academic Units that the Student is currently taking
+     */
     public int getCurrentAUs() { return currentAUs; }
 
-    //TODO: Remove
-//    /**
-//     * Updates this student's current AUs, based on courses this student has registered.<br>
-//     * This method is called whenever a modification to this student's courses registered is performed.
-//     */
-//    private void updateCurrentAUs() {
-//        currentAUs = 0;
-//        for (Course course : coursesRegistered.keySet()) {
-//            currentAUs += course.getAcademicUnits();
-//        }
-//    }
-
+    /**
+     * @return Major that the Student is taking
+     */
     public String getMajor() { return major; }
 
+    /**
+     * @param major Major to change the Student to
+     */
     public void setMajor(String major) {
         this.major = major;
     }
 
+    /**
+     * @return Array of 2 LocalDateTime objects that indicate when the Student is allowed to access the system
+     * <ul>
+     *     <li>LocalDateTime[0]: the start time as LocalDateTime for accessing STARS for this student</li>
+     *     <li>LocalDateTime[1]: the end time as LocalDateTime for accessing STARS for this student</li>
+     * </ul>
+     */
     public LocalDateTime[] getAccessTime() {
         return accessTime;
     }
@@ -189,6 +217,9 @@ public class Student extends User {
         return true;
     }
 
+    /**
+     * @return waitList of the Student, as a HashMap with key CourseCode, and value indexNum
+     */
     public HashMap<String, String> getWaitList() {
         return waitList;
     }
@@ -237,6 +268,16 @@ public class Student extends User {
         return other.getMatricNum().equals(this.matricNum);
     }
 
+    /**
+     * Overriden login validation from the User parent class
+     * Uses the implementation of User's validate login, but also checks for whether the Student is allowed to log in
+     * at the current time
+     * @param checkID userID to check against this Student's userID
+     * @param checkpw unhashed password to check against this Student's userID
+     * @return true if login is allowed, false if userID does not match
+     * @throws AccessDeniedException thrown when userID and password matches with this object, but it is currently
+     * outside of the allocated access period
+     */
     @Override
     public boolean validateLogin(String checkID, String checkpw) throws AccessDeniedException {
         if (super.validateLogin(checkID, checkpw)) {
@@ -251,6 +292,9 @@ public class Student extends User {
         return false;
     }
 
+    /**
+     * @return Student details as a String, suitable for printing
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -264,23 +308,4 @@ public class Student extends User {
         }
         return stringBuilder.toString();
     }
-
-    /**
-     * Displays course code, course name, course type, number of AUs, index number, and for each lesson in that index,
-     * the lesson information.
-     * KIV if to be placed here or handler
-     */
-    //TODO: Remove
-//    public void printRegisteredCoursesInfo() {
-//        System.out.println("Courses Registered For " + super.getName());
-//        for (String course : coursesRegistered.keySet()) {
-//            System.out.println(course.getCourseCode() + ": " + course.getCourseName());
-//            System.out.println(course.getCourseType() + "\tAUs: " + course.getAcademicUnits());
-//            Index index = coursesRegistered.get(course);
-//            System.out.println("Index: " + index.getIndexNum());
-//            for (Lesson lesson : index.getLessons()) {
-//                System.out.println(lesson);
-//            }
-//        }
-//    }
 }
