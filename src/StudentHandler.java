@@ -72,10 +72,8 @@ public class StudentHandler {
         return indexSelected;
     }
 
-    //For dropping without searching of index in course
-    public Index getIndexToDrop(Student student, Course courseSelected){
-        String indexNum = student.retrieveIndex(courseSelected.getCourseCode());
-        return courseSelected.getIndex(indexNum);
+    public Index getIndexRegistered(Student student, Course courseSelected){
+        return retrieveIndex(courseSelected, student.retrieveIndexFromRegistered(courseSelected.getCourseCode()));
     }
 
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
@@ -118,16 +116,12 @@ public class StudentHandler {
 
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
-        return student.retrieveIndex(courseSelected.getCourseCode()) != null;
+        return student.retrieveIndexFromRegistered(courseSelected.getCourseCode()) != null;
     }
 
     public boolean checkIfWaitListed(Student student, Course courseSelected){
         if (courseSelected == null) return false;
         return student.retrieveIndexFromWaitList(courseSelected.getCourseCode()) != null;
-    }
-
-    public Index getIndexRegistered(Student student, Course courseSelected){
-        return retrieveIndex(courseSelected, student.retrieveIndex(courseSelected.getCourseCode()));
     }
 
     public String getRegisteredCourses() {

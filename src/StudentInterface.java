@@ -36,9 +36,9 @@ public class StudentInterface extends UserInterface {
             System.out.println("| What would you like to do today?                           |");
             System.out.println("--------------------------------------------------------------");
             System.out.println("| 1. Add New Course                                          |");
-            System.out.println("| 2. Drop Registered Course / Waitlisted Course              |");
+            System.out.println("| 2. Drop Registered Course / Wait-listed Course              |");
             System.out.println("| 3. Check Currently Registered Courses                      |");
-            System.out.println("| 4. Check Vacancies for A Course                            |");
+            System.out.println("| 4. Check Vacancies for a Course                            |");
             System.out.println("| 5. Print Overview of Course Database                       |");
             System.out.println("| 6. Change Index of Registered Course                       |");
             System.out.println("| 7. Swap Index of Registered Course with Another Student    |");
@@ -54,8 +54,8 @@ public class StudentInterface extends UserInterface {
                 return;
             }
             switch (choice) {
-                case (1) -> addCourse();
-                case (2) -> dropCourse();
+                case (1) -> addCourseOption();
+                case (2) -> dropCourseOption();
                 case (3) -> getRegisteredCourses();
                 case (4) -> checkIndexVacancies();
                 case (5) -> printOverview();
@@ -73,7 +73,7 @@ public class StudentInterface extends UserInterface {
      * Relays the user's input to studentHandler to add student to selected index and outputs the outcome.
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
-    private void addCourse() {
+    private void addCourseOption() {
         Course courseSelected;
         Index indexSelected;
         boolean validCourse, validIndex;
@@ -125,11 +125,11 @@ public class StudentInterface extends UserInterface {
      * Relays the user's input to studentHandler to drop student from selected index and outputs the outcome.
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
-    private void dropCourse() {
+    private void dropCourseOption() {
         Course courseSelected;
-        String index;
+        String indexCode;
         boolean validCourse;
-        boolean waitlistedCourse = false;
+        boolean waitListed = false;
 
         if(noRegisteredCourses())
             return;
@@ -140,34 +140,31 @@ public class StudentInterface extends UserInterface {
                 System.out.print("Enter course to drop (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
-                if (validCourse)
-                    if (!studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected) &&
-                        !studHandler.checkIfWaitListed(studHandler.currentStudent, courseSelected)) {
-                        System.out.println("You are not enrolled in this course or waitlisted for this course!\n");
+                if (validCourse){
+                    waitListed = studHandler.checkIfWaitListed(studHandler.currentStudent, courseSelected);
+                    if (!studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected) && !waitListed) {
+                        System.out.println("You are not enrolled in this course/wait-listed for this course!\n");
                         validCourse = false;
                     }
+                }
             } while (!validCourse);
 
-            Index indexToDrop = studHandler.getIndexToDrop(studHandler.currentStudent, courseSelected);
-
-            if (indexToDrop == null) {
-                waitlistedCourse = true;
-                index = studHandler.currentStudent.retrieveIndexFromWaitList(courseSelected.getCourseCode());
-            }
+            if (waitListed)
+                indexCode = studHandler.currentStudent.retrieveIndexFromWaitList(courseSelected.getCourseCode());
             else
-                index = studHandler.currentStudent.retrieveIndex(courseSelected.getCourseCode());
+                indexCode = studHandler.currentStudent.retrieveIndexFromRegistered(courseSelected.getCourseCode());
 
+            Index indexToDrop = studHandler.retrieveIndex(courseSelected, indexCode);
             System.out.println("\nEnter \"Y\" to confirm that you would like to drop this index: \n" +
                                courseSelected.getCourseCode() + ", " + courseSelected.getCourseName() +
-                               ", Index Number: " + index);
+                               ", Index Number: " + indexCode);
 
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
-                studHandler.dropCourse(studHandler.currentStudent, courseSelected, index, waitlistedCourse);
-                System.out.println("Dropping index " + index + ", please wait a moment...");
-                if(!waitlistedCourse)
-                    studHandler.refreshWaitList(courseSelected, indexToDrop);
-                System.out.println("Successfully dropped index " + index + "!");
+                studHandler.dropCourse(studHandler.currentStudent, courseSelected, indexCode, waitListed);
+                System.out.println("Dropping index " + indexCode + ", please wait a moment...");
+                if(!waitListed) studHandler.refreshWaitList(courseSelected, indexToDrop);
+                System.out.println("Successfully dropped index " + indexCode + "!");
             }
             else System.out.println("Index not dropped. Returning to main menu.");
             waitForEnterInput();
@@ -262,6 +259,7 @@ public class StudentInterface extends UserInterface {
             }while (!validCourse);
 
             Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
+            //Index indexToDrop = studHandler.retrieveIndex(courseSelected, studHandler.currentStudent)
             showIndexesInCourse(courseSelected);
 
             do {

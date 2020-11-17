@@ -241,7 +241,7 @@ public class Student extends User {
      * @param course The course code of the index to be retrieved
      * @return <code>Index</code> object if the corresponding course exists; null otherwise.
      */
-    public String retrieveIndex(String course){
+    public String retrieveIndexFromRegistered(String course){
         return coursesRegistered.get(course);
     }
 
