@@ -21,7 +21,8 @@ enum typeOfInput{
  */
 public abstract class UserInterface {
     protected Scanner sc;
-    protected UserValidator userValidator;
+    protected StudentValidator studentValidator;
+    protected AdminValidator adminValidator;
     protected CourseValidator courseValidator;
     protected DateTimeFormatter dateTimeFormatter;
     protected DateTimeFormatter timeFormatter;
@@ -32,7 +33,7 @@ public abstract class UserInterface {
      */
     public UserInterface(Scanner sc){
         this.sc = sc;
-        userValidator = new UserValidator();
+        studentValidator = new StudentValidator();
         courseValidator = new CourseValidator();
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -70,42 +71,24 @@ public abstract class UserInterface {
      * @return true if input is valid
      */
     private boolean validateInput(String input, typeOfInput inputType) {
-        switch (inputType) {
-            case NAME: // names
-                return userValidator.validateName(input);
-            case INT: // integer inputs
-                return userValidator.validateInt(input);
-            case TIME: // time
-                return userValidator.validateTime(input);
-            case DATETIME: // datetime
-                return userValidator.validateDateTime(input);
-            case USERID: // userID
-                return userValidator.validateUserID(input);
-            case EMAIL: // email
-                return userValidator.validateEmail(input);
-            case MATRIC_NUM: // matricNum
-                return userValidator.validateMatricNum(input);
-            case GENDER: // gender
-                return userValidator.validateGender(input);
-            case STAFF_NUM: // staff num
-                return userValidator.validateStaffNum(input);
-            case COURSE_CODE: // course code
-                return courseValidator.validateCourseCode(input);
-            case COURSE_TYPE: // course type
-                return courseValidator.validateCourseType(input);
-            case INDEX_NUM:  // index num
-                return courseValidator.validateIndexNum(input);
-            case LESSON_TYPE: // lesson type
-                return courseValidator.validateLessonType(input);
-            case DAY: // day
-                return courseValidator.validateDay(input);
-            case GROUP_NAME: // group name
-                return courseValidator.validateGroupName(input);
-            case STANDARD:
-                return true;
-            default:
-                throw new IllegalArgumentException("ERROR: Invalid input type.");
-        }
+        return switch (inputType) {
+            case NAME -> studentValidator.validateName(input);
+            case INT -> studentValidator.validateInt(input);
+            case TIME -> studentValidator.validateTime(input);
+            case DATETIME -> studentValidator.validateDateTime(input);
+            case USERID -> studentValidator.validateUserID(input);
+            case EMAIL -> studentValidator.validateEmail(input);
+            case MATRIC_NUM -> studentValidator.validateMatricNum(input);
+            case GENDER -> studentValidator.validateGender(input);
+            case STAFF_NUM -> adminValidator.validateStaffNum(input);
+            case COURSE_CODE -> courseValidator.validateCourseCode(input);
+            case COURSE_TYPE -> courseValidator.validateCourseType(input);
+            case INDEX_NUM -> courseValidator.validateIndexNum(input);
+            case LESSON_TYPE -> courseValidator.validateLessonType(input);
+            case DAY -> courseValidator.validateDay(input);
+            case GROUP_NAME -> courseValidator.validateGroupName(input);
+            case STANDARD -> true;
+        };
     }
 
     /**
