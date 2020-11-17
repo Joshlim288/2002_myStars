@@ -33,10 +33,9 @@ public class UserDataManager implements DataManager{
                 in = new ObjectInputStream(fileIn);
                 userList.addAll((ArrayList<User>) in.readObject());
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("User data file not found or is blank. Initializing file...");
             } catch (ClassNotFoundException e) {
-                //TODO: Print correct error message
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 
