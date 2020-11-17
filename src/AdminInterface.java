@@ -339,7 +339,6 @@ public class AdminInterface extends UserInterface {
             do {
                 System.out.print("Enter course code: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
-
                 studentList = adHandler.getStudentListByCourse(courseCode);
             } while (studentList == null);
 
@@ -459,7 +458,7 @@ public class AdminInterface extends UserInterface {
                             newStart = getInput(typeOfInput.DATETIME);
                             System.out.print("Enter new exam end datetime: ");
                             newEnd = getInput(typeOfInput.DATETIME);
-                        } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
+                        } while (!studentValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editCourse(courseCode, newStart+"&"+newEnd, choice));
                     }
                     case (10) -> System.out.println("Exiting update course..."); // exit
@@ -784,7 +783,7 @@ public class AdminInterface extends UserInterface {
                             newStart = getInput(typeOfInput.DATETIME);
                             System.out.print("Enter student's new end access datetime: ");
                             newEnd = getInput(typeOfInput.DATETIME);
-                        } while (!userValidator.validateDateTimePeriod(newStart, newEnd) ||
+                        } while (!studentValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editStudent(matric, newStart+"&"+newEnd, choice));
                     }
                     case (11) -> System.out.println("Exiting update student...");
