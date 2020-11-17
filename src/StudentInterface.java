@@ -1,12 +1,10 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class StudentInterface extends UserInterface {
 
-    private StudentHandler studHandler;
+    private final StudentHandler studHandler;
 
     public StudentInterface(User currentUser, Scanner sc) {
         super(sc);
@@ -26,7 +24,7 @@ public class StudentInterface extends UserInterface {
             System.out.println("| What would you like to do today?                           |");
             System.out.println("--------------------------------------------------------------");
             System.out.println("| 1. Add New Course                                          |");
-            System.out.println("| 2. Drop Registered Course                                  |");
+            System.out.println("| 2. Drop Registered Course / Waitlisted Course              |");
             System.out.println("| 3. Check Currently Registered Courses                      |");
             System.out.println("| 4. Check Vacancies for A Course                            |");
             System.out.println("| 5. Print Overview of Course Database                       |");
@@ -160,6 +158,7 @@ public class StudentInterface extends UserInterface {
     private void dropCourse() {
         Course courseSelected;
         boolean validCourse;
+        boolean waitlistedCourse = false;
 
         if(NoRegisteredCourses())
             return;
@@ -171,23 +170,33 @@ public class StudentInterface extends UserInterface {
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
                 if (validCourse)
-                    if (!studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected)) {
+                    if (!studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected) &&
+                        !studHandler.checkIfWaitListed(studHandler.currentStudent, courseSelected)) {
                         System.out.println("You are not enrolled in this course!\n");
                         validCourse = false;
                     }
             } while (!validCourse);
 
             Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
-            String index = studHandler.currentStudent.retrieveIndex(courseSelected.getCourseCode());
+            String index;
+
+            if (indexToDrop == null) {
+                waitlistedCourse = true;
+                index = studHandler.currentStudent.retrieveIndexFromWaitList(courseSelected.getCourseCode());
+            }
+            else
+                index = studHandler.currentStudent.retrieveIndex(courseSelected.getCourseCode());
+
             System.out.println("\nEnter \"Y\" to confirm that you would like to drop this index: \n" +
                                courseSelected.getCourseCode() + ", " + courseSelected.getCourseName() +
                                ", Index Number: " + index);
 
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
-                studHandler.dropCourse(studHandler.currentStudent, courseSelected, index);
+                studHandler.dropCourse(studHandler.currentStudent, courseSelected, index, waitlistedCourse);
                 System.out.println("Dropping index " + index + ", please wait a moment...");
-                studHandler.refreshWaitList(courseSelected, indexToDrop);
+                if(!waitlistedCourse)
+                    studHandler.refreshWaitList(courseSelected, indexToDrop);
                 System.out.println("Successfully dropped index " + index + "!");
             }
             else System.out.println("Index not dropped. Returning to main menu.");

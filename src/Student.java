@@ -186,15 +186,6 @@ public class Student extends User {
     }
 
     /**
-     * Retrieves an index registered by this student.
-     * @param course The course code of the index to be retrieved
-     * @return <code>Index</code> object if the corresponding course exists; null otherwise.
-     */
-    public String retrieveIndex(String course){
-        return coursesRegistered.get(course);
-    }
-
-    /**
      * Adds a course into this student's registered courses for the semester.
      * @param course The object of the course to be added.
      * @param index The object of the index of the course to be added.
@@ -240,6 +231,15 @@ public class Student extends User {
      */
     public boolean removeCourseFromWaitList(String course) {
         return waitList.remove(course) != null;
+    }
+
+    /**
+     * Retrieves an index registered by this student.
+     * @param course The course code of the index to be retrieved
+     * @return <code>Index</code> object if the corresponding course exists; null otherwise.
+     */
+    public String retrieveIndex(String course){
+        return coursesRegistered.get(course);
     }
 
     /**

@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -153,7 +152,6 @@ public class Index implements Serializable {
      * @param venue Venue the new Lesson is conducted at
      * @param teachingWeeks Teaching weeks that the Lesson is conducted on
      */
-    // TODO: Check if necessary to have set method for lessons as a whole, maybe shift checkclash here
     public void addLesson(String type, String day, String startTime, String endTime,
                           String venue, ArrayList<Integer> teachingWeeks) {
         Lesson newLesson = new Lesson(type, day, startTime, endTime, venue, teachingWeeks);
@@ -166,25 +164,6 @@ public class Index implements Serializable {
     public ArrayList<String> getWaitlist() {
         return waitlist;
     }
-
-
-    // TODO: Check if necessary to have set method for entire waitlist, remove if not used
-    public void setWaitlist(ArrayList<String> waitlist) {
-        this.waitlist = waitlist;
-    }
-
-    /**
-     * @return EnrolledStudents as an ArrayList of Matriculation Numbers (Strings)
-     */
-    public ArrayList<String> getEnrolledStudents() {
-        return enrolledStudents;
-    }
-
-    // TODO: Check if necessary to have set method for entire enrolledStudents, remove if not used
-    public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
-        this.enrolledStudents = enrolledStudents;
-    }
-
 
     /**
      * Method to add a student to current waitlist
@@ -215,17 +194,21 @@ public class Index implements Serializable {
      * @return Matriculation number of Student removed if successful, null otherwise
      */
     public String removeFromWaitlist(String matricNum){
-        if (waitlist.remove(matricNum)){
-            currentVacancy += 1;
+        if (waitlist.remove(matricNum))
             return matricNum;
-        }
         return null;
+    }
+
+    /**
+     * @return EnrolledStudents as an ArrayList of Matriculation Numbers (Strings)
+     */
+    public ArrayList<String> getEnrolledStudents() {
+        return enrolledStudents;
     }
 
     /**
      * @param matricNum Matriculation number of the Student to be added to enrolledStudents
      */
-    // TODO: Exception handling if at max capacity (added?)
     public void addToEnrolledStudents(String matricNum){
         enrolledStudents.add(matricNum);
         currentVacancy--;
@@ -237,7 +220,6 @@ public class Index implements Serializable {
      *
      * @param matricNum Matriculation number of the Student to be removed from enrolledStudents
      */
-    // TODO: Exception handling if at zero capacity
     public void removeFromEnrolledStudents(String matricNum){
             enrolledStudents.remove(matricNum);
             this.currentVacancy++;
