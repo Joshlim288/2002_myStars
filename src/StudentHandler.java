@@ -43,10 +43,7 @@ public class StudentHandler {
 
     public boolean checkValidCourse(Course courseSelected){
         if (courseSelected == null) return false;
-        if (willGoOverMaxAU(courseSelected))
-            System.out.println("Cannot register for course, will exceed maximum AUs!\n");
-        else return true;
-        return false;
+        return true;
     }
 
     public boolean willGoOverMaxAU(Course courseSelected) {
@@ -163,7 +160,7 @@ public class StudentHandler {
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
                                     newLesson.getEndTime().isAfter(oldLesson.getStartTime())) {
                                 System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
-                                System.out.println("Please choose another index!");
+                                System.out.println("Please choose another index!\n");
                                 return true;
                             }
                     }

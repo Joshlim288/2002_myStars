@@ -174,7 +174,7 @@ public class StudentInterface extends UserInterface {
                 studHandler.dropCourse(studHandler.currentStudent, courseSelected, index);
                 System.out.println("Dropping index " + index + ", please wait a moment...");
                 studHandler.refreshWaitList(courseSelected, indexToDrop);
-                System.out.println("Successfully dropped index" + index + "!");
+                System.out.println("Successfully dropped index " + index + "!");
             }
             else System.out.println("Index not dropped. Returning to main menu.");
             waitForEnterInput();
