@@ -1,6 +1,7 @@
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class StudentInterface extends UserInterface {
@@ -146,27 +147,40 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    private boolean NoRegisteredCourses(){
+        HashMap<String, String> coursesRegistered = studHandler.currentStudent.getCoursesRegistered();
+        if (coursesRegistered.isEmpty()) {
+            System.out.println("ERROR! No currently registered courses.");
+            waitForEnterInput();
+            return true;
+        }
+        return false;
+    }
+
     private void dropCourse() {
         Course courseSelected;
         boolean validCourse;
 
+        if(NoRegisteredCourses())
+            return;
+
         try {
             showRegisteredCourses();
             do{
-                System.out.print("Enter course to drop (e.g. CZ2002):");
+                System.out.print("Enter course to drop (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
                 if (validCourse)
                     if (!studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected)) {
-                        System.out.println("You are not enrolled in this course!");
+                        System.out.println("You are not enrolled in this course!\n");
                         validCourse = false;
                     }
             } while (!validCourse);
 
             Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
             String index = studHandler.currentStudent.retrieveIndex(courseSelected.getCourseCode());
-            System.out.println("Enter \"Y\" to confirm that you would like to drop this index: \n" +
-                               courseSelected.getCourseCode() + " " + courseSelected.getCourseName() +
+            System.out.println("\nEnter \"Y\" to confirm that you would like to drop this index: \n" +
+                               courseSelected.getCourseCode() + ", " + courseSelected.getCourseName() +
                                ", Index Number: " + index);
 
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
@@ -193,8 +207,8 @@ public class StudentInterface extends UserInterface {
             Course courseSelected;
             boolean validCourse;
 
+            System.out.println(studHandler.getCourseOverview(1));
             do {
-                System.out.println(studHandler.getCourseOverview(1));
                 System.out.print("Enter course code to check vacancies (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
@@ -212,10 +226,13 @@ public class StudentInterface extends UserInterface {
         Index indexSelected;
         boolean validCourse, validIndex;
 
+        if(NoRegisteredCourses())
+            return;
+
         try {
             showRegisteredCourses();
             do {
-                System.out.print("Choose course for changing of index (e.g. CZ2002):");
+                System.out.print("Choose course for changing of index (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
                 if (validCourse)
@@ -234,6 +251,13 @@ public class StudentInterface extends UserInterface {
                             "You will be added to wait-list if you choose an index with no vacancies:");
                 indexSelected = studHandler.retrieveIndex(courseSelected, getInput(typeOfInput.INDEX_NUM));
                 validIndex = studHandler.checkValidIndex(indexSelected, studHandler.currentStudent, indexToDrop);
+
+                if(indexSelected.equals(indexToDrop)) {
+                    System.out.println("You have selected the index you are currently in!");
+                    System.out.println("Please choose a different index.\n");
+                    validIndex = false;
+                }
+
             } while (!validIndex);
 
 
@@ -246,8 +270,9 @@ public class StudentInterface extends UserInterface {
             if (ans == 'Y' || ans == 'y') {
                 int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop, true);
                 printStatusOfAddCourse(status, indexSelected);
-                System.out.println("\n");
+                System.out.println("Changing index, please wait a moment...");
                 studHandler.refreshWaitList(courseSelected, indexToDrop);
+                System.out.println("Index successfully changed!");
             } else
                 System.out.println("Index not changed.\n" + "Exiting to main menu...");
             waitForEnterInput();
@@ -260,6 +285,9 @@ public class StudentInterface extends UserInterface {
         Course courseSelected;
         boolean validCourse, validOtherStudent = false;
         Student otherStudent;
+
+        if(NoRegisteredCourses())
+            return;
 
         try {
             showRegisteredCourses();
