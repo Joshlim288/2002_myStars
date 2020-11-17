@@ -14,63 +14,63 @@ public class DataGenerator {
 
         /* Initialising Students */
 
-        Student studentA = new Student("studenta1", "memes", "Student A",
+        Student studentA = new Student("studenta1", "student", "Student A",
                 "U1111111A", "schong031@e.ntu.edu.sg", "MALE", "Singaporean",
                 "CSC", 24, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentB = new Student("studentb2", "memes", "Student B",
+        Student studentB = new Student("studentb2", "student", "Student B",
                 "U2222222B", "studentb2@e.ntu.edu.sg", "FEMALE", "Malaysian",
                 "CSC", 24, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentC = new Student("studentc3", "memes", "Student C",
+        Student studentC = new Student("studentc3", "student", "Student C",
                 "U3333333C", "studentc3@e.ntu.edu.sg", "OTHER", "Chinese",
                 "CSC", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentD = new Student("studentd4", "memes", "Student D",
+        Student studentD = new Student("studentd4", "student", "Student D",
                 "U4444444D", "studentd4@e.ntu.edu.sg", "MALE", "Indian",
                 "CSC", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentE = new Student("studente5", "memes", "Student E",
+        Student studentE = new Student("studente5", "student", "Student E",
                 "U5555555E", "studente5@e.ntu.edu.sg", "FEMALE", "Australian",
                 "CSC", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentF = new Student("studentf6", "memes", "Student F",
+        Student studentF = new Student("studentf6", "student", "Student F",
                 "U6666666F", "studentf6@e.ntu.edu.sg", "OTHER", "American",
                 "CSC", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentG = new Student("studentg7", "memes", "Student G",
+        Student studentG = new Student("studentg7", "student", "Student G",
                 "U7777777G", "studentg7@e.ntu.edu.sg", "MALE", "Singaporean",
                 "CEE", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentH = new Student("studenth8", "memes", "Student H",
+        Student studentH = new Student("studenth8", "student", "Student H",
                 "U8888888H", "studenth8@e.ntu.edu.sg", "FEMALE", "Malaysian",
                 "CEE", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentJ = new Student("studentj9", "memes", "Student J",
+        Student studentJ = new Student("studentj9", "student", "Student J",
                 "U9999999J", "studentj9@e.ntu.edu.sg", "OTHER", "Chinese",
                 "CEE", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentK = new Student("studentk10", "memes", "Student K",
+        Student studentK = new Student("studentk10", "student", "Student K",
                 "U0000000K", "studentk10@e.ntu.edu.sg", "MALE", "Indian",
                 "EEE", 21, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentL = new Student("studentl11", "memes", "Student L",
-                "U1010101L", "studentl11@e.ntu.edu.sg", "FEMALE", "Australian",
+        Student studentL = new Student("studentl11", "student", "Student L",
+                "U1010101L", "jtoh045@e.ntu.edu.sg", "FEMALE", "Australian",
                 "EEE", 18, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentM = new Student("studentm12", "memes", "Student M",
+        Student studentM = new Student("studentm12", "student", "Student M",
                 "U2020202M", "josh0047@e.ntu.edu.sg", "OTHER", "American",
                 "EEE", 18, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentN = new Student("studentn13", "memes", "Student N",
+        Student studentN = new Student("studentn13", "student", "Student N",
                 "U3030303N", "studentn13@e.ntu.edu.sg", "MALE", "Singaporean",
                 "DSAI", 9, "2020-11-11 00:00", "2021-01-01 00:00");
 
-        Student studentP = new Student("studentp14", "memes", "Student P",
+        Student studentP = new Student("studentp14", "student", "Student P",
                 "U4040404P", "studentp14@e.ntu.edu.sg", "FEMALE", "Malaysian",
                 "DSAI", 18, "2000-01-01 11:00", "2000-03-03 11:00");
 
-        Student studentQ = new Student("studentq15", "memes", "Student Q",
+        Student studentQ = new Student("studentq15", "student", "Student Q",
                 "U5050505Q", "studentq15@e.ntu.edu.sg", "OTHER", "Chinese",
                 "DSAI", 18, "2030-01-01 11:00", "2030-03-03 11:00");
 
@@ -94,7 +94,7 @@ public class DataGenerator {
 
         Course lk9001 = new Course("LK9001", "Korean Language Level One",
                 "UE", 3, "SOH", "2021-05-04 09:00", "2021-05-04 11:00");
-        Course lj9001 = new Course("LK9001", "Japanese Language Level One",
+        Course lj9001 = new Course("LJ9001", "Japanese Language Level One",
                         "UE", 3, "SOH", null, null);
 
         cz2002.addIndex("11111", 10, "SS1");
@@ -147,8 +147,8 @@ public class DataGenerator {
         index10101.addLesson("TUT", "WED", "13:00", "14:00", "TR15", oddWeeks);
         index10101.addLesson("SEM", "THU", "13:00", "14:00", "TR16", allWeeks);
 
-        lk9001.addIndex("12345", 10, "SS11");
-        Index index12345 = lk9001.getIndex("12345");
+        lj9001.addIndex("12345", 10, "SS11");
+        Index index12345 = lj9001.getIndex("12345");
         index12345.addLesson("TUT", "WED", "13:00", "14:00", "TR15", evenWeeks);
 
         /* Adding Students to Courses */
@@ -219,7 +219,7 @@ public class DataGenerator {
         for (Student student: allStudents)
             sdm.addStudent(student);
 
-        ArrayList<Course> allCourses = new ArrayList<>(Arrays.asList(cz2002, cz2004, cz2007, eg0001, lk9001));
+        ArrayList<Course> allCourses = new ArrayList<>(Arrays.asList(cz2002, cz2004, cz2007, eg0001, lk9001, lj9001));
         for (Course course: allCourses)
             cdm.addCourse(course);
 

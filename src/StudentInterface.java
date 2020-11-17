@@ -258,7 +258,7 @@ public class StudentInterface extends UserInterface {
 
     private void swapIndex() {
         Course courseSelected;
-        boolean validCourse, validOtherStudent;
+        boolean validCourse, validOtherStudent = false;
         Student otherStudent;
 
         try {
@@ -277,11 +277,15 @@ public class StudentInterface extends UserInterface {
 
             Index indexToSwapOut = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
 
-            do{
-                System.out.println("\nEnter the particulars of the student to swap with:");
-                otherStudent = studHandler.retrieveOtherStudent(sc);
+            System.out.println("\nEnter the particulars of the student to swap with:");
+            otherStudent = studHandler.retrieveOtherStudent(sc);
+            if (otherStudent != null)
                 validOtherStudent = studHandler.checkIfRegistered(otherStudent, courseSelected);
-            } while (!validOtherStudent);
+            if (!validOtherStudent) {
+                System.out.println("\nReturning to main menu!");
+                waitForEnterInput();
+                return;
+            }
 
             Index indexToSwapIn = studHandler.getIndexRegistered(otherStudent, courseSelected);
             if (indexToSwapIn.equals(indexToSwapOut)){
@@ -313,8 +317,12 @@ public class StudentInterface extends UserInterface {
                 printStatusOfAddCourse(status1, indexToSwapIn);
                 System.out.println("For " + otherStudent.getName() + " :");
                 printStatusOfAddCourse(status2, indexToSwapOut);
-                studHandler.emailStudent(studHandler.currentStudent, courseSelected, indexToSwapOut, indexToSwapIn);
-                studHandler.emailStudent(otherStudent, courseSelected, indexToSwapIn, indexToSwapOut);
+                System.out.println("Updating database, please wait...");
+                //For current student
+                studHandler.emailStudent(studHandler.currentStudent, otherStudent, courseSelected, indexToSwapOut, indexToSwapIn);
+                //For other student
+                studHandler.emailStudent(otherStudent, studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut);
+                System.out.println("Database updated!\n");
             } else
                 System.out.println("Swap not performed.\n" + "Exiting to main menu...");
             waitForEnterInput();

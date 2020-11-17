@@ -124,8 +124,9 @@ public class StudentHandler {
         return false;
     }
 
+    //TODO: BROKEN AGAIN
     /**
-     * Version 3 of hasTimetableClash() -.-
+     * Version 4 of hasTimetableClash() -.-
      * Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
@@ -153,15 +154,19 @@ public class StudentHandler {
             if (!indexToCheck.equals(indexToExclude)) {
                 oldLessons.addAll(indexToCheck.getLessons());
                 for (Lesson oldLesson : oldLessons)
-                    for (Lesson newLesson : newLessons)
-                        if (newLesson.getDay().equals(oldLesson.getDay()))
+                    for (Lesson newLesson : newLessons) {
+                        ArrayList<Integer> oldLessonWeeks = (ArrayList<Integer>) oldLesson.getTeachingWeeks().clone();
+                        oldLessonWeeks.retainAll(newLesson.getTeachingWeeks());
+                        //boolean noCommonWeek = (oldLesson.getTeachingWeeks().retainAll(newLesson.getTeachingWeeks())).isEmpty();
+                        if ((newLesson.getDay().equals(oldLesson.getDay())) && oldLessonWeeks.isEmpty())
                             /* Start of new lesson < End of old lesson && End of new lesson > Start of old lesson */
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
                                     newLesson.getEndTime().isAfter(oldLesson.getStartTime())) {
                                 System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
                                 System.out.println("Please choose another index!");
                                 return true;
-                                }
+                            }
+                    }
                 }
         }
         return false;
@@ -233,9 +238,9 @@ public class StudentHandler {
     }
 
     //Send email to other student if a swap has been performed successfully
-    public void emailStudent(Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
-        MailHandler.sendMail(otherStudent.getEmail(),
-                  currentStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
+    public void emailStudent(Student currentStudent, Student otherStudent,  Course courseSelected, Index oldIndex, Index newIndex){
+        MailHandler.sendMail(currentStudent.getEmail(),
+                  otherStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
                              " " + courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
                              " has been updated to " + newIndex.getIndexNum() + ".",
                       "Successful Swap of Index for " + courseSelected.getCourseCode() + ", "
