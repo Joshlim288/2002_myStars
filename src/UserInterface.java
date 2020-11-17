@@ -21,7 +21,8 @@ enum typeOfInput{
  */
 public abstract class UserInterface {
     protected Scanner sc;
-    protected UserValidator userValidator;
+    protected StudentValidator studentValidator;
+    protected AdminValidator adminValidator;
     protected CourseValidator courseValidator;
     protected DateTimeFormatter dateTimeFormatter;
     protected DateTimeFormatter timeFormatter;
@@ -32,7 +33,7 @@ public abstract class UserInterface {
      */
     public UserInterface(Scanner sc){
         this.sc = sc;
-        userValidator = new UserValidator();
+        studentValidator = new StudentValidator();
         courseValidator = new CourseValidator();
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -72,23 +73,23 @@ public abstract class UserInterface {
     private boolean validateInput(String input, typeOfInput inputType) {
         switch (inputType) {
             case NAME: // names
-                return userValidator.validateName(input);
+                return studentValidator.validateName(input);
             case INT: // integer inputs
-                return userValidator.validateInt(input);
+                return studentValidator.validateInt(input);
             case TIME: // time
-                return userValidator.validateTime(input);
+                return studentValidator.validateTime(input);
             case DATETIME: // datetime
-                return userValidator.validateDateTime(input);
+                return studentValidator.validateDateTime(input);
             case USERID: // userID
-                return userValidator.validateUserID(input);
+                return studentValidator.validateUserID(input);
             case EMAIL: // email
-                return userValidator.validateEmail(input);
+                return studentValidator.validateEmail(input);
             case MATRIC_NUM: // matricNum
-                return userValidator.validateMatricNum(input);
+                return studentValidator.validateMatricNum(input);
             case GENDER: // gender
-                return userValidator.validateGender(input);
+                return studentValidator.validateGender(input);
             case STAFF_NUM: // staff num
-                return userValidator.validateStaffNum(input);
+                return adminValidator.validateStaffNum(input);
             case COURSE_CODE: // course code
                 return courseValidator.validateCourseCode(input);
             case COURSE_TYPE: // course type
