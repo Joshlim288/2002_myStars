@@ -33,7 +33,7 @@ public class CourseDataManager implements DataManager{
             System.out.println("Course data file not found or is blank. Initializing file...");
             courseList = new ArrayList<>();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());;
         }
     }
 

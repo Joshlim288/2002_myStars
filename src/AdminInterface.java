@@ -644,6 +644,11 @@ public class AdminInterface extends UserInterface {
                         } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
                     }
                     case (5) -> { // edit teaching weeks
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Lessons cannot be deleted");
+                            waitForEnterInput();
+                            continue;
+                        }
                         String[] inputWeeks;
                         boolean validWeeks;
                         do {

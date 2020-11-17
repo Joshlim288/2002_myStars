@@ -32,7 +32,7 @@ public class AdminDataManager implements DataManager{
             System.out.println("Admin file not found or is blank. Initializing file...");
             adminList = new ArrayList<>();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
