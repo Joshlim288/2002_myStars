@@ -67,24 +67,36 @@ public class StudentHandler {
         return retrieveIndex(courseSelected, student.retrieveIndex(courseSelected.getCourseCode()));
     }
 
-    //TODO: Include waitlisted courses
     public String getRegisteredCourses() {
         Course course;
         Index index;
         HashMap<String, String> coursesRegistered = currentStudent.getCoursesRegistered();
+        HashMap<String, String> coursesWaitListed = currentStudent.getWaitList();
 
         StringBuilder stringBuilder = new StringBuilder();
+
         if (coursesRegistered.isEmpty())
                 stringBuilder.append("\nNo registered courses currently.\n");
-        else
-            stringBuilder.append("\nCourse | Index | AUs | Course Type\n");
-            stringBuilder.append("-----------------------------------\n");
+        else {
+            stringBuilder.append("\nCourse | Index | AUs |   Status   | Course Type\n");
+            stringBuilder.append("-------------------------------------------------\n");
             for (Map.Entry<String, String> pair : coursesRegistered.entrySet()) {
                 course = cdm.getCourse(pair.getKey());
                 index = cdm.getCourse(pair.getKey()).getIndex(pair.getValue());
                 stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
-                        + "  | " + course.getCourseType() + "\n");
+                        + "  | REGISTERED |  " + course.getCourseType() + "\n");
             }
+        }
+
+        if(!coursesWaitListed.isEmpty()) {
+            for (Map.Entry<String, String> pair2 : coursesWaitListed.entrySet()) {
+                course = cdm.getCourse(pair2.getKey());
+                index = cdm.getCourse(pair2.getKey()).getIndex(pair2.getValue());
+                stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
+                        + "  | WAITLISTED |  " + course.getCourseType() + "\n");
+            }
+
+        }
         return stringBuilder.toString();
     }
 
