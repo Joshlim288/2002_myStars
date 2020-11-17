@@ -576,8 +576,7 @@ public class AdminInterface extends UserInterface {
                         "3: lesson time\n" +
                         "4: venue\n" +
                         "5: teaching weeks\n" +
-                        "6: remove this lesson\n" +
-                        "7: exit");
+                        "6: exit");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -628,12 +627,11 @@ public class AdminInterface extends UserInterface {
                         } while (!validWeeks);
                         adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice);
                     }
-                    case (6) -> adHandler.editLesson(courseCode, indexNum, lessonIndex, null, choice);
-                    case (7) -> System.out.println("Exiting update lesson...");
+                    case (6) -> System.out.println("Exiting update lesson...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 7) System.out.println("Successfully changed");
-            } while (choice != 7);
+                if (choice >= 0 && choice < 6) System.out.println("Successfully changed");
+            } while (choice != 6);
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }

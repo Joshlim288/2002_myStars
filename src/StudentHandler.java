@@ -28,9 +28,7 @@ public class StudentHandler {
 
     public boolean checkValidIndex(Index indexSelected, Student studentToCheck, Index indexToExclude) {
         if (indexSelected == null) return false;
-        if(hasTimetableClash(indexSelected, studentToCheck, indexToExclude))
-            return false;
-        return true;
+        return !hasTimetableClash(indexSelected, studentToCheck, indexToExclude);
     }
 
     public Course retrieveCourse(String courseCode){
@@ -58,9 +56,7 @@ public class StudentHandler {
 
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
-        if (student.retrieveIndex(courseSelected.getCourseCode()) != null)
-            return true;
-        return false;
+        return student.retrieveIndex(courseSelected.getCourseCode()) != null;
     }
 
     public Index getIndexRegistered(Student student, Course courseSelected){
