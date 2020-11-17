@@ -94,6 +94,8 @@ public class DataGenerator {
 
         Course lk9001 = new Course("LK9001", "Korean Language Level One",
                 "UE", 3, "SOH", "2021-05-04 09:00", "2021-05-04 11:00");
+        Course lj9001 = new Course("LK9001", "Japanese Language Level One",
+                        "UE", 3, "SOH", null, null);
 
         cz2002.addIndex("11111", 10, "SS1");
         Index index11111 = cz2002.getIndex("11111");
@@ -145,6 +147,9 @@ public class DataGenerator {
         index10101.addLesson("TUT", "WED", "13:00", "14:00", "TR15", oddWeeks);
         index10101.addLesson("SEM", "THU", "13:00", "14:00", "TR16", allWeeks);
 
+        lk9001.addIndex("12345", 10, "SS11");
+        Index index12345 = lk9001.getIndex("12345");
+        index12345.addLesson("TUT", "WED", "13:00", "14:00", "TR15", evenWeeks);
 
         /* Adding Students to Courses */
 
