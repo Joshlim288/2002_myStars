@@ -13,9 +13,9 @@ enum typeOfGender {
 /**
  * Student represents a student enrolled in the university. It inherits from User.
  * A student is enrolled in one or more courses through indexes.
- * @author Toh Jun Wei
- * @version 1.0
- * @since 2020-10-17
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.7
+ * @since 1.1
  */
 public class Student extends User {
 

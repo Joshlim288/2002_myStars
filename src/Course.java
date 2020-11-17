@@ -20,8 +20,8 @@ enum typeOfCourse{
  * To see the format of all the data fields, refer to CourseVaildator
  *
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
- * @version 1.0
- * @since 2020-10-18
+ * @version 1.7
+ * @since 1.0
  */
 public class Course implements Serializable {
 

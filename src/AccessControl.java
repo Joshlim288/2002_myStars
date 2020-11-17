@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 /**
  * Utility class for handling login into the program
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-10-24
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.5
+ * @since 1.4
  */
 public class AccessControl {
     private static UserDataManager udm;

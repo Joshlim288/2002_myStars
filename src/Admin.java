@@ -5,9 +5,9 @@
  *
  * To see the format of all the data fields, refer to UserValidator
  *
- * @author Josh, Jun Wei, Joshua, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-10-17
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.6
+ * @since 1.1
  */
 public class Admin extends User {
     /**

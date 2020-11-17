@@ -7,9 +7,9 @@ import java.util.Map;
 /**
  * Control class that handles the logic for functions available to Students
  * Operates on and uses the entity classes using DataManagers
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-10-24
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.15
+ * @since 1.1
  */
 public class StudentHandler {
     Student currentStudent;

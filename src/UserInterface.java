@@ -15,9 +15,9 @@ enum typeOfInput{
 /**
  * Abstract class that defines a general userInterface that would show the menu for a particular type of user
  * Also contains an input getter that force users to enter correct input, or abort the function with the ~ character
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-11-16
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.8
+ * @since 1.1
  */
 public abstract class UserInterface {
     protected Scanner sc;

@@ -1,9 +1,9 @@
 /**
  * Exception class that is thrown when user wishes to abort method execution
  * Does not have unique functionality from other Exceptions, but the name allows for clearer program flow
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-11-16
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.4
+ * @since 1.4
  */
 public class EscapeException extends Exception{
     /**

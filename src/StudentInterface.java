@@ -5,9 +5,9 @@ import java.util.Scanner;
 /**
  * Control class to display to the Student what functions are available to them
  * Gets input for performing these functions and passes them to the handler to be executed
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-10-24
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.15
+ * @since 1.1
  */
 public class StudentInterface extends UserInterface {
 

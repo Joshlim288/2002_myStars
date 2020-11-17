@@ -7,9 +7,9 @@ import java.util.Scanner;
  * Depends on a strict naming convention of having a class with the name user_domain+"Interface" e.g. StudentInterface
  * defined in the project scope
  *
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-11-16
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.5
+ * @since 1.4
  */
 public class UserInterfaceCreator {
     /**

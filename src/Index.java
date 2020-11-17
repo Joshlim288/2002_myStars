@@ -6,9 +6,9 @@ import java.util.ArrayList;
  * There can be multiple indexes per course, where the timings of the lessons may differ (except for LEC).
  * Contains an ArrayList of Lesson.
  * Contains two ArrayList of Student, one for students registered, the other for students in waitlist.
- * @author Josh, Jun Wei, Chong Shen Rui, Joshua, Daryl
- * @version 1.2
- * @since 2020-10-18
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.7
+ * @since 1.1
  */
 public class Index implements Serializable {
 

@@ -4,9 +4,9 @@ import java.io.Serializable;
  * User represents a user in the STARS system.<br>
  * It is inherited by Student and Admin.
  *
- * @author Jun Wei
- * @version 1.0
- * @since 2020-10-17
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.4
+ * @since 1.1
  */
 public abstract class User implements Serializable {
 

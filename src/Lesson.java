@@ -24,9 +24,9 @@ enum typeOfLesson{
  * Lessons can have different venues, timings, and so on.
  * There are multiple lessons per index of a course.
  * Enumerations for day of lessons and type of lessons are also included.
- * @author Josh, Jun Wei, Chong Shen Rui , Joshua, Daryl
- * @version 1.0
- * @since 2020-10-18
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.7
+ * @since 1.1
  */
 public class Lesson implements Serializable {
 

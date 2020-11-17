@@ -14,9 +14,9 @@ import javax.mail.internet.MimeMessage;
  * Utility class for sending mails
  * References the given SendMailTLS class
  *
- * @author Josh
- * @version 1.0
- * @since 2020-10-24
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.7
+ * @since 1.6
  */
 public class MailHandler {
 		/**

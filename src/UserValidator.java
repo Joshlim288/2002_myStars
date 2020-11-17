@@ -2,9 +2,9 @@
  * UserValidator extends the Validator class and adds additional validation methods specialized for handling users
  * in the system.
  * Assumes user knows what the input formats are (through a guide, manual, etc).
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-11-16
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.8
+ * @since 1.7
  */
 public class UserValidator extends Validator {
 

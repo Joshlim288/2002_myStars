@@ -3,9 +3,9 @@ import java.util.ArrayList;
 /**
  * DataManager for Course data
  * Handles the loading, holding, editing and storing of Admin objects from the data/courseData.dat
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-10-24
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.10
+ * @since 1.9
  */
 public class CourseDataManager implements DataManager{
     private ArrayList<Course> courseList;

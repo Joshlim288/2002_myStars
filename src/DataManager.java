@@ -1,9 +1,9 @@
 /**
  * Interface meant to signify handling of data
  * Classes which implement this interface deal with the loading, holding, editing and storing of data
- * @author Josh, Joshua, Jun Wei, Shen Rui, Daryl
- * @version 1.0
- * @since 2020-11-16
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.9
+ * @since 1.9
  */
 public interface DataManager {
     public void load();

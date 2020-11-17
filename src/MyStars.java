@@ -4,9 +4,9 @@ import java.util.Scanner;
  * Main class for the application
  * Contains the functionality for the start menu, handles user input for logging in
  *
- * @author Josh
- * @version 1.0
- * @since 16/11/2020
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.3
+ * @since 1.1
  */
 public class MyStars {
     /**
