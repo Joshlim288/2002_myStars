@@ -181,6 +181,9 @@ public class Student extends User {
         accessTime[1] = LocalDateTime.parse(end, formatter);
     }
 
+    /**
+     * @return coursesRegistered by the Student, as a HashMap with key CourseCode, and value indexNum
+     */
     public HashMap<String, String> getCoursesRegistered() {
         return coursesRegistered;
     }
@@ -269,8 +272,8 @@ public class Student extends User {
     }
 
     /**
-     * Overriden login validation from the User parent class
-     * Uses the implementation of User's validate login, but also checks for whether the Student is allowed to log in
+     * Overrides <code>validateLogin()</code> from the User parent class.
+     * Uses User's validate login implementation, and also checks for whether the Student is allowed to log in
      * at the current time
      * @param checkID userID to check against this Student's userID
      * @param checkpw unhashed password to check against this Student's userID

@@ -13,6 +13,11 @@ public class StudentInterface extends UserInterface {
 
     private final StudentHandler studHandler;
 
+    /**
+     * Constructor for the Student Interface, called from UserInterfaceCreator
+     * @param currentUser User which has logged in
+     * @param sc Scanner to be used for getting input
+     */
     public StudentInterface(User currentUser, Scanner sc) {
         super(sc);
         String matricNum = ((Student)currentUser).getMatricNum();
@@ -21,7 +26,7 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Student UI is displayed here
+     * Menu for Students is displayed here
      */
     public void start() {
         int choice;
@@ -62,6 +67,12 @@ public class StudentInterface extends UserInterface {
         } while (!exitFlag);
     }
 
+    /**
+     * Gets input to register a course for the current student.
+     * Asks for input repeatedly if course/index input given is invalid.
+     * Relays the user's input to studentHandler to add student to selected index and outputs the outcome.
+     * Escape exception is caught to allow user to return to main menu at any time during method's execution.
+     */
     private void addCourse() {
         Course courseSelected;
         Index indexSelected;
@@ -108,6 +119,12 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Gets input to drop a course from the current student's registered courses or waitlist.
+     * Asks for input repeatedly if course/index input given is invalid.
+     * Relays the user's input to studentHandler to drop student from selected index and outputs the outcome.
+     * Escape exception is caught to allow user to return to main menu at any time during method's execution.
+     */
     private void dropCourse() {
         Course courseSelected;
         boolean validCourse;
@@ -159,11 +176,21 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Outputs the information of the student's registered and wait-listed courses/indexes.
+     * Retrieves the relevant data needed for the output from studentHandler.
+     */
     private void getRegisteredCourses(){
         showRegisteredCourses();
         waitForEnterInput();
     }
 
+    /**
+     * Outputs the chosen index's remaining vacancies in the course database.
+     * Asks for input repeatedly if index input given is invalid.
+     * Relays the user's input to studentHandler to retrieve the remaining vacancy and outputs the outcome.
+     * Escape exception is caught to allow user to return to main menu at any time during method's execution.
+     */
     private void checkIndexVacancies(){
         try {
             Course courseSelected;
@@ -183,6 +210,12 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Allows the user to prints an overview of the current course database (courses, indexes, lessons).
+     * Asks for input of choice of granularity of data to be retrieved.
+     * Relays the user's input to studentHandler to retrieve the required information from database.
+     * Escape exception is caught to allow user to return to main menu at any time during method's execution.
+     */
     private void printOverview(){
         try{
             int choice;
@@ -200,6 +233,12 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Gets input to change a currently registered index of the student.
+     * Asks for input repeatedly if course/index input is invalid.
+     * Relays the user's input to studentHandler to execute the change of index and outputs the outcome.
+     * Escape exception is caught to allow user to return to main menu at any time during method's execution.
+     */
     private void changeIndex() {
         Course courseSelected;
         Index indexSelected;
@@ -260,6 +299,12 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Gets input to swap a currently registered index of the student with another student.
+     * Asks for input repeatedly if course/user input is invalid.
+     * Relays the user's input to studentHandler to execute the swap of index and outputs the outcome.
+     * Escape exception is caught to allow user to return to main menu at any time during method's execution.
+     */
     private void swapIndex() {
         Course courseSelected;
         boolean validCourse, validOtherStudent = false;
@@ -338,6 +383,11 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Checks if the student has any currently registered courses.
+     * @return <code>true</code> if no currently registered courses and <code>false</code> otherwise.
+     * Used in <code>dropCourse</code>, <code>changeIndex</code> and <code>swapIndex</code>.
+     */
     private boolean noRegisteredCourses(){
         HashMap<String, String> coursesRegistered = studHandler.currentStudent.getCoursesRegistered();
         if (coursesRegistered.isEmpty()) {
@@ -348,7 +398,11 @@ public class StudentInterface extends UserInterface {
         return false;
     }
 
-    //Used in adding of course, changing index and swapping index
+    /**
+     * Prints the indexes that are in the course selected and the number of remaining vacancies.
+     * @param courseSelected The course to check in the database.
+     * Used in <code>addCourse</code, <code>checkIndexVacancies</code> and <code>changeIndex</code>.
+     */
     private void showIndexesInCourse(Course courseSelected){
 
         ArrayList<Index> indexList = courseSelected.getIndexes();
@@ -363,12 +417,20 @@ public class StudentInterface extends UserInterface {
             System.out.println(index);
     }
 
+    /**
+     * Prints the courses and indexes that are currently registered or wait-listed for the student.
+     * Used in <code>dropCourse</code>, <code>getRegisteredCourses</code>, <code>changeIndex</code> and <code>swapIndex</code>.
+     */
     private void showRegisteredCourses(){
         System.out.println("\nThese are your currently registered courses and indexes:");
         System.out.println(studHandler.getRegisteredCourses());
     }
 
-    //Default when an integer representing clash is returned
+    /**
+     * Prints the status of adding an index for the student.
+     * Status is either registered for the index or added to wait-list for the index.
+     * Used in <code>addCourse</code>, <code>changeIndex</code> and <code>swapIndex</code>.
+     */
     private void printStatusOfAddCourse(int status, Index indexSelected){
         switch (status) {
             case (1) -> System.out.println("Registered for Index " + indexSelected.getIndexNum() + " successfully!\n");
@@ -376,6 +438,11 @@ public class StudentInterface extends UserInterface {
         }
     }
 
+    /**
+     * Initiates logout process, confirms if user wants to logout.
+     * Saves data back to file by closing the handler.
+     * @return true if user wishes to logout, false otherwise.
+     */
     private boolean logout(){
         if (exit()) {
             System.out.println("\nSaving Data...");

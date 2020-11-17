@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
- * Indicates what types of inputs are allowed for getInput
+ * Enumeration to indicates what types of inputs are allowed for getInput
  */
 enum typeOfInput{
     NAME, INT, TIME, DATETIME, USERID, EMAIL, MATRIC_NUM, GENDER, STAFF_NUM,
