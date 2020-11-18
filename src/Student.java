@@ -50,6 +50,7 @@ public class Student extends User {
     /**
      * Constructor for <code>Student</code>.<br>
      * <code>accessTime</code> and <code>coursesRegistered</code> cannot be passed into the constructor and must instead be manually set.
+     * @param userID This student's userID.
      * @param password This student's password (in plain text).
      * @param studentName This student's name.
      * @param matricNum This student's matriculation number. It is unique.
@@ -58,6 +59,8 @@ public class Student extends User {
      * @param nationality This student's nationality
      * @param maxAUs This student's AU balance.
      * @param major This student's major.
+     * @param startAccessTime This student's start of access period, as String
+     * @param endAccessTime This student's end of access period, as String
      */
     public Student(String userID, String password, String studentName, String matricNum, String email,
                    String gender, String nationality, String major, int maxAUs, String startAccessTime,
@@ -182,8 +185,9 @@ public class Student extends User {
 
     /**
      * Adds a course into this student's registered courses for the semester.
-     * @param course The object of the course to be added.
-     * @param index The object of the index of the course to be added.
+     * @param course The course code of the course to be added.
+     * @param index The index number of the index of the course to be added.
+     * @param AUs The AUs of the course to be added
      */
     public void addCourse(String course, String index, int AUs) {
         coursesRegistered.put(course, index);
@@ -192,7 +196,8 @@ public class Student extends User {
 
     /**
      * Removes a course from this student's registered courses.
-     * @param course The object of the course to be removed.
+     * @param course The course code of the course to be removed.
+     * @param AUs The AUs of the course to be removed
      * @return <code>true</code> if the course code is removed.
      */
     public boolean removeCourse(String course, int AUs) {

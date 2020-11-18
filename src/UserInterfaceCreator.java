@@ -15,6 +15,8 @@ public class UserInterfaceCreator {
     /**
      * Creates a UserInterface object to be run by the main program
      * @param domain Indicates what type of User has logged in, to find the corresponding UserInterface
+     * @param currentUser The User object of the current user logged in
+     * @param sc Scanner object to be passed to the UserInterface being created
      * @return UserInterface object based on the domain of the logged in User
      */
     public static UserInterface makeInterface(String domain, User currentUser, Scanner sc) {

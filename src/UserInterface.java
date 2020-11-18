@@ -47,6 +47,7 @@ public abstract class UserInterface {
 
     /**
      * Gets string input from user and validates it
+     * @param inputType enum of typeOfInput representing type of input
      * @return user input that is valid as String
      * @throws EscapeException Used to abort function and return to main menu
      */
@@ -67,7 +68,7 @@ public abstract class UserInterface {
     /**
      * Validates input from user
      * @param input input to be validated
-     * @param inputType enum representing type of input
+     * @param inputType enum of typeOfInput representing type of input
      * @return true if input is valid
      */
     private boolean validateInput(String input, typeOfInput inputType) {

@@ -36,6 +36,9 @@ public abstract class User implements Serializable {
      * Constructor for User, using userID and hashedPassword.
      * @param userID This user's user ID.
      * @param password This user's password (hashed).
+     * @param domain This user's domain
+     * @param name This user's name
+     * @param email This user's email
      */
     public User(String userID, String password, String domain, String name, String email) {
         this.userID = userID;

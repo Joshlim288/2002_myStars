@@ -65,6 +65,7 @@ public class Index implements Serializable {
      * Only administrators should be able to initialise an index.
      * @param indexNum Unique identifier for this index.
      * @param indexVacancy Maximum vacancies for this index.
+     * @param group This index's group name
      */
     public Index(String indexNum, int indexVacancy, String group) {
         this.indexNum = indexNum;
@@ -178,6 +179,7 @@ public class Index implements Serializable {
      * Method to remove a student from current waitlist.
      * Student at front of queue removed
      * Exception handling if waitlist is already empty
+     * @return Matriculation number of the student at the front of the waitlist. null if waitlist is empty.
      */
     public String removeFromWaitlist(){
         try{
