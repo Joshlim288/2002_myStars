@@ -3,14 +3,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
- * Definition of enumeration called typeOfGender, with 3 elements, referred to as:
- * typeOfGender.MALE, typeOfGender.FEMALE, typeOfGender.OTHER
- */
-enum typeOfGender {
-    MALE, FEMALE, OTHER
-}
-
-/**
  * Student represents a student enrolled in the university. It inherits from User.
  * A student is enrolled in one or more courses through indexes.
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
@@ -30,7 +22,7 @@ public class Student extends User {
 
     /**
      * This student's authorized access time to STARS. accessTime is an array of LocalDateTime of size 2.
-     * <br>accessTime[0] refers to the start datetime, and access[1] refers to the end datetime.
+     * <br>accessTime[0] refers to the start datetime, and accessTime[1] refers to the end datetime.
      */
     private LocalDateTime[] accessTime;
 

@@ -1,6 +1,14 @@
 import java.io.Serializable;
 
 /**
+ * Definition of enumeration called typeOfGender, with 3 elements, referred to as:
+ * typeOfGender.MALE, typeOfGender.FEMALE, typeOfGender.OTHER
+ */
+enum typeOfGender {
+    MALE, FEMALE, OTHER
+}
+
+/**
  * User represents a user in the STARS system.<br>
  * It is inherited by Student and Admin.
  *

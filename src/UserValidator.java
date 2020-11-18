@@ -34,9 +34,11 @@ public class UserValidator extends Validator {
     }
 
     /**
-     * Validates a Gender. Gender may only be MALE, FEMALE or OTHER
+     * Validates a Gender. Gender may only be MALE, FEMALE or OTHER.
+     * Gender is checked against typeOfGender defined under User.
      * @param gender String to match pattern against
      * @return true if input matches, false otherwise
+     * @see typeOfGender
      */
     public boolean validateGender(String gender) {
         try {

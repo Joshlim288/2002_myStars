@@ -112,8 +112,10 @@ public class Validator {
 
     /**
      * Validates day. Accepted day inputs are the first three characters of days of the week, capitalized
+     * <br>Day inputs are checked against dayOfWeek defined under Lesson.
      * @param day String to match against the pattern
      * @return true if input matches, false otherwise
+     * @see dayOfWeek
      */
     public boolean validateDay(String day) {
         try {

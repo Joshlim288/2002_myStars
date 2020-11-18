@@ -29,6 +29,7 @@ public class CourseValidator extends Validator {
      * Validates course type. Accepted course types are according to typeOfCourse enum defined under Course class.
      * @param courseType String to match against the pattern
      * @return true if input matches, false otherwise
+     * @see typeOfCourse
      */
     public boolean validateCourseType(String courseType) {
         try {
@@ -57,6 +58,7 @@ public class CourseValidator extends Validator {
      * Validates lesson type. Accepted lesson types are according to typeOfLesson defined under Lesson class.
      * @param lessonType String to match against the pattern
      * @return true if input matches, false otherwise
+     * @see typeOfLesson
      */
     public boolean validateLessonType(String lessonType) {
         try {
