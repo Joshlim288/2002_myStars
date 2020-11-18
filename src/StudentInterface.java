@@ -36,7 +36,7 @@ public class StudentInterface extends UserInterface {
             System.out.println("| What would you like to do today?                           |");
             System.out.println("--------------------------------------------------------------");
             System.out.println("| 1. Add New Course                                          |");
-            System.out.println("| 2. Drop Registered Course / Wait-listed Course              |");
+            System.out.println("| 2. Drop Registered Course / Wait-listed Course             |");
             System.out.println("| 3. Check Currently Registered Courses                      |");
             System.out.println("| 4. Check Vacancies for a Course                            |");
             System.out.println("| 5. Print Overview of Course Database                       |");
