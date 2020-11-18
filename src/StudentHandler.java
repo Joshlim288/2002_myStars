@@ -178,20 +178,30 @@ public class StudentHandler {
         return (totalAUs + courseSelected.getAcademicUnits()) > currentStudent.getMaxAUs();
     }
 
-    //Check for exam clashes and returns true if clash, otherwise false.
+    /** Checks if there is a clash between any two course's exam schedule if a new course is added to the student's timetable.
+     * A student's timetable consists of both registered and wait-listed courses.
+     * @param courseSelected The course to be checked against the rest of the courses in the timetable.
+     * @return <code>true</code> if there exists a clash in exam schedule, <code>false</code> otherwise. */
     public boolean hasExamClash(Course courseSelected){
 
+        /* If the new course has no final examinations,a clash will never occur,
+        and false can be immediately returned */
         LocalDateTime[] oldExamTime;
         LocalDateTime[] newExamTime = cdm.getCourse(courseSelected.getCourseCode()).getExamDateTime();
         if (newExamTime[0] == null)
             return false;
 
+        /* Combine courses registered and waitlist for the student into a new HashMap.
+         * We then retrieve all the actual courses the student is enrolled in and put
+         * them into a ArrayList<Course> to iterate through*/
         HashMap<String, String> timetable = (HashMap<String, String>) currentStudent.getCoursesRegistered().clone();
         timetable.putAll(currentStudent.getWaitList());
         ArrayList<Course> coursesToCheck = new ArrayList<>();
         for(Map.Entry<String, String> entry : timetable.entrySet())
             coursesToCheck.add(cdm.getCourse(entry.getKey()));
 
+        /* If any of the old courses has no final examinations, it will not be included in the
+        check as it will never clash and also prevent the null timings from throwing a NullPointerException. */
         for (Course courseToCheck : coursesToCheck) {
             oldExamTime = courseToCheck.getExamDateTime();
             if (!(oldExamTime[0] == null))
@@ -205,15 +215,16 @@ public class StudentHandler {
         return false;
     }
 
-    /** Checks for a clash of timetable. Timetable consists of courses registered and courses on waitlist.
+    /** Checks if there is a clash between any two lessons in a timetable if a new index is added.
+     * A student's timetable consists of both registered and wait-listed courses.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
-     * @param indexToExclude Used for swapping of indexes, to exclude the index it is swapping from.
+     * @param indexToExclude Used for swapping of indexes, to exclude the index it is swapping from in the checking of clash.
      * (e.g. Swapping from index 33333 to index 44444, index 33333 should not be included in the check)
      * @return The index in the timetable that has clashed with the new index, otherwise null if no clashes. */
     public boolean hasTimetableClash(Index indexToAdd, Student studentToCheck, Index indexToExclude) {
 
-        /* Combine courses registered and waitlist for the student into a HashMap.
+        /* Combine courses registered and waitlist for the student into a new HashMap.
          * We then retrieve all the actual indexes the student is enrolled in and put
          * them into a ArrayList<Index> to iterate through*/
         HashMap<String, String> timetable = (HashMap<String, String>) studentToCheck.getCoursesRegistered().clone();
@@ -225,9 +236,9 @@ public class StudentHandler {
         ArrayList<Lesson> newLessons = indexToAdd.getLessons();
         ArrayList<Lesson> oldLessons = new ArrayList<>();
 
-        /* For all currently registered indexes, retrieve their lessons and then compare with lessons of
-         *  the new index. Comparison only done if the lessons fall on the same day and the index is not
-         *  the index to be excluded. */
+        /* For all currently registered indexes, retrieve their lessons and then compare their start/end times
+         with lessons of the new index. Comparison only done if the lessons fall on the same day, there exists
+         a clash in teaching weeks and the index is not the index to be excluded. */
         for (Index indexToCheck : indexesToCheck) {
             if (!indexToCheck.equals(indexToExclude)) {
                 oldLessons.addAll(indexToCheck.getLessons());
@@ -250,15 +261,14 @@ public class StudentHandler {
         }
         return false;
     }
-    
-    //TODO: Shenrui double check javadocs for this point on pls
+
     /**
-     * Retrieves the Student object of the other student for swapCourse(). <br>
+     * Retrieves the Student object of the other student for swapCourse() in StudentInterface. <br>
      * Swapping of index with another student requires the other student to enter his/her login credentials
-     * to retrieve his/her Student object to perform the actual swap.<br>
-     * Calls MyStars.login to perform the login.
+     * for validation and retrieving of his/her Student object to perform the actual swap.<br>
+     * Calls {@link MyStars#login(Scanner)} to perform the login.
      * @param sc Scanner object to pass to MyStars.login
-     * @return Student object of the student to perform swap with
+     * @return Student object of the student to perform swap with. If no valid student found, <code>null</code> is returned.
      */
     public Student retrieveOtherStudent(Scanner sc) {
         try {
@@ -275,12 +285,13 @@ public class StudentHandler {
     }
     
     /**
-     * Sends a confirmation email to both students doing a swap if the swap has been performed successfully.
-     * @param currentStudent the Student object of the student doing the swap
-     * @param otherStudent the Student object of the other student doing the same swap
+     * Sends a confirmation email to a student when a swap of an index has been done successfully.
+     * Will be called twice, one for the student performing the swap and one for the other student.
+     * @param currentStudent the Student object of the student to send to send the email to.
+     * @param otherStudent the Student object of the other student in the swap.
      * @param courseSelected the Course object of the course both students are doing a swap of index for
-     * @param oldIndex the Index object of the currentStudent's current enrolled index (index currentStudent is swapping out)
-     * @param newIndex the Index object of the otherStudent's current enrolled index (index currentStudent is swapping for)
+     * @param oldIndex the Index object of the current student's initial enrolled index
+     * @param newIndex the Index object of the current student's updated enrolled index
      */
     public void emailStudent(Student currentStudent, Student otherStudent,  Course courseSelected, Index oldIndex, Index newIndex){
         MailHandler.sendMail(currentStudent.getEmail(),
@@ -292,10 +303,10 @@ public class StudentHandler {
     }
 
     /**
-     * Checks if a student is registered in a course
+     * Checks if a student is currently registered in a course
      * @param student the Student object of the student to check
      * @param courseSelected the Course object of the course student is potentially registered for
-     * @return true if student is enrolled in courseSelected
+     * @return true if student is enrolled in courseSelected and false otherwise
      */
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
@@ -303,10 +314,10 @@ public class StudentHandler {
     }
 
     /**
-     * Checks if a student is waitlisted in a course
+     * Checks if a student is currently wait-listed in a course
      * @param student the Student object of the student to check
-     * @param courseSelected the Course object of the course student is potentially waitlisted for
-     * @return true if student is waitlisted in courseSelected
+     * @param courseSelected the Course object of the course student is potentially wait-listed for
+     * @return true if student is wait-listed in courseSelected and false otherwise
      */
     public boolean checkIfWaitListed(Student student, Course courseSelected){
         if (courseSelected == null) return false;
@@ -314,8 +325,9 @@ public class StudentHandler {
     }
 
     /**
-     * Gets all courses registered by currentStudent
-     * @return a String representing all courses registered by currentStudent
+     * Formats output for all registered and waitlisted courses by currentStudent using {@link StringBuilder}.
+     * @return  String representing all courses registered by currentStudent. If no registered
+     * or wait-listed courses, String stating that no such courses exist is also returned.
      */
     public String getRegisteredCourses() {
         Course course;
@@ -324,8 +336,8 @@ public class StudentHandler {
         HashMap<String, String> coursesWaitListed = currentStudent.getWaitList();
         StringBuilder stringBuilder = new StringBuilder();
 
-        if (coursesRegistered.isEmpty())
-            stringBuilder.append("\nNo registered courses currently.\n");
+        if (coursesRegistered.isEmpty() && coursesWaitListed.isEmpty())
+            stringBuilder.append("\nNo registered or wait-listed courses currently.\n");
         else {
             stringBuilder.append("\nCourse | Index | AUs |   Status   | Course Type\n");
             stringBuilder.append("-------------------------------------------------\n");
@@ -350,9 +362,9 @@ public class StudentHandler {
     }
 
     /**
-     * Gets an overview of all courses in the system
-     * @param choice int to pass to cdm.generateCourseOverview
-     * @return a String of all courses in the system
+     * Gets an overview of all courses currently in the system
+     * @param choice int to be passed to cdm.generateCourseOverview
+     * @return a String with the required information of all courses in the system
      * @see CourseDataManager#generateCourseOverview(int) 
      */
     public String getCourseOverview(int choice){
