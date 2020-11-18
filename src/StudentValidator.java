@@ -1,3 +1,12 @@
+/**
+ * StudentValidator extends the UserValidator class and adds additional validation methods specialized for course-related
+ * data in the system.
+ * Assumes user knows what the input formats are (through a guide, manual, etc).
+ * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
+ * @version 1.12
+ * @since 1.10
+ */
+
 public class StudentValidator extends UserValidator {
 
     /**

@@ -8,6 +8,15 @@
  */
 public class CourseValidator extends Validator {
 
+    /**
+     * Validates a course code. Assumes format of course code as a string of 6 characters where:
+     * <ul>
+     *     <li>First two characters are uppercase letters</li>
+     *     <li>Last four characters are digits</li>
+     * </ul>
+     * @param courseCode String to match against the pattern
+     * @return true if input matches, false otherwise
+     */
     public boolean validateCourseCode(String courseCode) {
         if (courseCode.matches("[A-Z]{2}[0-9]{4}")) {
             return true;
@@ -16,6 +25,11 @@ public class CourseValidator extends Validator {
         return false;
     }
 
+    /**
+     * Validates course type. Accepted course types are according to typeOfCourse enum defined under Course class.
+     * @param courseType String to match against the pattern
+     * @return true if input matches, false otherwise
+     */
     public boolean validateCourseType(String courseType) {
         try {
             typeOfCourse.valueOf(courseType);
@@ -26,6 +40,11 @@ public class CourseValidator extends Validator {
         }
     }
 
+    /**
+     * Validates index number. Assumes index number is a String of 5 digits.
+     * @param indexNum String to match against the pattern
+     * @return true if input matches, false otherwise
+     */
     public boolean validateIndexNum(String indexNum) {
         if (indexNum.matches("[0-9]{5}")) {
             return true;
@@ -34,6 +53,11 @@ public class CourseValidator extends Validator {
         return false;
     }
 
+    /**
+     * Validates lesson type. Accepted lesson types are according to typeOfLesson defined under Lesson class.
+     * @param lessonType String to match against the pattern
+     * @return true if input matches, false otherwise
+     */
     public boolean validateLessonType(String lessonType) {
         try {
             typeOfLesson.valueOf(lessonType);
@@ -44,16 +68,11 @@ public class CourseValidator extends Validator {
         }
     }
 
-    public boolean validateDay(String day) {
-        try {
-            dayOfWeek.valueOf(day);
-            return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("ERROR: Day can only be MON / TUES / WED / THURS / FRI / SAT / SUN");
-            return false;
-        }
-    }
-
+    /**
+     * Validates an index's group name. Group name may only contain uppercase alphabets and digits.
+     * @param groupName String to match against the pattern
+     * @return true if input matches, false otherwise
+     */
     public boolean validateGroupName(String groupName) {
         if (groupName.matches("^[0-9A-Z]+$")) {
             return true;
@@ -62,6 +81,11 @@ public class CourseValidator extends Validator {
         return false;
     }
 
+    /**
+     * Validates a lesson's teaching weeks. Teaching weeks are 1-13 inclusive. Each week must be checked individually.
+     * @param week String to match against the pattern
+     * @return true if input matches, false otherwise
+     */
     public boolean validateTeachingWeek(String week) {
         if (validateInt(week)) {
             int teachingWeek = Integer.parseInt(week);

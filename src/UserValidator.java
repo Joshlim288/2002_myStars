@@ -9,8 +9,7 @@
 public class UserValidator extends Validator {
 
     /**
-     * Validates a userID
-     * userID may only contain letters and digits
+     * Validates a userID. userID may only contain letters and digits
      * @param userID String to match pattern against
      * @return true if input matches, false otherwise
      */
@@ -22,8 +21,7 @@ public class UserValidator extends Validator {
     }
 
     /**
-     * validates an email
-     * Must end with @e.ntu.edu.sg
+     * validates an email, which must end with @e.ntu.edu.sg
      * @param email String to match pattern against
      * @return true if input matches, false otherwise
      */
@@ -36,8 +34,7 @@ public class UserValidator extends Validator {
     }
 
     /**
-     * Validates a Gender
-     * May only be MALE, FEMALE or OTHER
+     * Validates a Gender. Gender may only be MALE, FEMALE or OTHER
      * @param gender String to match pattern against
      * @return true if input matches, false otherwise
      */

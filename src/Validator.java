@@ -13,8 +13,7 @@ import java.time.format.DateTimeParseException;
 public class Validator {
 
     /**
-     * Validates a Name
-     * May only contain letters and spaces
+     * Validates a name, which may only contain letters and spaces
      * @param name String to match against the pattern
      * @return true if input matches, false otherwise
      */
@@ -26,8 +25,7 @@ public class Validator {
     }
 
     /**
-     * Validates an int
-     * May only contain digits
+     * Validates input to be an integer.
      * @param integer String to match against the pattern
      * @return true if input matches, false otherwise
      */
@@ -40,8 +38,7 @@ public class Validator {
     }
 
     /**
-     * Validates a time
-     * Must be of the format HH:mm
+     * Validates a time, which must be of the format HH:mm
      * @param time String to match against the pattern
      * @return true if input matches, false otherwise
      */
@@ -61,8 +58,7 @@ public class Validator {
     }
 
     /**
-     * validates a dateTime
-     * Must be of format yyyy-MM-dd HH:mm
+     * validates a dateTime, which must be of format yyyy-MM-dd HH:mm
      * @param dateTime String to match against the pattern
      * @return true if input matches, false otherwise
      */
@@ -82,8 +78,7 @@ public class Validator {
     }
 
     /**
-     * Validates a dateTime period
-     * Ensures that a start dateTime is after an end dateTime
+     * Validates a dateTime period, which ensures that a start dateTime is after an end dateTime
      * @param start start dateTime to check against
      * @param end end dateTime to check against
      * @return true if start dateTime is after end dateTime, false otherwise
@@ -100,8 +95,7 @@ public class Validator {
     }
 
     /**
-     * Validates a time period
-     * Ensures that a start time is after an end time
+     * Validates a time period, which ensures that a start time is after an end time
      * @param start start time to check against
      * @param end end time to check against
      * @return true if start time is after end time, false otherwise
@@ -117,28 +111,17 @@ public class Validator {
     }
 
     /**
-     * Validates a password
-     * ensures that a password contains:
-     * <ul>
-     *     <li>an uppercase letter</li>
-     *     <li>a lowercase letter</li>
-     *     <li>a digit</li>
-     *     <li>a symbol</li>
-     * </ul>
-     * @param password String to match against the pattern
+     * Validates day. Accepted day inputs are the first three characters of days of the week, capitalized
+     * @param day String to match against the pattern
      * @return true if input matches, false otherwise
      */
-    //TODO: let students set their passwords upon first login
-    public boolean validatePassword(String password) {
-        if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,15}$")) {
+    public boolean validateDay(String day) {
+        try {
+            dayOfWeek.valueOf(day);
             return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERROR: Day can only be MON / TUE / WED / THU / FRI / SAT / SUN");
+            return false;
         }
-        System.out.println("ERROR: Password must contain at least \n" +
-                            "- an uppercase letter\n" +
-                            "- a lowercase letter\n" +
-                            "- a digit\n" +
-                            "- a symbol\n" +
-                            "and must be at least 8 characters long");
-        return true;
     }
 }
