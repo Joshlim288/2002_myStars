@@ -81,6 +81,7 @@ public class StudentInterface extends UserInterface {
         try {
             System.out.println(studHandler.getCourseOverview(1));
             do {
+                //Get valid course to add
                 System.out.print("Enter course to add (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
@@ -100,6 +101,7 @@ public class StudentInterface extends UserInterface {
 
             showIndexesInCourse(courseSelected);
             do {
+                //Get valid index to add
                 System.out.println("Enter the index you would like to enroll in.\n" +
                                    "You will be added to wait-list if an index with no vacancies is chosen:");
                 indexSelected = studHandler.retrieveIndex(courseSelected, getInput(typeOfInput.INDEX_NUM));
@@ -134,6 +136,8 @@ public class StudentInterface extends UserInterface {
 
         try {
             showRegisteredCourses();
+
+            //Get valid course to drop
             do{
                 System.out.print("Enter course to drop (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
@@ -192,6 +196,8 @@ public class StudentInterface extends UserInterface {
 
         try {
             System.out.println(studHandler.getCourseOverview(1));
+
+            //Get valid course to check vacancies
             do {
                 System.out.print("Enter course code to check vacancies (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
@@ -245,6 +251,8 @@ public class StudentInterface extends UserInterface {
 
         try {
             showRegisteredCourses();
+
+            //Get valid index for changing of index
             do {
                 System.out.print("Choose course for changing of index (e.g. CZ2002): ");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
@@ -260,6 +268,7 @@ public class StudentInterface extends UserInterface {
             Index indexToDrop = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
             showIndexesInCourse(courseSelected);
 
+            //Get valid index to change to
             do {
                 System.out.println("Enter the index you would like to swap to.\n" +
                                    "You will be added to wait-list if you choose an index with no vacancies:");
@@ -310,6 +319,7 @@ public class StudentInterface extends UserInterface {
         try {
             showRegisteredCourses();
             do {
+                //Get valid index to swap
                 System.out.print("Choose course for swapping of index (e.g. CZ2002):");
                 courseSelected = studHandler.retrieveCourse(getInput(typeOfInput.COURSE_CODE));
                 validCourse = studHandler.checkValidCourse(courseSelected);
@@ -323,6 +333,7 @@ public class StudentInterface extends UserInterface {
 
             Index indexToSwapOut = studHandler.getIndexRegistered(studHandler.currentStudent, courseSelected);
 
+            //Get the other student to swap indexes with
             System.out.println("\nEnter the particulars of the student to swap with:");
             otherStudent = studHandler.retrieveOtherStudent(sc);
             if (otherStudent != null)
@@ -333,6 +344,7 @@ public class StudentInterface extends UserInterface {
                 return;
             }
 
+            //Check if both students are registered in the same index
             Index indexToSwapIn = studHandler.getIndexRegistered(otherStudent, courseSelected);
             if (indexToSwapIn.equals(indexToSwapOut)){
                 System.out.println("\nERROR! Both of you are registered for the same index. Swap not performed.");
@@ -341,6 +353,7 @@ public class StudentInterface extends UserInterface {
                 return;
             }
 
+            //Check for clashes of timetable for both students
             boolean currentStudentClash = studHandler.hasTimetableClash(indexToSwapIn, studHandler.currentStudent, indexToSwapOut);
             boolean otherStudentClash = studHandler.hasTimetableClash(indexToSwapOut, otherStudent, indexToSwapIn);
             if (currentStudentClash || otherStudentClash) {
@@ -364,9 +377,9 @@ public class StudentInterface extends UserInterface {
                 System.out.println("For " + otherStudent.getName() + ":");
                 printStatusOfAddCourse(status2, indexToSwapOut);
                 System.out.println("Updating database, please wait...");
-                //For current student
+                //Email for notifying current student
                 studHandler.emailStudent(studHandler.currentStudent, otherStudent, courseSelected, indexToSwapOut, indexToSwapIn);
-                //For other student
+                //Email for notifying other student
                 studHandler.emailStudent(otherStudent, studHandler.currentStudent, courseSelected, indexToSwapIn, indexToSwapOut);
                 System.out.println("Database updated!\n");
             } else
@@ -424,9 +437,12 @@ public class StudentInterface extends UserInterface {
 
     /**
      * Prints the status of adding an index for the student.<p>
-     * Status is either registered for the index or added to wait-list for the index.
+     * Status depends on whether student is registered for the index or added to wait-list.
      * Used in {@link StudentInterface#addCourseOption()}, {@link StudentInterface#changeIndex()}
      * and {@link StudentInterface#swapIndex()}.
+     * @param indexSelected Index object to retrieve index number from.
+     * @param status Status of adding a course to the current Student's timetable.
+     * @see StudentHandler#addCourse(Student, Course, Index, Index, boolean)
      */
     private void printStatusOfAddCourse(int status, Index indexSelected){
         switch (status) {
