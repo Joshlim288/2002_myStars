@@ -428,6 +428,9 @@ public class AdminHandler{
      * @param courseType CourseType of the new course
      * @param academicUnits AUs the new course is worth
      * @param school School the new course belongs to
+     * @param hasExam boolean indicating if this course has final examinations
+     * @param examStart String representing the start time of this course's final exam. null if there is no final exam.
+     * @param examEnd String representing the end time of this course's final exam. null if there is no final exam.
      * @return true on success, false otherwise
      */
     public boolean addCourse(String courseCode, String courseName,String courseType, int academicUnits, String school,

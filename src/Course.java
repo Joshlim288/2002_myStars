@@ -72,6 +72,8 @@ public class Course implements Serializable {
      * @param courseType This course's type. Represented with <code>typeOfCourse</code> enumeration.
      * @param academicUnits This course's allocated academic units (AUs).
      * @param school The school that teaches this course.
+     * @param examStart This course's exam start datetime, as String. null if this course does not have exam.
+     * @param examEnd This course's exam end datetime, as String. null if this course does not have exam.
      */
     public Course(String courseCode, String courseName, String courseType, int academicUnits, String school
                     , String examStart, String examEnd) {

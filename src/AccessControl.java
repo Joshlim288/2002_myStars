@@ -29,6 +29,7 @@ public class AccessControl {
      * @param userId userId to be searched for
      * @param password unhashed password entered by user
      * @return User object if a matching account is found, null if not
+     * @throws AccessDeniedException if userId cannot be found in the system
      */
     public static User validate(String userId, String password) throws AccessDeniedException{
         ArrayList<User> userList = udm.getUserList();

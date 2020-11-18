@@ -19,6 +19,7 @@ public class StudentHandler {
     /**
      * Constructor for the handler
      * Initializes the DataManagers and calls their load() methods to load in the required data from the data folder
+     * @param matricNum the matriculation number of the student currently using myStars
      * @see StudentDataManager#load()
      * @see CourseDataManager#load()
      */
@@ -39,13 +40,13 @@ public class StudentHandler {
      * @param indexToAdd The index to be added.
      * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping/changing indexes.
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
+     * @param checkVacancy passed in as false only for swapIndex() in StudentInterface,
+     *         as we still want to be able to swap their indexes rather than add them to wait-list
+     *         even if their indexes are already at max vacancy at the time of swap
      * @return The status of adding the course, 1 if added to student's registered courses, 2 if added to waitlisted courses.
      * */
     public int addCourse(Student student, Course course, Index indexToAdd, Index indexToDrop, boolean checkVacancy) {
 
-        /* checkVacancy will be passed in as false only for swapIndex() in StudentInterface,
-        as we still want to be able to swap their indexes rather than add them to wait-list
-        even if their indexes are already at max vacancy at the time of swap. */
         if (!checkVacancy || !indexToAdd.isAtMaxCapacity()) {
             if (indexToDrop != null) dropCourse(student, course, indexToDrop.getIndexNum(), false);
             indexToAdd.addToEnrolledStudents(student.getMatricNum());

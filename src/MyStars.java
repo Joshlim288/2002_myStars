@@ -64,6 +64,7 @@ public class MyStars {
      * Handles the login
      * Gets userID and password, sends it to AccessControl for validation
      * @param sc Main scanner passed down
+     * @return User object if login is successful
      * @throws AccessDeniedException When login has failed, exception will be thrown with the reason as the message
      */
     public static User login(Scanner sc) throws AccessDeniedException{
