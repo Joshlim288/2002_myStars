@@ -1,7 +1,7 @@
 /**
- * Admin represents an academic staff in the university.
- * Admins can add a new Student, and modify his/her course registrations.
- * Admins can also add a new course, and modify a course's details.
+ * Admin represents an academic staff in the university.<p>
+ * Admins can add a new Student, and modify his/her course registrations.<p>
+ * Admins can also add a new course, and modify a course's details.<p>
  *
  * To see the format of all the data fields, refer to UserValidator
  *

@@ -2,8 +2,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 /**
- * Control class to display to the Admin what functions are available to them
- * Gets input for performing these functions and passes them to the handler to be executed
+ * Control class to display to the Admin what functions are available to them.<p>
+ * Gets input for performing these functions and passes them to the handler to be executed.
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.15
  * @since 1.1
@@ -74,8 +74,8 @@ public class AdminInterface extends UserInterface {
     }
 
     /**
-     * Get input for the creation of a new Course object
-     * Escape exception is handled within this method as we need to remove the added Course object from the database
+     * Get input for the creation of a new Course object.<p>
+     * Escape exception is handled within this method as we need to remove the added Course object from the database.<p>
      * if the user wishes to abort creation of the Course
      */
     private void createCourse() {
@@ -353,9 +353,9 @@ public class AdminInterface extends UserInterface {
     }
 
     /**
-     * Get input for updating a Course object
-     * Will relay the user's input and which attribute of the Course the user wishes to edit to the handler
-     * Some parameters cannot be edited if there are Students already enrolled in the course
+     * Get input for updating a Course object.<p>
+     * Will relay the user's input and which attribute of the Course the user wishes to edit to the handler.<p>
+     * Some parameters cannot be edited if there are Students already enrolled in the course.<p>
      * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
      */
     private void updateCourse() {
@@ -476,10 +476,10 @@ public class AdminInterface extends UserInterface {
     }
 
     /**
-     * Get input for updating an index object
-     * Will relay the user's input and which attribute of the Index the user wishes to edit to the handler
-     * Some parameters cannot be edited if there are Students already enrolled in the course
-     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
+     * Get input for updating an index object.<p>
+     * Will relay the user's input and which attribute of the Index the user wishes to edit to the handler.<p>
+     * Some parameters cannot be edited if there are Students already enrolled in the course.<p>
+     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around.<p>
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      */
     private void editIndex(String courseCode) {
@@ -579,10 +579,10 @@ public class AdminInterface extends UserInterface {
         }
     }
     /**
-     * Get input for updating a Lesson object
-     * Will relay the user's input and which attribute of the Lesson the user wishes to edit to the handler
-     * Lessons cannot be modified if there are Students already enrolled in the course
-     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
+     * Get input for updating a Lesson object.<p>
+     * Will relay the user's input and which attribute of the Lesson the user wishes to edit to the handler.<p>
+     * Lessons cannot be modified if there are Students already enrolled in the course.<p>
+     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around.
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      * @param indexNum Index Number of Index object which contains the Lesson we wish to edit
      */

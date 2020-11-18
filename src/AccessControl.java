@@ -11,9 +11,9 @@ public class AccessControl {
 
     /**
      * Instantiates a new UserDataManager, to handle User data within data/users
-     * User data is not meant to be edited from the UserDataManager,
-     * it is an aggregation of data from all subclasses of User, thus this dataManager does not need to be closed
-     *
+     * <p>
+     * User data is not meant to be edited from the UserDataManager, it is an aggregation of data from all subclasses of User, thus this dataManager does not need to be closed
+     * <p>
      * May be called multiple times in an execution, to update the list of users if they have changed, once a user
      * logs out
      */
@@ -23,8 +23,8 @@ public class AccessControl {
     }
 
     /**
-     * Used to validate user credentials.
-     * Retrieves the list of users for the system, and checks if the given credentials match any of them.
+     * Used to validate user credentials. <p>
+     * Retrieves the list of users for the system, and checks if the given credentials match any of them. <p>
      * Our implementation requires userID to be unique among all users, regardless of domain
      * @param userId userId to be searched for
      * @param password unhashed password entered by user

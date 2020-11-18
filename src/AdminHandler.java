@@ -128,9 +128,9 @@ public class AdminHandler{
     }
 
     /**
-     * Edits a Course object's attributes based on the given parameters
-     * Some parameters cannot be edited if there are Students already enrolled in the course
-     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around
+     * Edits a Course object's attributes based on the given parameters.<p>
+     * Some parameters cannot be edited if there are Students already enrolled in the course.<p>
+     * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around.
      * @param courseCode course code of the Course object to be edited
      * @param input user's input for new value of desired attribute
      * @param choice indicates which attribute is to be edited, based on the menu in AdminInterface

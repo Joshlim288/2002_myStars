@@ -13,7 +13,7 @@ public class MyStars {
      * Starts the program
      * Allows user to login to or exit the program
      * If login has failed, message will be printed stating the reason
-     * @param args
+     * @param args command line arguments
      */
     public static void main(String[] args){
         String menuChoice;
