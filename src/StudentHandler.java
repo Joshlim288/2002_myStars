@@ -249,8 +249,16 @@ public class StudentHandler {
         }
         return false;
     }
-
-    //Retrieves other student for swapCourse()
+    
+    //TODO: Shenrui double check javadocs for this point on pls
+    /**
+     * Retrieves the Student object of the other student for swapCourse(). <br>
+     * Swapping of index with another student requires the other student to enter his/her login credentials
+     * to retrieve his/her Student object to perform the actual swap.<br>
+     * Calls MyStars.login to perform the login.
+     * @param sc Scanner object to pass to MyStars.login
+     * @return Student object of the student to perform swap with
+     */
     public Student retrieveOtherStudent(Scanner sc) {
         try {
             User targetUser = MyStars.login(sc);
@@ -264,8 +272,15 @@ public class StudentHandler {
         }
         return null;
     }
-
-    //Send email to other student if a swap has been performed successfully
+    
+    /**
+     * Sends a confirmation email to both students doing a swap if the swap has been performed successfully.
+     * @param currentStudent the Student object of the student doing the swap
+     * @param otherStudent the Student object of the other student doing the same swap
+     * @param courseSelected the Course object of the course both students are doing a swap of index for
+     * @param oldIndex the Index object of the currentStudent's current enrolled index (index currentStudent is swapping out)
+     * @param newIndex the Index object of the otherStudent's current enrolled index (index currentStudent is swapping for)
+     */
     public void emailStudent(Student currentStudent, Student otherStudent,  Course courseSelected, Index oldIndex, Index newIndex){
         MailHandler.sendMail(currentStudent.getEmail(),
                   otherStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
@@ -275,19 +290,32 @@ public class StudentHandler {
                              + courseSelected.getCourseName());
     }
 
-    //Check if student registered in a course
+    /**
+     * Checks if a student is registered in a course
+     * @param student the Student object of the student to check
+     * @param courseSelected the Course object of the course student is potentially registered for
+     * @return true if student is enrolled in courseSelected
+     */
     public boolean checkIfRegistered(Student student, Course courseSelected){
         if (courseSelected == null) return false;
         return student.retrieveIndexFromRegistered(courseSelected.getCourseCode()) != null;
     }
 
-    //Check if student waitlist4ed in a course
+    /**
+     * Checks if a student is waitlisted in a course
+     * @param student the Student object of the student to check
+     * @param courseSelected the Course object of the course student is potentially waitlisted for
+     * @return true if student is waitlisted in courseSelected
+     */
     public boolean checkIfWaitListed(Student student, Course courseSelected){
         if (courseSelected == null) return false;
         return student.retrieveIndexFromWaitList(courseSelected.getCourseCode()) != null;
     }
 
-    //Get all registered courses of a student
+    /**
+     * Gets all courses registered by currentStudent
+     * @return a String representing all courses registered by currentStudent
+     */
     public String getRegisteredCourses() {
         Course course;
         Index index;
@@ -320,7 +348,12 @@ public class StudentHandler {
         return stringBuilder.toString();
     }
 
-    //Get course overview of all courses in database
+    /**
+     * Gets an overview of all courses in the system
+     * @param choice int to pass to cdm.generateCourseOverview
+     * @return a String of all courses in the system
+     * @see CourseDataManager#generateCourseOverview(int) 
+     */
     public String getCourseOverview(int choice){
         return cdm.generateCourseOverview(choice);
     }
