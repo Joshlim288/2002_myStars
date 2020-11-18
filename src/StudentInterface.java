@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Control class to display to the Student what functions are available to them
+ * Control class to display to the Student what functions are available to them.<p>
  * Gets input for performing these functions and passes them to the handler to be executed
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.15
@@ -68,9 +68,9 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Gets input to register a course for the current student.
-     * Asks for input repeatedly if course/index input given is invalid.
-     * Relays the user's input to studentHandler to add student to selected index and outputs the outcome.
+     * Gets input to register a course for the current student.<p>
+     * Asks for input repeatedly if course/index input given is invalid.<p>
+     * Relays the user's input to studentHandler to add student to selected index and outputs the outcome.<p>
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void addCourseOption() {
@@ -119,9 +119,9 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Gets input to drop a course from the current student's registered/wait-listed courses.
-     * Asks for input repeatedly if course/index input given is invalid.
-     * Relays the user's input to studentHandler to drop student from selected index and outputs the outcome.
+     * Gets input to drop a course from the current student's registered/wait-listed courses.<p>
+     * Asks for input repeatedly if course/index input given is invalid.<p>
+     * Relays the user's input to studentHandler to drop student from selected index and outputs the outcome.<p>
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void dropCourseOption() {
@@ -172,7 +172,7 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Outputs the information of the student's registered and wait-listed courses/indexes.
+     * Outputs the information of the student's registered and wait-listed courses/indexes.<p>
      * Retrieves the relevant data needed for the output from studentHandler.
      */
     private void getRegisteredCourses(){
@@ -181,9 +181,9 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Outputs the chosen index's remaining vacancies in the course database.
-     * Asks for input repeatedly if index input given is invalid.
-     * Relays the user's input to studentHandler to retrieve the remaining vacancy and outputs the outcome.
+     * Outputs the chosen index's remaining vacancies in the course database.<p>
+     * Asks for input repeatedly if index input given is invalid.<p>
+     * Relays the user's input to studentHandler to retrieve the remaining vacancy and outputs the outcome.<p>
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void checkIndexVacancies(){
@@ -206,9 +206,9 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Allows the user to prints an overview of the current course database (courses, indexes, lessons).
-     * Asks for input of choice of granularity of data to be retrieved.
-     * Relays the user's input to studentHandler to retrieve the required information from database.
+     * Allows the user to prints an overview of the current course database (courses, indexes, lessons).<p>
+     * Asks for input of choice of granularity of data to be retrieved.<p>
+     * Relays the user's input to studentHandler to retrieve the required information from database.<p>
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void printOverview(){
@@ -230,9 +230,9 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Gets input to change a currently registered index of the student.
-     * Asks for input repeatedly if course/index input is invalid.
-     * Relays the user's input to studentHandler to execute the change of index and outputs the outcome.
+     * Gets input to change a currently registered index of the student.<p>
+     * Asks for input repeatedly if course/index input is invalid.<p>
+     * Relays the user's input to studentHandler to execute the change of index and outputs the outcome.<p>
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void changeIndex() {
@@ -294,9 +294,9 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Gets input to swap a currently registered index of the student with another student.
-     * Asks for input repeatedly if course/user input is invalid.
-     * Relays the user's input to studentHandler to execute the swap of index and outputs the outcome.
+     * Gets input to swap a currently registered index of the student with another student.<p>
+     * Asks for input repeatedly if course/user input is invalid.<p>
+     * Relays the user's input to studentHandler to execute the swap of index and outputs the outcome.<p>
      * Escape exception is caught to allow user to return to main menu at any time during method's execution.
      */
     private void swapIndex() {
@@ -413,7 +413,7 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Prints the courses and indexes that are currently registered or wait-listed for the student.
+     * Prints the courses and indexes that are currently registered or wait-listed for the student.<p>
      * Used in {@link StudentInterface#dropCourseOption()}, {@link StudentInterface#getRegisteredCourses()},
      * {@link StudentInterface#changeIndex()} and {@link StudentInterface#swapIndex()}.
      */
@@ -423,7 +423,7 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Prints the status of adding an index for the student.
+     * Prints the status of adding an index for the student.<p>
      * Status is either registered for the index or added to wait-list for the index.
      * Used in {@link StudentInterface#addCourseOption()}, {@link StudentInterface#changeIndex()}
      * and {@link StudentInterface#swapIndex()}.
@@ -436,7 +436,7 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Initiates logout process, confirms if user wants to logout.
+     * Initiates logout process, confirms if user wants to logout.<p>
      * Saves data back to file by closing the handler.
      * @return true if user wishes to logout, false otherwise.
      */

@@ -2,7 +2,11 @@ import java.io.Serializable;
 
 /**
  * Definition of enumeration called typeOfGender, with 3 elements, referred to as:
- * typeOfGender.MALE, typeOfGender.FEMALE, typeOfGender.OTHER
+ * <ul>
+ *     <li>typeOfGender.MALE</li>
+ *     <li>typeOfGender.FEMALE</li>
+ *     <li>typeOfGender.OTHER</li>
+ * </ul>
  */
 enum typeOfGender {
     MALE, FEMALE, OTHER

@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * DataManager for Student data
- * Handles the loading, and holding of User objects from the data/users
+ * DataManager for Student data.<p>
+ * Handles the loading, and holding of User objects from the data/users.<p>
  * It aggregates all data within the users folder, and is only meant for examining the data
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.10
@@ -20,7 +20,7 @@ public class UserDataManager implements DataManager{
     }
 
     /**
-     * Load userList from data/users
+     * Load userList from data/users.<p>
      * Will check all files within the data/users folders, read in all .dat files, appending all Users to the userList
      */
     public void load() {
@@ -44,7 +44,7 @@ public class UserDataManager implements DataManager{
     }
 
     /**
-     * Dummy function, userData is aggregated from all files of the User folder
+     * Dummy function, userData is aggregated from all files of the User folder.<p>
      * There should be no modifications to the userList, any changes should be made in the appropriate handlers
      */
     public void save() {

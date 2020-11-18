@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 /**
- * DataManager for Course data
+ * DataManager for Course data.<p>
  * Handles the loading, holding, editing and storing of Admin objects from the data/courseData.dat
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.10
@@ -14,8 +14,8 @@ public class CourseDataManager implements DataManager{
     }
 
     /**
-     * Loads Course objects from data/courseData.dat into courseList
-     * Also contains the relevant Indexes and Lessons that each Course contains
+     * Loads Course objects from data/courseData.dat into courseList.<p>
+     * Also contains the relevant Indexes and Lessons that each Course contains.<p>
      *
      * Initializes the file if it has not yet been created
      */
@@ -38,7 +38,7 @@ public class CourseDataManager implements DataManager{
     }
 
     /**
-     * Writes back the edited courseList to data/courseData.dat
+     * Writes back the edited courseList to data/courseData.dat<p>
      * Must be called when exiting the program or updated data will not be retained between executions of the program
      */
     public void save() {

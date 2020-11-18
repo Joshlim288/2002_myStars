@@ -2,7 +2,7 @@ import java.lang.reflect.Constructor;
 import java.util.Scanner;
 
 /**
- * Utility class used to dynamically create UserInterfaces
+ * Utility class used to dynamically create UserInterfaces.<p>
  *
  * Depends on a strict naming convention of having a class with the name user_domain+"Interface" e.g. StudentInterface
  * defined in the project scope

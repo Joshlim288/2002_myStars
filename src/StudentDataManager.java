@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * DataManager for Student data
+ * DataManager for Student data.<p>
  * Handles the loading, holding, editing and storing of Admin objects from the data/users/studentData.dat
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.10

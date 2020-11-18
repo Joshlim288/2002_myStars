@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Control class that handles the logic for functions available to Students
+ * Control class that handles the logic for functions available to Students.<p>
  * Operates on and uses the entity classes using DataManagers
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.15
@@ -17,7 +17,7 @@ public class StudentHandler {
     CourseDataManager cdm;
 
     /**
-     * Constructor for the handler
+     * Constructor for the handler.<p>
      * Initializes the DataManagers and calls their load() methods to load in the required data from the data folder
      * @param matricNum the matriculation number of the student currently using myStars
      * @see StudentDataManager#load()
@@ -31,9 +31,9 @@ public class StudentHandler {
         this.currentStudent = sdm.getStudent(matricNum);
     }
 
-    /** Adds the selected index to the student's list of registered courses.
-     * Student can be added to waitlist or list of enrolled students for the course.
-     * Updates student's registered courses and updates index's list of enrolled students/waitlist.
+    /** Adds the selected index to the student's list of registered courses.<p>
+     * Student can be added to waitlist or list of enrolled students for the course.<p>
+     * Updates student's registered courses and updates index's list of enrolled students/waitlist.<p>
      * Also drops any prior index if required before adding new index.
      * @param student The student whose timetable to add the index to.
      * @param course The course of the index to be added.
@@ -61,7 +61,7 @@ public class StudentHandler {
         }
     }
 
-    /** Drops the selected index from the student's list of registered courses/waitlisted courses.
+    /** Drops the selected index from the student's list of registered courses/waitlisted courses.<p>
      *  Updates student's registered/waitlisted courses and updates index's list of enrolled students.
      * @param student The student whose timetable to drop the index from.
      * @param course The course of the index to be dropped.
@@ -80,8 +80,8 @@ public class StudentHandler {
         }
     }
 
-    /** Triggers update of waitlist for selected index and is only used after a student drops or changes a index.
-     * If waitlist is not empty, remove student at head of waitlist and register him for the course.
+    /** Triggers update of waitlist for selected index and is only used after a student drops or changes a index.<p>
+     * If waitlist is not empty, remove student at head of waitlist and register him for the course.<p>
      * Email will be sent to student's email informing the successful registration of course from waitlist.
      * @param course The course of the index for updating of waitlist.
      * @param index The index that contains the waitlist to be updated.
@@ -105,7 +105,7 @@ public class StudentHandler {
     }
 
     /**
-     * Retrieves course based on input from user with CourseDataManager.
+     * Retrieves course based on input from user with CourseDataManager.<p>
      * If course does not exist in database, user is prompted to enter a valid course.
      * @param courseCode Course input from user to search database with.
      * @return Course if it exists in database, otherwise <code>null</code> is returned.
@@ -127,7 +127,7 @@ public class StudentHandler {
         return courseSelected != null;
     }
 
-    /** Retrieves index based on input from user and course selected.
+    /** Retrieves index based on input from user and course selected.<p>
      * If index does not exist in the selected course, user is prompted to enter a valid index.
      * @param courseSelected Course selected to check.
      * @param indexNum Index selected to check.
@@ -142,7 +142,7 @@ public class StudentHandler {
         return indexSelected;
     }
 
-    /** Checks if index selected is in course previously selected and is used after calling <code>retrieveIndex</code>.
+    /** Checks if index selected is in course previously selected and is used after calling <code>retrieveIndex</code>.<p>
      * Also checks if index will clash with current timetable of student through <code>hasTimetableClash</code>.
      * @param indexSelected Index selected to check.
      * @param studentToCheck Student to retrieve timetable and check for clashes.
@@ -155,7 +155,7 @@ public class StudentHandler {
         return !hasTimetableClash(indexSelected, studentToCheck, indexToExclude);
     }
 
-    /** Retrieves index that the student is registered in based on the course chosen.
+    /** Retrieves index that the student is registered in based on the course chosen.<p>
      * Uses <code>retrieveIndex</code> but indexNum passed in is retrieved from student's list of registered indexes instead.
      * @param student Student to get index registered in.
      * @param courseSelected Course to get index registered.
@@ -166,7 +166,7 @@ public class StudentHandler {
         return retrieveIndex(courseSelected, student.retrieveIndexFromRegistered(courseSelected.getCourseCode()));
     }
 
-    /** Checks if the student will go over maximum AUs after adding selected course.
+    /** Checks if the student will go over maximum AUs after adding selected course.<p>
      * Adds AUs of courses registered and courses waitlisted with the course to be added to compare with max AUs allowed.
      * @param courseSelected The course to be added by the student.
      * @return <code>true</code> if student will go over max AUs allowed, otherwise <code>false</code>.
@@ -178,7 +178,7 @@ public class StudentHandler {
         return (totalAUs + courseSelected.getAcademicUnits()) > currentStudent.getMaxAUs();
     }
 
-    /** Checks if there is a clash between any two course's exam schedule if a new course is added to the student's timetable.
+    /** Checks if there is a clash between any two course's exam schedule if a new course is added to the student's timetable.<p>
      * A student's timetable consists of both registered and wait-listed courses.
      * @param courseSelected The course to be checked against the rest of the courses in the timetable.
      * @return <code>true</code> if there exists a clash in exam schedule, <code>false</code> otherwise. */
@@ -215,7 +215,7 @@ public class StudentHandler {
         return false;
     }
 
-    /** Checks if there is a clash between any two lessons in a timetable if a new index is added.
+    /** Checks if there is a clash between any two lessons in a timetable if a new index is added.<p>
      * A student's timetable consists of both registered and wait-listed courses.
      * @param indexToAdd The index to be checked against the student's timetable.
      * @param studentToCheck The student who is trying to add the new index.
@@ -285,7 +285,7 @@ public class StudentHandler {
     }
     
     /**
-     * Sends a confirmation email to a student when a swap of an index has been done successfully.
+     * Sends a confirmation email to a student when a swap of an index has been done successfully.<p>
      * Will be called twice, one for the student performing the swap and one for the other student.
      * @param currentStudent the Student object of the student to send to send the email to.
      * @param otherStudent the Student object of the other student in the swap.

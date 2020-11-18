@@ -1,6 +1,6 @@
 /**
  * UserValidator extends the Validator class and adds additional validation methods specialized for handling users
- * in the system.
+ * in the system.<p>
  * Assumes user knows what the input formats are (through a guide, manual, etc).
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.8
@@ -34,7 +34,7 @@ public class UserValidator extends Validator {
     }
 
     /**
-     * Validates a Gender. Gender may only be MALE, FEMALE or OTHER.
+     * Validates a Gender. Gender may only be MALE, FEMALE or OTHER.<p>
      * Gender is checked against typeOfGender defined under User.
      * @param gender String to match pattern against
      * @return true if input matches, false otherwise

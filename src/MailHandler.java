@@ -11,7 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
- * Utility class for sending mails
+ * Utility class for sending mails.<p>
  * References the given SendMailTLS class
  *
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
@@ -20,8 +20,8 @@ import javax.mail.internet.MimeMessage;
  */
 public class MailHandler {
 		/**
-		 * Used to send an email.
-		 * By default, email is sent from a dummy account created by us.
+		 * Used to send an email.<p>
+		 * By default, email is sent from a dummy account created by us.<p>
 		 * If you wish to use your own email, edit mailCredentials.txt in the data folder
 		 * @param recipient Recipient email address
 		 * @param messageText Message to be sent in the email
@@ -60,10 +60,10 @@ public class MailHandler {
 	}
 
 	/**
-	 * Retrieves credentials for email account used to send emails from the system
-	 * Credentials can be edited in the mailCredentials.txt file in the data folder
-	 * @return String containing the credentials to be used. Must follow the given format in the txt file
-	 * Username:example@gmail.com
+	 * Retrieves credentials for email account used to send emails from the system.<p>
+	 * Credentials can be edited in the mailCredentials.txt file in the data folder.<p>
+	 * @return String containing the credentials to be used. Must follow the given format in the txt file<p>
+	 * Username:example@gmail.com<p>
 	 * Password:example_password
 	 */
 	private static String readCredentials() {

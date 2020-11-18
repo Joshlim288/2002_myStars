@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Validator contains methods to validate inputs where format can be generalized, such as name, time and datetime.
+ * Validator contains methods to validate inputs where format can be generalized, such as name, time and datetime.<p>
  * Assumes user knows what the input formats are (through a guide, manual, etc).
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.9

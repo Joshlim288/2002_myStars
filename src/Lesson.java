@@ -4,7 +4,15 @@ import java.util.ArrayList;
 
 /**
  * Definition of enumeration called dayOfWeek, with 7 elements, referred to as:
- * dayOfWeek.MON, dayOfWeek.TUES, dayOfWeek.WED, dayOfWeek.THURS, dayOfWeek.FRI, dayOfWeek.SAT, dayOfWeek.SUN
+ * <ul>
+ *     <li>dayOfWeek.MON</li>
+ *     <li>dayOfWeek.TUES</li>
+ *     <li>dayOfWeek.WED</li>
+ *     <li>dayOfWeek.THURS</li>
+ *     <li>dayOfWeek.FRI</li>
+ *     <li>dayOfWeek.SAT</li>
+ *     <li>dayOfWeek.SUN</li>
+ * </ul>
  */
 enum dayOfWeek{
     MON, TUE, WED, THU, FRI, SAT, SUN
@@ -12,17 +20,24 @@ enum dayOfWeek{
 
 /**
  * Definition of enumeration called typeOfLesson, with 6 elements, referred to as:
- * typeOfLesson.LEC, typeOfLesson.TUT, typeOfLesson.LAB, typeOfLesson.DES, typeOfLesson.PRJ, typeOfLesson.SEM
+ * <ul>
+ *     <li>typeOfLesson.LEC</li>
+ *     <li>typeOfLesson.TUT</li>
+ *     <li>typeOfLesson.LAB</li>
+ *     <li>typeOfLesson.DES</li>
+ *     <li>typeOfLesson.PRJ</li>
+ *     <li>typeOfLesson.SEM</li>
+ * </ul>
  */
 enum typeOfLesson{
     LEC, TUT, LAB, DES, PRJ, SEM
 }
 
 /**
- * Lesson represents the actual classes held for an index of a course.
- * Lessons encompasses lectures, tutorials, seminars, etc.
- * Lessons can have different venues, timings, and so on.
- * There are multiple lessons per index of a course.
+ * Lesson represents the actual classes held for an index of a course.<p>
+ * Lessons encompasses lectures, tutorials, seminars, etc.<p>
+ * Lessons can have different venues, timings, and so on.<p>
+ * There are multiple lessons per index of a course.<p>
  * Enumerations for day of lessons and type of lessons are also included.
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.7
@@ -31,25 +46,25 @@ enum typeOfLesson{
 public class Lesson implements Serializable {
 
     /**
-     * This lesson's type (e.g. LEC, TUT, LAB)
+     * This lesson's type (e.g. LEC, TUT, LAB)<p>
      * Represented with <code>typeOfLesson</code> enumeration.
      */
     private typeOfLesson lessonType;
 
     /**
-     * Day on which lesson is held.
+     * Day on which lesson is held.<p>
      * Represented with <code>dayOfWeek</code> enumeration.
      */
     private dayOfWeek day;
 
     /**
-     * This lesson's start time.
+     * This lesson's start time.<p>
      * Implemented using LocalDateTime class.
      */
     private LocalTime startTime;
 
     /**
-     * This lesson's end time.
+     * This lesson's end time.<p>
      * Implemented using LocalDateTime class.
      */
     private LocalTime endTime;
@@ -60,7 +75,7 @@ public class Lesson implements Serializable {
     private String venue;
 
     /**
-     * This lesson's teaching weeks represented by array of integers representing week number.
+     * This lesson's teaching weeks represented by array of integers representing week number.<p>
      * Valid range of teaching weeks is 1-13.
      */
     private ArrayList<Integer> teachingWeeks;

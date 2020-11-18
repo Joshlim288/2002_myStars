@@ -13,7 +13,7 @@ enum typeOfInput{
 }
 
 /**
- * Abstract class that defines a general userInterface that would show the menu for a particular type of user
+ * Abstract class that defines a general userInterface that would show the menu for a particular type of user.<p>
  * Also contains an input getter that force users to enter correct input, or abort the function with the ~ character
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.8
@@ -40,7 +40,7 @@ public abstract class UserInterface {
     }
 
     /**
-     * Function which every UserInterface must implement
+     * Function which every UserInterface must implement.<p>
      * Shows the menu and handles the control logic for the particular User type
      */
     public abstract void start();

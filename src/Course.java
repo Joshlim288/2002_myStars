@@ -5,17 +5,22 @@ import java.time.LocalDateTime;
 
 /**
  * Definition of enumeration called typeOfCourse, with 4 elements, referred to as:
- * typeOfCourse.CORE, typeOfCourse.MPE, typeOfCourse.GER, typeOfCourse.UE
+ * <ul>
+ *     <li>typeOfCourse.CORE</li>
+ *     <li>typeOfCourse.MPE</li>
+ *     <li>typeOfCourse.GER</li>
+ *     <li>typeOfCourse.UE</li>
+ * </ul>
  */
 enum typeOfCourse{
     CORE, MPE, GER, UE
 }
 
 /**
- * Course represents a course taught in the university (e.g. CZ2002 - OODP).
- * It consists of multiple indexes which have lessons of different timings.
- * The database of courses is maintained and obtained through <code>FileHandler</code>.
- * Enumeration for type of courses also included here.
+ * Course represents a course taught in the university (e.g. CZ2002 - OODP).<p>
+ * It consists of multiple indexes which have lessons of different timings.<p>
+ * The database of courses is maintained and obtained through <code>FileHandler</code>.<p>
+ * Enumeration for type of courses also included here.<p>
  *
  * To see the format of all the data fields, refer to CourseVaildator
  *
@@ -36,7 +41,7 @@ public class Course implements Serializable {
     private String courseName;
 
     /**
-     * This course's type (e.g. CORE/MPE/UE)
+     * This course's type (e.g. CORE/MPE/UE)<p>
      * Represented with <code>typeOfCourse</code> enumeration.
      */
     private typeOfCourse courseType;
@@ -52,16 +57,18 @@ public class Course implements Serializable {
     private String school;
 
     /**
-     * Indexes under this course.
+     * Indexes under this course.<p>
      * Stored as an ArrayList of indexes to allow for flexibility of modification.
      */
     private ArrayList<Index> indexes;
 
     /**
-     * Datetime for the final exam for this Course
+     * Datetime for the final exam for this Course<p>
      * Contains 2 elements:
-     * <code>LocalDateTime[0]</code> is the start datetime
-     * <code>LocalDateTime[1]</code> is the end datetime
+     * <ul>
+     *     <li><code>LocalDateTime[0]</code> is the start datetime</li>
+     *     <li><code>LocalDateTime[1]</code> is the end datetime</li>
+     * </ul>
      */
     private LocalDateTime[] examDateTime;
 
@@ -89,13 +96,15 @@ public class Course implements Serializable {
 
     /**
      * @return ExamDateTime array that contains 2 elements:
-     * index 0 contains start datetime
-     * index 1 contains end datetime
+     * <ul>
+     *     <li>index 0 contains start datetime</li>
+     *     <li>index 1 contains end datetime</li>
+     * </ul>
      */
     public LocalDateTime[] getExamDateTime(){return examDateTime;}
 
     /**
-     * Sets exam datetime for a Course
+     * Sets exam datetime for a Course<p>
      * check CourseVaildator for the format
      * @param examStart as a String representing the datetime for the start of the exam
      *                  if null is passed in, exams will be removed

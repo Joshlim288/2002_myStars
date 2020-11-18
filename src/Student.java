@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 /**
- * Student represents a student enrolled in the university. It inherits from User.
+ * Student represents a student enrolled in the university. It inherits from User.<p>
  * A student is enrolled in one or more courses through indexes.
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.7
@@ -21,7 +21,7 @@ public class Student extends User {
     private String nationality;
 
     /**
-     * This student's authorized access time to STARS. accessTime is an array of LocalDateTime of size 2.
+     * This student's authorized access time to STARS. accessTime is an array of LocalDateTime of size 2.<p>
      * <br>accessTime[0] refers to the start datetime, and accessTime[1] refers to the end datetime.
      */
     private LocalDateTime[] accessTime;
@@ -36,13 +36,13 @@ public class Student extends User {
     private String major;
 
     /**
-     * This student's registered courses and the corresponding index for the semester, stored as a HashMap.
+     * This student's registered courses and the corresponding index for the semester, stored as a HashMap.<p>
      * Key is the registered course's code, and value is the index number registered by this student.
      */
     private HashMap<String, String> coursesRegistered;
 
     /**
-     * This student's list of courses waiting to be registered, stored as a HashMap.
+     * This student's list of courses waiting to be registered, stored as a HashMap.<p>
      * Key is the course code to be registered, and value is the index number registered by this student.
      */
     private HashMap<String, String> waitList;
@@ -269,7 +269,7 @@ public class Student extends User {
     }
 
     /**
-     * Overrides <code>validateLogin()</code> from the User parent class.
+     * Overrides <code>validateLogin()</code> from the User parent class.<p>
      * Uses User's validate login implementation, and also checks for whether the Student is allowed to log in
      * at the current time
      * @param checkID userID to check against this Student's userID

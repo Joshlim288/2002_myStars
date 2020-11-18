@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * Main class for the application
+ * Main class for the application.<p>
  * Contains the functionality for the start menu, handles user input for logging in
  *
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
@@ -10,8 +10,8 @@ import java.util.Scanner;
  */
 public class MyStars {
     /**
-     * Starts the program
-     * Allows user to login to or exit the program
+     * Starts the program.<p>
+     * Allows user to login to or exit the program.<p>
      * If login has failed, message will be printed stating the reason
      * @param args command line arguments
      */
@@ -61,7 +61,7 @@ public class MyStars {
     }
 
     /**
-     * Handles the login
+     * Handles the login.<p>
      * Gets userID and password, sends it to AccessControl for validation
      * @param sc Main scanner passed down
      * @return User object if login is successful

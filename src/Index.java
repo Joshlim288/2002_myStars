@@ -2,9 +2,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Index represents the actual schedules for each course.
- * There can be multiple indexes per course, where the timings of the lessons may differ (except for LEC).
- * Contains an ArrayList of Lesson.
+ * Index represents the actual schedules for each course.<p>
+ * There can be multiple indexes per course, where the timings of the lessons may differ (except for LEC).<p>
+ * Contains an ArrayList of Lesson.<p>
  * Contains two ArrayList of Student, one for students registered, the other for students in waitlist.
  * @author Josh, Jun Wei, Shen Rui, Joshua, Daryl
  * @version 1.7
@@ -23,16 +23,16 @@ public class Index implements Serializable {
     private int indexVacancy;
 
     /**
-     * Number of vacancies remaining for the index.
-     * Once vacancies reaches 0, index is full and can no longer accept more students
-     * Is a calculated field, and thus does not have a setter
+     * Number of vacancies remaining for the index.<p>
+     * Once vacancies reaches 0, index is full and can no longer accept more students.<p>
+     * Is a calculated field, and thus does not have a setter.<p>
      * Will be automatically updated when the relevant methods are called
      */
     private int currentVacancy;
 
     /**
-     * Boolean variable showing if index is at max capacity
-     * Is a calculated field, and thus does not have a setter
+     * Boolean variable showing if index is at max capacity.<p>
+     * Is a calculated field, and thus does not have a setter.<p>
      * Will be automatically updated whent he relevant methods are called
      */
     private boolean atMaxCapacity;
@@ -43,25 +43,25 @@ public class Index implements Serializable {
     private String group;
 
     /**
-     * Contains all lessons conducted under this index.
+     * Contains all lessons conducted under this index.<p>
      * Each lesson can be mapped to only one index.
      */
     private ArrayList<Lesson> lessons;
 
     /**
-     * Contains all students in waiting list for this index.
+     * Contains all students in waiting list for this index.<p>
      * Each student can only be on the waitlist on one index per course.
      */
     private ArrayList<String> waitlist;
 
     /**
-     * Contains all students currently registered in this index
+     * Contains all students currently registered in this index.<p>
      * Each student can only be registered in one index for each course.
      */
     private ArrayList<String> enrolledStudents;
 
     /**
-     * Constructor for <code>Index</code>.
+     * Constructor for <code>Index</code>.<p>
      * Only administrators should be able to initialise an index.
      * @param indexNum Unique identifier for this index.
      * @param indexVacancy Maximum vacancies for this index.
@@ -167,7 +167,7 @@ public class Index implements Serializable {
     }
 
     /**
-     * Method to add a student to current waitlist
+     * Method to add a student to current waitlist.<p>
      * Student added to the back of the queue.
      * @param matricNum Matriculation number of the Student to be added
      */
@@ -176,8 +176,8 @@ public class Index implements Serializable {
     }
 
     /**
-     * Method to remove a student from current waitlist.
-     * Student at front of queue removed
+     * Method to remove a student from current waitlist.<p>
+     * Student at front of queue removed.
      * Exception handling if waitlist is already empty
      * @return Matriculation number of the student at the front of the waitlist. null if waitlist is empty.
      */
