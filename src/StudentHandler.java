@@ -293,7 +293,7 @@ public class StudentHandler {
      * @param oldIndex the Index object of the current student's initial enrolled index
      * @param newIndex the Index object of the current student's updated enrolled index
      */
-    public void emailStudent(Student currentStudent, Student otherStudent,  Course courseSelected, Index oldIndex, Index newIndex){
+    public void emailStudent(Student currentStudent, Student otherStudent, Course courseSelected, Index oldIndex, Index newIndex){
         MailHandler.sendMail(currentStudent.getEmail(),
                   otherStudent.getName() + " has swapped indexes with you for " + courseSelected.getCourseCode() +
                              " " + courseSelected.getCourseName() + ". Your index " + oldIndex.getIndexNum() +
