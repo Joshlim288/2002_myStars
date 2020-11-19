@@ -14,7 +14,8 @@ public class StudentInterface extends UserInterface {
     private final StudentHandler studHandler;
 
     /**
-     * Constructor for the Student Interface, called from UserInterfaceCreator
+     * Constructor for the Student Interface.
+     * Called from {@link UserInterfaceCreator}.
      * @param currentUser User which has logged in
      * @param sc Scanner to be used for getting input
      */
@@ -161,10 +162,12 @@ public class StudentInterface extends UserInterface {
                                courseSelected.getCourseCode() + ", " + courseSelected.getCourseName() +
                                ", Index Number: " + indexCode);
 
+            //Get confirmation to drop index
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
                 studHandler.dropCourse(studHandler.currentStudent, courseSelected, indexCode, waitListed);
                 System.out.println("Dropping index " + indexCode + ", please wait a moment...");
+                //Trigger waitlist update for index only if student was actually registered and not waitlisted
                 if(!waitListed) studHandler.refreshWaitList(courseSelected, indexToDrop);
                 System.out.println("Successfully dropped index " + indexCode + "!");
             }
@@ -181,6 +184,7 @@ public class StudentInterface extends UserInterface {
      */
     private void getRegisteredCourses(){
         showRegisteredCourses();
+        System.out.println("Total AUs registered: " + studHandler.currentStudent.getCurrentAUs() + "\n");
         waitForEnterInput();
     }
 
@@ -287,12 +291,13 @@ public class StudentInterface extends UserInterface {
             System.out.println("Updated index after swap: " + indexSelected.getIndexNum());
             System.out.println("Confirm to proceed with the change? Press 'Y/y' to continue and any other key otherwise.");
 
+            //Get confirmation to change index
             char ans = getInput(typeOfInput.STANDARD).toCharArray()[0];
             if (ans == 'Y' || ans == 'y') {
                 int status = studHandler.addCourse(studHandler.currentStudent, courseSelected, indexSelected, indexToDrop, true);
                 printStatusOfAddCourse(status, indexSelected);
                 System.out.println("Changing index, please wait a moment...");
-                studHandler.refreshWaitList(courseSelected, indexToDrop);
+                studHandler.refreshWaitList(courseSelected, indexToDrop); //Trigger waitlist update for original index
                 System.out.println("Index successfully changed!");
             } else
                 System.out.println("Index not changed.\n" + "Exiting to main menu...");
@@ -407,10 +412,11 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Prints the indexes that are in the course selected and the number of remaining vacancies.
-     * @param courseSelected The course to check in the database.
+     * Prints indexes in the course selected and number of remaining vacancies.<p>
      * Used in {@link StudentInterface#addCourseOption()}, {@link StudentInterface#checkIndexVacancies()}
      * and {@link StudentInterface#changeIndex()}.
+     * @param courseSelected The course to check in the database.
+     *
      */
     private void showIndexesInCourse(Course courseSelected){
         ArrayList<Index> indexList = courseSelected.getIndexes();
@@ -426,17 +432,17 @@ public class StudentInterface extends UserInterface {
     }
 
     /**
-     * Prints the courses and indexes that are currently registered or wait-listed for the student.<p>
+     * Prints courses and indexes currently registered or wait-listed by the student.<p>
      * Used in {@link StudentInterface#dropCourseOption()}, {@link StudentInterface#getRegisteredCourses()},
      * {@link StudentInterface#changeIndex()} and {@link StudentInterface#swapIndex()}.
      */
     private void showRegisteredCourses(){
-        System.out.println("\nThese are your currently registered courses and indexes:");
+        System.out.println("\nThese are your currently registered/wait-listed courses and indexes:");
         System.out.println(studHandler.getRegisteredCourses());
     }
 
     /**
-     * Prints the status of adding an index for the student.<p>
+     * Prints status after adding an index for the student.<p>
      * Status depends on whether student is registered for the index or added to wait-list.
      * Used in {@link StudentInterface#addCourseOption()}, {@link StudentInterface#changeIndex()}
      * and {@link StudentInterface#swapIndex()}.
