@@ -138,7 +138,7 @@ public class StudentHandler {
 
         if (indexSelected == null)
             System.out.println("Index does not exist in this course!\n" +
-                               "Please re-enter index again.");
+                               "Please re-enter index again.\n");
         return indexSelected;
     }
 
