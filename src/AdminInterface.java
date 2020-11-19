@@ -45,7 +45,7 @@ public class AdminInterface extends UserInterface {
             System.out.println("|  9. Delete a Student from Database                  |");
             System.out.println("| 10. Delete a Course from Database                   |");
             System.out.println("| 11. Force enroll Student on wait list               |");
-            System.out.println("| 12. Log Out of MyStars                              |");
+            System.out.println("| 12. Save and Log Out of MyStars                     |");
             System.out.println("| (Enter ~ at any time to exit back to previous menu) |");
             System.out.println("-------------------------------------------------------");
 

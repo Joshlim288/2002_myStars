@@ -43,7 +43,7 @@ public class StudentInterface extends UserInterface {
             System.out.println("| 5. Print Overview of Course Database                       |");
             System.out.println("| 6. Change Index of Registered Course                       |");
             System.out.println("| 7. Swap Index of Registered Course with Another Student    |");
-            System.out.println("| 8. Log Out of MyStars                                      |");
+            System.out.println("| 8. Save and Log Out of MyStars                             |");
             System.out.println("| (Enter ~ at any time to return back to previous menu)      |");
             System.out.println("--------------------------------------------------------------");
 

@@ -10,10 +10,6 @@
  * @since 1.1
  */
 public class Admin extends User {
-    /**
-     * This admin's name.
-     */
-    private String adminName;
 
     /**
      * The faculty this admin belongs to.
@@ -36,23 +32,8 @@ public class Admin extends User {
      */
     public Admin(String userID, String password, String adminName, String faculty, String staffNum, String email) {
         super(userID, password, "Admin", adminName, email);
-        this.adminName = adminName;
         this.faculty = faculty;
         this.staffNum = staffNum;
-    }
-
-    /**
-     * @return Full Name of the admin
-     */
-    public String getAdminName() {
-        return adminName;
-    }
-
-    /**
-     * @param adminName Full name to change the admin's name to
-     */
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
     }
 
     /**
@@ -106,7 +87,7 @@ public class Admin extends User {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(adminName + ", " + staffNum + "\n");
+        stringBuilder.append(super.getName() + ", " + staffNum + "\n");
         stringBuilder.append(faculty + "\n");
         return stringBuilder.toString();
     }

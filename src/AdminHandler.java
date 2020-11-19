@@ -510,7 +510,7 @@ public class AdminHandler{
     /**
      * Retrieves student list for the Index specified by the admin
      * @param indexNum Index number of the Index we want to get the Students of
-     * @param byWaitlist true if want to list waitListed students only, false for only registered waitlist
+     * @param byWaitlist true if want to list waitListed students only, false for only registered
      * @return ArrayList of Students who are enrolled in the Index
      */
     public ArrayList<Student> getStudentListByIndex(String indexNum, boolean byWaitlist){

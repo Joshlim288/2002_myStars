@@ -72,6 +72,12 @@ public abstract class User implements Serializable {
     public String getDomain() {return domain;}
 
     /**
+     * Sets the domain the User belongs to
+     * @param domain new domain the User belongs to
+     */
+    public void setDomain(String domain) { this.domain = domain; }
+
+    /**
      * @param userID String to change the User's userID to
      */
     public void setUserID(String userID) {
