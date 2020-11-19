@@ -66,10 +66,11 @@ public abstract class UserInterface {
     }
 
     /**
-     * Validates input from user
+     * Validates input from user<p>
+     * Called by {@link UserInterface#getInput(typeOfInput)}.
      * @param input input to be validated
      * @param inputType enum of typeOfInput representing type of input
-     * @return true if input is valid
+     * @return true if input is valid and false otherwise
      */
     private boolean validateInput(String input, typeOfInput inputType) {
         return switch (inputType) {
@@ -93,11 +94,13 @@ public abstract class UserInterface {
     }
 
     /**
-     * Used to allow User to read the results of their chosen function before returning to the menu
+     * Waits for the User to press Enter before continuing with program flow. <p>
+     * Used to allow program to wait for User to read output results from a method's execution first before continuing
+     * its execution.
      */
     public void waitForEnterInput(){
         System.out.println("Press Enter to continue...");
-        System.console().readPassword();
+        System.console().readPassword(); //Hides any characters that the user may type before pressing Enter
 
     }
 

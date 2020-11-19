@@ -17,7 +17,10 @@ public class AdminHandler{
 
     /**
      * Constructor for the handler
-     * Initializes the DataManagers and calls their load() methods to load in the required data from the data folder
+     * Initializes the DataManagers and calls their <code>load</code> methods to load in the required data from the data folder
+     * @see CourseDataManager
+     * @see StudentDataManager
+     * @see UserDataManager
      */
     public AdminHandler() {
         this.cdm = new CourseDataManager();

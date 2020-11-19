@@ -18,7 +18,7 @@ public class StudentHandler {
 
     /**
      * Constructor for the handler.<p>
-     * Initializes the DataManagers and calls their load() methods to load in the required data from the data folder
+     * Initializes the DataManagers and calls their <code>load</code> methods to load in the required data from the data folder
      * @param matricNum the matriculation number of the student currently using myStars
      * @see StudentDataManager#load()
      * @see CourseDataManager#load()
@@ -32,15 +32,15 @@ public class StudentHandler {
     }
 
     /** Adds the selected index to the student's list of registered courses.<p>
-     * Student can be added to waitlist or list of enrolled students for the course.<p>
+     * Student can be added to index's waitlist or enrolled students list depending on vacancy.<p>
      * Updates student's registered courses and updates index's list of enrolled students/waitlist.<p>
      * Also drops any prior index if required before adding new index.
-     * @param student The student whose timetable to add the index to.
-     * @param course The course of the index to be added.
-     * @param indexToAdd The index to be added.
-     * @param indexToDrop The index to be dropped, if no index to be dropped, use null. Useful for swapping/changing indexes.
+     * @param student the student whose timetable to add the index to
+     * @param course the course of the index to be added
+     * @param indexToAdd the index to be added
+     * @param indexToDrop The index to be dropped, if no index to be dropped, use <code>null</code>. Useful for swapping/changing indexes.
      * (e.g. Swapping from index 33333 to index 44444 requires a drop from index 33333 first)
-     * @param checkVacancy passed in as false only for swapIndex() in StudentInterface,
+     * @param checkVacancy Passed in as false only for swapIndex() in StudentInterface,
      *         as we still want to be able to swap their indexes rather than add them to wait-list
      *         even if their indexes are already at max vacancy at the time of swap
      * @return The status of adding the course, 1 if added to student's registered courses, 2 if added to waitlisted courses.
@@ -63,9 +63,9 @@ public class StudentHandler {
 
     /** Drops the selected index from the student's list of registered courses/waitlisted courses.<p>
      *  Updates student's registered/waitlisted courses and updates index's list of enrolled students.
-     * @param student The student whose timetable to drop the index from.
-     * @param course The course of the index to be dropped.
-     * @param index The index to be dropped.
+     * @param student the student whose timetable to drop the index from
+     * @param course the course of the index to be dropped
+     * @param index the index to be dropped
      * @param waitlisted <code>true</code> if course is waitlisted for student, <code>false</code> if registered for student.
      */
     public void dropCourse(Student student, Course course, String index, boolean waitlisted) {
@@ -83,8 +83,8 @@ public class StudentHandler {
     /** Triggers update of waitlist for selected index and is only used after a student drops or changes a index.<p>
      * If waitlist is not empty, remove student at head of waitlist and register him for the course.<p>
      * Email will be sent to student's email informing the successful registration of course from waitlist.
-     * @param course The course of the index for updating of waitlist.
-     * @param index The index that contains the waitlist to be updated.
+     * @param course the course of the index for updating of waitlist
+     * @param index the index that contains the waitlist to be updated
      */
     public void refreshWaitList(Course course, Index index) {
         if (!index.getWaitlist().isEmpty()) {
@@ -105,10 +105,10 @@ public class StudentHandler {
     }
 
     /**
-     * Retrieves course based on input from user with CourseDataManager.<p>
+     * Retrieves course based on input from user with <code>CourseDataManager</code>.<p>
      * If course does not exist in database, user is prompted to enter a valid course.
-     * @param courseCode Course input from user to search database with.
-     * @return Course if it exists in database, otherwise <code>null</code> is returned.
+     * @param courseCode course input from user to search database with
+     * @return <code>Course</code> if it exists in database, otherwise <code>null</code> is returned
      * @see CourseDataManager#getCourse(String)
      */
     public Course retrieveCourse(String courseCode){
@@ -119,8 +119,8 @@ public class StudentHandler {
         return courseSelected;
     }
 
-    /** Checks if course selected exists in database and is used after calling <code>retrieveCourse</code>.
-     * @param courseSelected Course selected to check.
+    /** Checks if course selected exists in database and is used after calling {@link #retrieveCourse(String)}.
+     * @param courseSelected <code>Course</code> selected to check.
      * @return <code>true</code> if course selected exists in database, <code>false</code> if it does not.
      */
     public boolean checkValidCourse(Course courseSelected){
@@ -129,24 +129,24 @@ public class StudentHandler {
 
     /** Retrieves index based on input from user and course selected.<p>
      * If index does not exist in the selected course, user is prompted to enter a valid index.
-     * @param courseSelected Course selected to check.
-     * @param indexNum Index selected to check.
-     * @return Index if it exists in the course selected, otherwise <code>null</code> is returned.
+     * @param courseSelected <code>Course</code> selected to check
+     * @param indexNum <code>Index</code> selected to check
+     * @return <code>Index</code> if it exists in the course, otherwise <code>null</code> is returned
      */
     public Index retrieveIndex(Course courseSelected, String indexNum){
         Index indexSelected = courseSelected.getIndex(indexNum);
 
         if (indexSelected == null)
             System.out.println("Index does not exist in this course!\n" +
-                               "Please re-enter index again.");
+                               "Please re-enter index again.\n");
         return indexSelected;
     }
 
-    /** Checks if index selected is in course previously selected and is used after calling <code>retrieveIndex</code>.<p>
-     * Also checks if index will clash with current timetable of student through <code>hasTimetableClash</code>.
-     * @param indexSelected Index selected to check.
-     * @param studentToCheck Student to retrieve timetable and check for clashes.
-     * @param indexToExclude Index to exclude from checking for clashes with timetable. Useful for changing/swapping index.
+    /** Checks if index selected is in course previously selected and is used after calling {@link #retrieveIndex(Course, String)}.<p>
+     * Also checks if index will clash with current timetable of student through {@link #hasTimetableClash(Index, Student, Index)}.
+     * @param indexSelected <code>Index</code> selected to check
+     * @param studentToCheck <code>Student</code> to retrieve timetable and check for clashes
+     * @param indexToExclude <code>Index</code> to exclude from checking for clashes with timetable, useful for changing/swapping index
      * (e.g. For changing from index 33333 to index 44444, index 33333 should not be included in the check for clash)
      * @return <code>true</code> if index selected is available to be added, otherwise <code>false</code> is returned.
      */
@@ -157,9 +157,9 @@ public class StudentHandler {
 
     /** Retrieves index that the student is registered in based on the course chosen.<p>
      * Uses <code>retrieveIndex</code> but indexNum passed in is retrieved from student's list of registered indexes instead.
-     * @param student Student to get index registered in.
-     * @param courseSelected Course to get index registered.
-     * @return Index that the student is registered in.
+     * @param student <code>Student</code> to get index registered in.
+     * @param courseSelected <code>Course</code> to get index registered.
+     * @return <code>Index</code> that the student is registered in.
      * @see #retrieveIndex(Course, String)
      */
     public Index getIndexRegistered(Student student, Course courseSelected){
@@ -168,7 +168,7 @@ public class StudentHandler {
 
     /** Checks if the student will go over maximum AUs after adding selected course.<p>
      * Adds AUs of courses registered and courses waitlisted with the course to be added to compare with max AUs allowed.
-     * @param courseSelected The course to be added by the student.
+     * @param courseSelected The <code>Course</code> to be added by the student.
      * @return <code>true</code> if student will go over max AUs allowed, otherwise <code>false</code>.
      */
     public boolean willGoOverMaxAU(Course courseSelected) {
@@ -180,7 +180,7 @@ public class StudentHandler {
 
     /** Checks if there is a clash between any two course's exam schedule if a new course is added to the student's timetable.<p>
      * A student's timetable consists of both registered and wait-listed courses.
-     * @param courseSelected The course to be checked against the rest of the courses in the timetable.
+     * @param courseSelected The <code>Course</code> to be checked against the rest of the courses in the timetable.
      * @return <code>true</code> if there exists a clash in exam schedule, <code>false</code> otherwise. */
     public boolean hasExamClash(Course courseSelected){
 
@@ -268,7 +268,7 @@ public class StudentHandler {
      * for validation and retrieving of his/her Student object to perform the actual swap.<br>
      * Calls {@link MyStars#login(Scanner)} to perform the login.
      * @param sc Scanner object to pass to MyStars.login
-     * @return Student object of the student to perform swap with. If no valid student found, <code>null</code> is returned.
+     * @return Student object to perform the indexswap with. If no valid Student found, <code>null</code> is returned.
      */
     public Student retrieveOtherStudent(Scanner sc) {
         try {
@@ -287,7 +287,7 @@ public class StudentHandler {
     /**
      * Sends a confirmation email to a student when a swap of an index has been done successfully.<p>
      * Will be called twice, one for the student performing the swap and one for the other student.
-     * @param currentStudent the Student object of the student to send to send the email to.
+     * @param currentStudent the Student object of the student to send the email to.
      * @param otherStudent the Student object of the other student in the swap.
      * @param courseSelected the Course object of the course both students are doing a swap of index for
      * @param oldIndex the Index object of the current student's initial enrolled index
@@ -362,7 +362,7 @@ public class StudentHandler {
     }
 
     /**
-     * Gets an overview of all courses currently in the system
+     * Gets an overview of all courses currently in the system.
      * @param choice int to be passed to cdm.generateCourseOverview
      * @return a String with the required information of all courses in the system
      * @see CourseDataManager#generateCourseOverview(int) 

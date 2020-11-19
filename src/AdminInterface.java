@@ -13,7 +13,8 @@ public class AdminInterface extends UserInterface {
     private final AdminHandler adHandler;
 
     /**
-     * Constructor for the Admin Interface, called from UserInterfaceCreator
+     * Constructor for the Admin Interface.
+     * Called from {@link UserInterfaceCreator}.
      * @param currentUser User which has logged in
      * @param sc Scanner to be used for getting input
      */
