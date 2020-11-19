@@ -91,8 +91,9 @@ public class StudentInterface extends UserInterface {
                         System.out.println("Cannot register for course, will exceed maximum AUs!\n");
                         validCourse = false;
                     }
-                    else if (studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected)) {
-                        System.out.println("You are already enrolled in this course!\n");
+                    else if (studHandler.checkIfRegistered(studHandler.currentStudent, courseSelected) ||
+                            studHandler.checkIfWaitListed(studHandler.currentStudent, courseSelected)) {
+                        System.out.println("You are already enrolled/wait-listed for this course!\n");
                         validCourse = false;
                     }
                     else if (studHandler.hasExamClash(courseSelected))
