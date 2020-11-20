@@ -234,9 +234,11 @@ public class Index implements Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Index " + indexNum + "  |  " + "Group " + group + "\n" +
-                "Remaining Vacancies: " + currentVacancy + "/" + indexVacancy + "\n");
-        stringBuilder.append("Number of students currently in wait list: " + waitlist.size() + "\n");
+        String blank = " "; //Used for formatting
+        int vacancyChar = 0;
+        if (currentVacancy < 10) vacancyChar = 1;
+        stringBuilder.append(indexNum + " | " + group + blank.repeat(5 - group.length()) + " | " + currentVacancy +
+                             "/" + indexVacancy + blank.repeat(4 + vacancyChar) + " | " + waitlist.size());
         return stringBuilder.toString();
     }
 

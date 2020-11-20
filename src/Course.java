@@ -248,10 +248,10 @@ public class Course implements Serializable {
         Course other = (Course) o;
         return other.getCourseCode().equals(courseCode);
     }
-
-    /**
+/*
+    *//**
      * @return Course details as a String, suitable for printing
-     */
+     *//*
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -265,6 +265,28 @@ public class Course implements Serializable {
                     examDateTime[1].format(formatter) + "\n");
         else
             stringBuilder.append("No examinations for this course.\n");
+        return stringBuilder.toString();
+    }*/
+
+    /**
+     * @return Course details as a String, suitable for printing
+     */
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        StringBuilder stringBuilder = new StringBuilder();
+        String examString;
+        if (examDateTime[0] != null)
+            examString = examDateTime[0].format(formatter) + " - " + examDateTime[1].format(formatter);
+        else
+            examString = "No examinations for this course.   ";
+
+        String blank = " "; //Used for formatting
+        stringBuilder.append(courseCode + " | " + courseName + blank.repeat(40- courseName.length()) + " | " +
+                             academicUnits + "   | " + school + blank.repeat(6-school.length()) + " | " +
+                             examString + " | ");
+        stringBuilder.append(courseType);
+
         return stringBuilder.toString();
     }
 }

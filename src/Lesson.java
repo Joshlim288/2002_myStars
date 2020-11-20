@@ -190,16 +190,14 @@ public class Lesson implements Serializable {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Lesson Type: " + lessonType + " | ");
-        stringBuilder.append("Venue: " + venue + " | ");
-        stringBuilder.append(day + ", " + startTime + " - " + endTime + "\n");
-        stringBuilder.append("Teaching Weeks: ");
+
+        String blank = " "; //Used for formatting
+        stringBuilder.append(lessonType + "  | " + venue + blank.repeat(7 - venue.length()) + " | " + day + ", " + startTime + " - " + endTime + " | ");
         for (int i = 0; i < teachingWeeks.size(); i++)
             if (i < teachingWeeks.size() - 1)
                 stringBuilder.append(teachingWeeks.get(i) + ", ");
             else
                 stringBuilder.append(teachingWeeks.get(i));
-        stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 

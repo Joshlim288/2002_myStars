@@ -337,9 +337,10 @@ public class StudentHandler {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (coursesRegistered.isEmpty() && coursesWaitListed.isEmpty())
-            stringBuilder.append("\nNo registered or wait-listed courses currently.\n");
+            stringBuilder.append("No registered or wait-listed courses currently.\n");
         else {
-            stringBuilder.append("\nCourse | Index | AUs |   Status   | Course Type\n");
+            stringBuilder.append("-------------------------------------------------\n");
+            stringBuilder.append("Course | Index | AUs |   Status   | Course Type\n");
             stringBuilder.append("-------------------------------------------------\n");
             for (Map.Entry<String, String> pair : coursesRegistered.entrySet()) {
                 course = cdm.getCourse(pair.getKey());
@@ -357,7 +358,7 @@ public class StudentHandler {
                         + "  | WAITLISTED |  " + course.getCourseType() + "\n");
             }
         }
-
+        stringBuilder.append("-------------------------------------------------\n");
         return stringBuilder.toString();
     }
 

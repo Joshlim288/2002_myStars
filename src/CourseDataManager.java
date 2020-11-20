@@ -114,38 +114,41 @@ public class CourseDataManager implements DataManager{
         StringBuilder stringBuilder = new StringBuilder();
         switch (choice){
             case(1) -> {
-                stringBuilder.append("-----------------------------------");
+                stringBuilder.append("\n--------------------------------------------------------------------------------------------------------------------");
+                stringBuilder.append("\nCourse | Course Name                              | AUs | School | Exam Timing                         | Course Type");
+                stringBuilder.append("\n--------------------------------------------------------------------------------------------------------------------");
                 ArrayList<Course> courseList = getCourseList();
                 for (Course course: courseList)
                     stringBuilder.append("\n" + course);
-                stringBuilder.append("-----------------------------------");
+                stringBuilder.append("\n--------------------------------------------------------------------------------------------------------------------");
             }
             case(2) -> {
+                stringBuilder.append(generateCourseOverview(1));
                 ArrayList<Course> courseList = getCourseList();
-                stringBuilder.append("-----------------------------------");
+                stringBuilder.append("\n------------------------------------------------------");
+                stringBuilder.append("\nCourse | Index | Group | Vacancies | Waitlist Length");
+                stringBuilder.append("\n------------------------------------------------------");
                 for (Course course: courseList) {
-                    stringBuilder.append("\n" + course);
                     ArrayList<Index> indexList = course.getIndexes();
                     for (Index index : indexList)
-                        stringBuilder.append("\n" + index);
-                    stringBuilder.append("-----------------------------------");
+                        stringBuilder.append("\n" + course.getCourseCode() + " | " + index);
+                    stringBuilder.append("\n------------------------------------------------------");
                 }
             }
             case(3) -> {
+                stringBuilder.append(generateCourseOverview(2));
                 ArrayList<Course> courseList = getCourseList();
-                stringBuilder.append("-----------------------------------");
-                stringBuilder.append("-----------------------------------");
+                stringBuilder.append("\n----------------------------------------------------------------------------------------------------");
+                stringBuilder.append("\nCourse | Index | Type | Venue   | Class Timing       | Teaching Weeks");
+                stringBuilder.append("\n----------------------------------------------------------------------------------------------------");
                 for (Course course: courseList) {
-                    stringBuilder.append("\n" + course);
                     ArrayList<Index> indexList = course.getIndexes();
                     for (Index index: indexList) {
-                        stringBuilder.append("\n" + index);
                         ArrayList<Lesson> lessonList = index.getLessons();
                         for (Lesson lesson: lessonList)
-                            stringBuilder.append("\n" + lesson);
-                        stringBuilder.append("-----------------------------------");
+                            stringBuilder.append("\n" + course.getCourseCode() + " | " + index.getIndexNum() + " | " + lesson);
+                        stringBuilder.append("\n----------------------------------------------------------------------------------------------------");
                     }
-                    stringBuilder.append("-----------------------------------");
                 }
             }
         }
