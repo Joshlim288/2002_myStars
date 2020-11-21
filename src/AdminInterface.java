@@ -744,8 +744,8 @@ public class AdminInterface extends UserInterface {
                         "| What attribute would you like to edit?     |\n" +
                         "----------------------------------------------\n" +
                         "|  1: userID                                 |\n" +
-                        "|  2: Password                               |\n" +
-                        "|  3: Name                                   |\n" +
+                        "|  2: password                               |\n" +
+                        "|  3: name                                   |\n" +
                         "|  4: matricNum                              |\n" +
                         "|  5: email                                  |\n" +
                         "|  6: gender                                 |\n" +
