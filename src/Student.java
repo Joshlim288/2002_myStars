@@ -304,8 +304,9 @@ public class Student extends User {
         stringBuilder.append("AUs registered: " + currentAUs + "\n");
         stringBuilder.append("Courses registered: \n");
         for (String course : coursesRegistered.keySet()) {
-            stringBuilder.append("- " + course + " (" + coursesRegistered.get(course) + ")\n");
+            stringBuilder.append("- " + course + " (Index " + coursesRegistered.get(course) + ")\n");
         }
+        if (coursesRegistered.isEmpty()) stringBuilder.append("- NA\n");
         return stringBuilder.toString();
     }
 }

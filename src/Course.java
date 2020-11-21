@@ -248,25 +248,6 @@ public class Course implements Serializable {
         Course other = (Course) o;
         return other.getCourseCode().equals(courseCode);
     }
-/*
-    *//**
-     * @return Course details as a String, suitable for printing
-     *//*
-    @Override
-    public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(courseName + ", " + courseCode + "\n");
-        stringBuilder.append("Course Type: " + courseType + "\n");
-        stringBuilder.append("Academic Units: " + academicUnits + "\n");
-        stringBuilder.append("School: " + school + "\n");
-        if (examDateTime[0] != null)
-            stringBuilder.append("Exam Date: " + examDateTime[0].format(formatter) + " to " +
-                    examDateTime[1].format(formatter) + "\n");
-        else
-            stringBuilder.append("No examinations for this course.\n");
-        return stringBuilder.toString();
-    }*/
 
     /**
      * @return Course details as a String, suitable for printing
