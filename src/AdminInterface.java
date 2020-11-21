@@ -365,9 +365,7 @@ public class AdminInterface extends UserInterface {
             String changedValue;
             int choice;
             System.out.println("Courses:");
-            for (Course crs: adHandler.getCourses()){
-                System.out.println(crs);
-            }
+            System.out.println(adHandler.getCourseOverview(1));
             while (true) {
                 System.out.print("Enter course code to edit: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
@@ -378,18 +376,21 @@ public class AdminInterface extends UserInterface {
             }
 
             do {
-                System.out.println("\nWhat attribute would you like to edit?");
-                System.out.println(" 1: courseCode\n" +
-                        " 2: courseName\n" +
-                        " 3: courseType\n" +
-                        " 4: academicUnits\n" +
-                        " 5: school\n" +
-                        " 6: edit existing indexes\n" +
-                        " 7: add new index\n" +
-                        " 8: delete an index\n" +
-                        " 9: examDate\n" +
-                        "10: exit\n" +
-                        "--------------------------");
+                System.out.println("\n"+
+                        "-----------------------------------------------\n" +
+                        "| What attribute would you like to edit?      |\n" +
+                        "-----------------------------------------------\n"+
+                        "|  1: courseCode                              |\n" +
+                        "|  2: courseName                              |\n" +
+                        "|  3: courseType                              |\n" +
+                        "|  4: academicUnits                           |\n" +
+                        "|  5: school                                  |\n" +
+                        "|  6: edit existing indexes                   |\n" +
+                        "|  7: add new index                           |\n" +
+                        "|  8: delete an index                         |\n" +
+                        "|  9: examDate                                |\n" +
+                        "| 10: exit                                    |\n" +
+                        "-----------------------------------------------");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -489,9 +490,14 @@ public class AdminInterface extends UserInterface {
             String indexNum;
             int choice;
             System.out.println("Indexes:");
+            System.out.println("" +
+                    "------------------------------------------------------\n" +
+                    "Course | Index | Group | Vacancies | Waitlist Length\n" +
+                    "------------------------------------------------------");
             for(Index idx: adHandler.getIndexes(courseCode)){
                 System.out.println(idx);
             }
+            System.out.println("------------------------------------------------------");
             while(true) {
                 System.out.print("Enter index number to edit: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
@@ -502,15 +508,18 @@ public class AdminInterface extends UserInterface {
             }
 
             do {
-                System.out.println("\nWhat attribute would you like to edit?");
-                System.out.println("1: indexNum\n" +
-                        "2: indexVacancy\n" +
-                        "3: group\n" +
-                        "4. add a new lesson\n" +
-                        "5: edit existing lessons\n" +
-                        "6: remove a lesson\n" +
-                        "7: exit\n" +
-                        "--------------------------");
+                System.out.println("\n"+
+                        "----------------------------------------------\n" +
+                        "| What attribute would you like to edit?     |\n" +
+                        "----------------------------------------------\n"+
+                        "|  1: indexNum                               |\n" +
+                        "|  2: indexVacancy                           |\n" +
+                        "|  3: group                                  |\n" +
+                        "|  4. add a new lesson                       |\n" +
+                        "|  5: edit existing lessons                  |\n" +
+                        "|  6: remove a lesson                        |\n" +
+                        "|  7: exit                                   |\n" +
+                        "---------------------------------------------|");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -594,28 +603,36 @@ public class AdminInterface extends UserInterface {
             int choice;
             int i=1;
             System.out.println("Lessons:");
+            System.out.println("" +
+                    "----------------------------------------------------------------------------------------------------\n" +
+                    "Num | Type | Venue   | Class Timing       | Teaching Weeks\n" +
+                    "----------------------------------------------------------------------------------------------------");
             for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)){
-                System.out.println("\n" + i +":\n"+lsn);
+                System.out.println(i + "   | " +lsn);
                 i++;
             }
+            System.out.println("----------------------------------------------------------------------------------------------------");
             while(true) {
                 System.out.print("Enter lesson number to edit:");
                 lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
-                if (lessonIndex<=i && lessonIndex>0){
+                if (lessonIndex<i-1 && lessonIndex>=0){
                     break;
                 }
-                System.out.println("Index out of range, enter lesson number < "+ i);
+                System.out.println("Index out of range, enter lesson number <= "+ (i-1));
             }
 
             do {
-                System.out.println("\nWhat attribute would you like to edit?");
-                System.out.println("1: lessonType\n" +
-                        "2: day\n" +
-                        "3: lesson time\n" +
-                        "4: venue\n" +
-                        "5: teaching weeks\n" +
-                        "6: exit\n"+
-                        "--------------------------");
+                System.out.println("\n"+
+                        "----------------------------------------------\n" +
+                        "| What attribute would you like to edit?     |\n" +
+                        "----------------------------------------------\n"+
+                        "|  1: lessonType                             |\n" +
+                        "|  2: day                                    |\n" +
+                        "|  3: lesson time                            |\n" +
+                        "|  4: venue                                  |\n" +
+                        "|  5: teaching weeks                         |\n" +
+                        "|  6: exit                                   |\n"+
+                        "----------------------------------------------");
                 System.out.print("Choose attribute to edit:");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
@@ -627,7 +644,7 @@ public class AdminInterface extends UserInterface {
                     }
                     case (2) -> { // edit day
                         do {
-                            System.out.print("Enter new lesson day: ");
+                            System.out.print("Enter new lesson day (First 3 letters): ");
                             changedValue = getInput(typeOfInput.DAY);
                         } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
                     }
@@ -635,9 +652,9 @@ public class AdminInterface extends UserInterface {
                         String newStart;
                         String newEnd;
                         do {
-                            System.out.print("Enter new start time: ");
+                            System.out.print("Enter new start time (HH:mm): ");
                             newStart = getInput(typeOfInput.TIME);
-                            System.out.print("Enter new end time: ");
+                            System.out.print("Enter new end time (HH:mm): ");
                             newEnd = getInput(typeOfInput.TIME);
                         } while (!courseValidator.validateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editLesson(courseCode, indexNum, lessonIndex, newStart+"&"+newEnd, choice));
@@ -705,20 +722,23 @@ public class AdminInterface extends UserInterface {
             }
 
             do {
-                System.out.println("Choose attribute to edit: ");
-                System.out.print(" 1: userID\n" +
-                                 " 2: Password\n" +
-                                 " 3: Name\n" +
-                                 " 4: matricNum\n" +
-                                 " 5: email\n" +
-                                 " 6: gender\n" +
-                                 " 7: nationality\n" +
-                                 " 8: major\n" +
-                                 " 9: maxAUs\n" +
-                                 "10: access period\n" +
-                                 "11: exit\n" +
-                                 "--------------------------\n" +
-                                 "Enter choice: ");
+                System.out.println("\n"+
+                        "----------------------------------------------\n" +
+                        "| What attribute would you like to edit?     |\n" +
+                        "----------------------------------------------\n"+
+                        "|  1: userID                                 |\n" +
+                        "|  2: Password                               |\n" +
+                        "|  3: Name                                   |\n" +
+                        "|  4: matricNum                              |\n" +
+                        "|  5: email                                  |\n" +
+                        "|  6: gender                                 |\n" +
+                        "|  7: nationality                            |\n" +
+                        "|  8: major                                  |\n" +
+                        "|  9: maxAUs                                 |\n" +
+                        "| 10: access period                          |\n" +
+                        "| 11: exit                                   |\n" +
+                        "----------------------------------------------");
+                System.out.print("Enter choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
                 switch (choice) {
                     case (1) -> { // user id
