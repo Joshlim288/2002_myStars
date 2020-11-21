@@ -153,16 +153,16 @@ public class AdminInterface extends UserInterface {
         int numLessons;
         String group;
 
-            do {
-                System.out.print("Enter index number: ");
-                indexNum = getInput(typeOfInput.INDEX_NUM);
+        do {
+            System.out.print("Enter index number: ");
+            indexNum = getInput(typeOfInput.INDEX_NUM);
 
-                System.out.print("Enter number of vacancies: ");
-                indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
+            System.out.print("Enter number of vacancies: ");
+            indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
 
-                System.out.print("Enter group name for the index: ");
-                group = getInput(typeOfInput.GROUP_NAME);
-            } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies, group));
+            System.out.print("Enter group name for the index: ");
+            group = getInput(typeOfInput.GROUP_NAME);
+        } while (!adHandler.addIndex(courseCode, indexNum, indexVacancies, group));
         try {
             System.out.print("Enter number of lessons: ");
             do {

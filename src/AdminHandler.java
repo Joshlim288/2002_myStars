@@ -685,18 +685,6 @@ public class AdminHandler{
     }
 
     /**
-     * Used to remove a Lesson from a Course
-     * Not allowed while students are enrolled
-     * @param courseCode Course code of Course containing relevant Index
-     * @param indexNum Index number of Index containing relevant Lesson
-     * @param index Index of Lesson in Lesson ArrayList to be removed
-     */
-    public void removeLesson(String courseCode, String indexNum, int index) {
-        ArrayList<Lesson> toRemove = cdm.getCourse(courseCode).getIndex(indexNum).getLessons();
-        toRemove.remove(index);
-    }
-
-    /**
      * Forcefully enroll a Student currently in the wait list of an index
      * Will increase the current vacancy of an Index to accommodate the Student
      * @param indexNum Index number of the Index to forcefully enroll the Student in
