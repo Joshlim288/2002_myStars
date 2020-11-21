@@ -251,8 +251,13 @@ public class StudentHandler {
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
                                     newLesson.getEndTime().isAfter(oldLesson.getStartTime()) &&
                                         !oldLessonWeeks.isEmpty()) {
-                                System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
-                                System.out.println("Please choose another index!\n");
+                                ArrayList<Course> courseList = cdm.getCourseList();
+                                for (Course course: courseList)
+                                    if (course.getIndex(indexToCheck.getIndexNum()) != null) {
+                                        System.out.println("There is a clash with " + course.getCourseCode() +
+                                                           ", Index " + indexToCheck.getIndexNum() + "!");
+                                        System.out.println("Please choose another index!\n");
+                                    }
                                 return true;
                             }
                         }
