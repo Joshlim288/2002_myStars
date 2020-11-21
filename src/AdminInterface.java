@@ -130,6 +130,7 @@ public class AdminInterface extends UserInterface {
             } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examStart, examEnd));
         } catch(EscapeException e){
             System.out.println(e.getMessage());
+            return;
         }
 
         try {
