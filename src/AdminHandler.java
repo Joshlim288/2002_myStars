@@ -411,12 +411,12 @@ public class AdminHandler{
                 tempStudent.setAccessTime(newStart, newEnd);
             }
         }
-        System.out.println("Successfully changed");
-        System.out.println(tempStudent);
-        System.out.println(tempStudent.getMaxAUs());
-        System.out.println(tempStudent.getUserID());
-        System.out.println(tempStudent.getEmail());
-        System.out.println(Arrays.toString(tempStudent.getAccessTime()));
+        System.out.println("\nHere are the updated details:");
+        System.out.print(tempStudent);
+        System.out.println("Max AUs: " + tempStudent.getMaxAUs());
+        System.out.println("Student's ID: " + tempStudent.getUserID());
+        System.out.println("Student's Email: " + tempStudent.getEmail());
+        System.out.println("Student's Access Period: " + Arrays.toString(tempStudent.getAccessTime()));
         return true;
     }
 
