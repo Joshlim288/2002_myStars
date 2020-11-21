@@ -385,10 +385,10 @@ public class AdminInterface extends UserInterface {
                         "|  3: courseType                              |\n" +
                         "|  4: academicUnits                           |\n" +
                         "|  5: school                                  |\n" +
-                        "|  6: edit existing indexes                   |\n" +
+                        "|  6: examDate                                |\n" +
                         "|  7: add new index                           |\n" +
                         "|  8: delete an index                         |\n" +
-                        "|  9: examDate                                |\n" +
+                        "|  9: edit existing indexes                   |\n" +
                         "| 10: exit                                    |\n" +
                         "-----------------------------------------------");
                 System.out.print("Choose attribute to edit:");
@@ -431,23 +431,7 @@ public class AdminInterface extends UserInterface {
                             changedValue = getInput(typeOfInput.NAME);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
                     }
-                    case (6) -> editIndex(courseCode); // edit index
-                    case (7) -> createIndex(courseCode); // create index
-                    case (8) -> {
-                        if(adHandler.checkCourseOccupied(courseCode)){
-                            System.out.println("Course already has students enrolled, Indexes cannot be deleted");
-                            waitForEnterInput();
-                            continue;
-                        }
-                        for (Index idx: adHandler.getIndexes(courseCode)) {
-                            System.out.println(idx);
-                        }
-                        do {
-                            System.out.print("Enter index number to delete: ");
-                            changedValue = getInput(typeOfInput.INDEX_NUM);
-                        } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                    }
-                    case (9) -> { // edit finals
+                    case (6) -> { // edit finals
                         if(adHandler.checkCourseOccupied(courseCode)){
                             System.out.println("Course already has students enrolled, Final exams cannot be changed");
                             waitForEnterInput();
@@ -463,10 +447,26 @@ public class AdminInterface extends UserInterface {
                         } while (!studentValidator.validateDateTimePeriod(newStart, newEnd) ||
                                 !adHandler.editCourse(courseCode, newStart+"&"+newEnd, choice));
                     }
+                    case (7) -> createIndex(courseCode); // create index
+                    case (8) -> { // remove index
+                        if(adHandler.checkCourseOccupied(courseCode)){
+                            System.out.println("Course already has students enrolled, Indexes cannot be deleted");
+                            waitForEnterInput();
+                            continue;
+                        }
+                        for (Index idx: adHandler.getIndexes(courseCode)) {
+                            System.out.println(idx);
+                        }
+                        do {
+                            System.out.print("Enter index number to delete: ");
+                            changedValue = getInput(typeOfInput.INDEX_NUM);
+                        } while (!adHandler.editCourse(courseCode, changedValue, choice));
+                    }
+                    case (9) -> editIndex(courseCode); // edit index
                     case (10) -> System.out.println("Exiting update course..."); // exit
                     default -> System.out.println("ERROR: Invalid menu option selected");
                 }
-                if (choice >= 0 && choice < 10) {
+                if (choice >= 0 && choice < 9) {
                     System.out.println("Successfully changed");
                     waitForEnterInput();
                 }
@@ -484,109 +484,109 @@ public class AdminInterface extends UserInterface {
      * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around.<p>
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      */
-    private void editIndex(String courseCode) {
-        try {
-            String changedValue;
-            String indexNum;
-            int choice;
-            System.out.println("Indexes:");
-            System.out.println("" +
-                    "------------------------------------------------------\n" +
-                    "Course | Index | Group | Vacancies | Waitlist Length\n" +
-                    "------------------------------------------------------");
-            for(Index idx: adHandler.getIndexes(courseCode)){
-                System.out.println(idx);
-            }
-            System.out.println("------------------------------------------------------");
-            while(true) {
-                System.out.print("Enter index number to edit: ");
-                indexNum = getInput(typeOfInput.INDEX_NUM);
-                if (adHandler.checkIndexExists(indexNum)){
-                    break;
-                }
-                System.out.println("Index number not found");
-            }
-
-            do {
-                System.out.println("\n"+
-                        "----------------------------------------------\n" +
-                        "| What attribute would you like to edit?     |\n" +
-                        "----------------------------------------------\n"+
-                        "|  1: indexNum                               |\n" +
-                        "|  2: indexVacancy                           |\n" +
-                        "|  3: group                                  |\n" +
-                        "|  4. add a new lesson                       |\n" +
-                        "|  5: edit existing lessons                  |\n" +
-                        "|  6: remove a lesson                        |\n" +
-                        "|  7: exit                                   |\n" +
-                        "---------------------------------------------|");
-                System.out.print("Choose attribute to edit:");
-                choice = Integer.parseInt(getInput(typeOfInput.INT));
-                switch (choice) {
-                    case (1) -> { // edit index num
-                        do {
-                            System.out.print("Enter new index number: ");
-                            changedValue = getInput(typeOfInput.INDEX_NUM);
-                        } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
-                        indexNum = changedValue; // to allow further edits of same index in the same method call
-                    }
-                    case (2) -> {
-                        do { // edit index vacancies
-                            System.out.print("Enter new index vacancies: ");
-                            changedValue = getInput(typeOfInput.INT);
-                        } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
-                    }
-                    case (3) -> {
-                        do { // edit group number
-                            System.out.print("Enter new group number for index: ");
-                            changedValue = getInput(typeOfInput.GROUP_NAME);
-                        } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
-                    }
-                    case (4) -> {
-                        if(adHandler.checkCourseOccupied(courseCode)){
-                            System.out.println("Course already has students enrolled, Lessons cannot be added");
-                            waitForEnterInput();
-                            continue;
-                        }
-                        createLesson(courseCode, indexNum);
-                    }
-                    case (5) -> {
-                        if(adHandler.checkCourseOccupied(courseCode)){
-                            System.out.println("Course already has students enrolled, Lessons cannot be edited");
-                            waitForEnterInput();
-                            continue;
-                        }
-                        editLesson(courseCode, indexNum);
-                    }
-                    case (6) -> {
-                        if(adHandler.checkCourseOccupied(courseCode)){
-                            System.out.println("Course already has students enrolled, Lessons cannot be deleted");
-                            waitForEnterInput();
-                            continue;
-                        }
-                        int i = 1;
-                        for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)) {
-                            System.out.println("\n"+i+":");
-                            System.out.println(lsn);
-                            i++;
-                        }
-                        do {
-                            System.out.print("Enter number of lesson to delete: ");
-                            changedValue = getInput(typeOfInput.INT);
-                        } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                    }
-                    case (7) -> System.out.println("Exiting update index...");
-                    default -> System.out.println("ERROR: Invalid menu option selected");
-                }
-                if (choice >= 0 && choice < 7) {
-                    System.out.println("Successfully changed");
-                    waitForEnterInput();
-                }
-            } while (choice != 7);
-
-        } catch (EscapeException e) {
-            System.out.println(e.getMessage());
+    private void editIndex(String courseCode) throws EscapeException{
+        String changedValue;
+        String indexNum;
+        int choice;
+        System.out.println("Indexes:");
+        System.out.println("" +
+                "-------------------------------------------\n" +
+                "Index | Group | Vacancies | Waitlist Length\n" +
+                "-------------------------------------------");
+        for(Index idx: adHandler.getIndexes(courseCode)){
+            System.out.println(idx);
         }
+        System.out.println("-------------------------------------------");
+        while(true) {
+            System.out.print("Enter index number to edit: ");
+            indexNum = getInput(typeOfInput.INDEX_NUM);
+            if (adHandler.checkIndexExists(indexNum)){
+                break;
+            }
+            System.out.println("Index number not found");
+        }
+
+        do {
+            System.out.println("\n"+
+                    "----------------------------------------------\n" +
+                    "| What attribute would you like to edit?     |\n" +
+                    "----------------------------------------------\n"+
+                    "|  1: indexNum                               |\n" +
+                    "|  2: indexVacancy                           |\n" +
+                    "|  3: group                                  |\n" +
+                    "|  4. add a new lesson                       |\n" +
+                    "|  5: remove a lesson                        |\n" +
+                    "|  6: edit existing lessons                  |\n" +
+                    "|  7: back                                   |\n" +
+                    "---------------------------------------------|");
+            System.out.print("Choose attribute to edit:");
+            choice = Integer.parseInt(getInput(typeOfInput.INT));
+            switch (choice) {
+                case (1) -> { // edit index num
+                    do {
+                        System.out.print("Enter new index number: ");
+                        changedValue = getInput(typeOfInput.INDEX_NUM);
+                    } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                    indexNum = changedValue; // to allow further edits of same index in the same method call
+                }
+                case (2) -> {
+                    do { // edit index vacancies
+                        System.out.print("Enter new index vacancies: ");
+                        changedValue = getInput(typeOfInput.INT);
+                    } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                }
+                case (3) -> {
+                    do { // edit group number
+                        System.out.print("Enter new group number for index: ");
+                        changedValue = getInput(typeOfInput.GROUP_NAME);
+                    } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                }
+                case (4) -> { // add new Lesson
+                    if(adHandler.checkCourseOccupied(courseCode)){
+                        System.out.println("Course already has students enrolled, Lessons cannot be added");
+                        waitForEnterInput();
+                        continue;
+                    }
+                    createLesson(courseCode, indexNum);
+                }
+                case (5) -> { // delete lesson
+                    if(adHandler.checkCourseOccupied(courseCode)){
+                        System.out.println("Course already has students enrolled, Lessons cannot be deleted");
+                        waitForEnterInput();
+                        continue;
+                    }
+                    int i = 1;
+                    System.out.println("Lessons:");
+                    System.out.println("" +
+                            "----------------------------------------------------------------------------------------------------\n" +
+                            "Num | Type | Venue   | Class Timing       | Teaching Weeks\n" +
+                            "----------------------------------------------------------------------------------------------------");
+                    for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)){
+                        System.out.println(i + "   | " +lsn);
+                        i++;
+                    }
+                    System.out.println("----------------------------------------------------------------------------------------------------");
+                    do {
+                        System.out.print("Enter number of lesson to delete: ");
+                        changedValue = getInput(typeOfInput.INT);
+                    } while (!adHandler.editIndex(courseCode, indexNum, changedValue, choice));
+                }
+                case (6) -> { // edit lesson
+                    if(adHandler.checkCourseOccupied(courseCode)){
+                        System.out.println("Course already has students enrolled, Lessons cannot be edited");
+                        waitForEnterInput();
+                        continue;
+                    }
+                    editLesson(courseCode, indexNum);
+                }
+                case (7) -> System.out.println("Exiting update index...");
+                default -> System.out.println("ERROR: Invalid menu option selected");
+            }
+            if (choice >= 0 && choice < 6) {
+                System.out.println("Successfully changed");
+                waitForEnterInput();
+            }
+        } while (choice != 7);
     }
     /**
      * Get input for updating a Lesson object.<p>
@@ -596,115 +596,111 @@ public class AdminInterface extends UserInterface {
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      * @param indexNum Index Number of Index object which contains the Lesson we wish to edit
      */
-    private void editLesson(String courseCode, String indexNum) {
-        try {
-            String changedValue;
-            int lessonIndex;
-            int choice;
-            int i=1;
-            System.out.println("Lessons:");
-            System.out.println("" +
-                    "----------------------------------------------------------------------------------------------------\n" +
-                    "Num | Type | Venue   | Class Timing       | Teaching Weeks\n" +
-                    "----------------------------------------------------------------------------------------------------");
-            for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)){
-                System.out.println(i + "   | " +lsn);
-                i++;
-            }
-            System.out.println("----------------------------------------------------------------------------------------------------");
-            while(true) {
-                System.out.print("Enter lesson number to edit:");
-                lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
-                if (lessonIndex<i-1 && lessonIndex>=0){
-                    break;
-                }
-                System.out.println("Index out of range, enter lesson number <= "+ (i-1));
-            }
-
-            do {
-                System.out.println("\n"+
-                        "----------------------------------------------\n" +
-                        "| What attribute would you like to edit?     |\n" +
-                        "----------------------------------------------\n"+
-                        "|  1: lessonType                             |\n" +
-                        "|  2: day                                    |\n" +
-                        "|  3: lesson time                            |\n" +
-                        "|  4: venue                                  |\n" +
-                        "|  5: teaching weeks                         |\n" +
-                        "|  6: exit                                   |\n"+
-                        "----------------------------------------------");
-                System.out.print("Choose attribute to edit:");
-                choice = Integer.parseInt(getInput(typeOfInput.INT));
-                switch (choice) {
-                    case (1) -> { // edit lesson type
-                        do {
-                            System.out.print("Enter new lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
-                            changedValue = getInput(typeOfInput.LESSON_TYPE);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
-                    }
-                    case (2) -> { // edit day
-                        do {
-                            System.out.print("Enter new lesson day (First 3 letters): ");
-                            changedValue = getInput(typeOfInput.DAY);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
-                    }
-                    case (3) -> { // edit time
-                        String newStart;
-                        String newEnd;
-                        do {
-                            System.out.print("Enter new start time (HH:mm): ");
-                            newStart = getInput(typeOfInput.TIME);
-                            System.out.print("Enter new end time (HH:mm): ");
-                            newEnd = getInput(typeOfInput.TIME);
-                        } while (!courseValidator.validateTimePeriod(newStart, newEnd) ||
-                                !adHandler.editLesson(courseCode, indexNum, lessonIndex, newStart+"&"+newEnd, choice));
-                    }
-                    case (4) -> { // edit venue
-                        do {
-                            System.out.println("Enter new venue: ");
-                            changedValue = getInput(typeOfInput.STANDARD);
-                        } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
-                    }
-                    case (5) -> { // edit teaching weeks
-                        if(adHandler.checkCourseOccupied(courseCode)){
-                            System.out.println("Course already has students enrolled, Lessons cannot be deleted");
-                            waitForEnterInput();
-                            continue;
-                        }
-                        String[] inputWeeks;
-                        boolean validWeeks;
-                        do {
-                            System.out.print("Enter new teaching weeks, separated with a comma (1-13): ");
-                            changedValue = getInput(typeOfInput.STANDARD);
-                            inputWeeks = changedValue.split(",");
-                            validWeeks = true;
-                            for (String week : inputWeeks) {
-                                if (!courseValidator.validateTeachingWeek(week)) {
-                                    System.out.println("Please enter the teaching weeks again.");
-                                    validWeeks = false;
-                                    break;
-                                }
-                            }
-                        } while (!validWeeks);
-                        adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice);
-                    }
-                    case (6) -> System.out.println("Exiting update lesson...");
-                    default -> System.out.println("ERROR: Invalid menu option selected");
-                }
-                if (choice >= 0 && choice < 6) {
-                    System.out.println("Successfully changed");
-                    waitForEnterInput();
-                }
-            } while (choice != 6);
-        } catch (EscapeException e) {
-            System.out.println(e.getMessage());
+    private void editLesson(String courseCode, String indexNum) throws EscapeException{
+        String changedValue;
+        int lessonIndex;
+        int choice;
+        int i=1;
+        System.out.println("Lessons:");
+        System.out.println("" +
+                "----------------------------------------------------------------------------------------------------\n" +
+                "Num | Type | Venue   | Class Timing       | Teaching Weeks\n" +
+                "----------------------------------------------------------------------------------------------------");
+        for (Lesson lsn: adHandler.getLessons(courseCode, indexNum)){
+            System.out.println(i + "   | " +lsn);
+            i++;
         }
+        System.out.println("----------------------------------------------------------------------------------------------------");
+        while(true) {
+            System.out.print("Enter lesson number to edit:");
+            lessonIndex = Integer.parseInt(getInput(typeOfInput.INT))-1;
+            if (lessonIndex<i-1 && lessonIndex>=0){
+                break;
+            }
+            System.out.println("Index out of range, enter lesson number <= "+ (i-1));
+        }
+
+        do {
+            System.out.println("\n"+
+                    "----------------------------------------------\n" +
+                    "| What attribute would you like to edit?     |\n" +
+                    "----------------------------------------------\n"+
+                    "|  1: lessonType                             |\n" +
+                    "|  2: day                                    |\n" +
+                    "|  3: lesson time                            |\n" +
+                    "|  4: venue                                  |\n" +
+                    "|  5: teaching weeks                         |\n" +
+                    "|  6: back                                   |\n"+
+                    "----------------------------------------------");
+            System.out.print("Choose attribute to edit:");
+            choice = Integer.parseInt(getInput(typeOfInput.INT));
+            switch (choice) {
+                case (1) -> { // edit lesson type
+                    do {
+                        System.out.print("Enter new lesson type (LEC, TUT, LAB, DES, PRJ, SEM): ");
+                        changedValue = getInput(typeOfInput.LESSON_TYPE);
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
+                }
+                case (2) -> { // edit day
+                    do {
+                        System.out.print("Enter new lesson day (First 3 letters): ");
+                        changedValue = getInput(typeOfInput.DAY);
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
+                }
+                case (3) -> { // edit time
+                    String newStart;
+                    String newEnd;
+                    do {
+                        System.out.print("Enter new start time (HH:mm): ");
+                        newStart = getInput(typeOfInput.TIME);
+                        System.out.print("Enter new end time (HH:mm): ");
+                        newEnd = getInput(typeOfInput.TIME);
+                    } while (!courseValidator.validateTimePeriod(newStart, newEnd) ||
+                            !adHandler.editLesson(courseCode, indexNum, lessonIndex, newStart+"&"+newEnd, choice));
+                }
+                case (4) -> { // edit venue
+                    do {
+                        System.out.println("Enter new venue: ");
+                        changedValue = getInput(typeOfInput.STANDARD);
+                    } while (!adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice));
+                }
+                case (5) -> { // edit teaching weeks
+                    if(adHandler.checkCourseOccupied(courseCode)){
+                        System.out.println("Course already has students enrolled, Lessons cannot be deleted");
+                        waitForEnterInput();
+                        continue;
+                    }
+                    String[] inputWeeks;
+                    boolean validWeeks;
+                    do {
+                        System.out.print("Enter new teaching weeks, separated with a comma (1-13): ");
+                        changedValue = getInput(typeOfInput.STANDARD);
+                        inputWeeks = changedValue.split(",");
+                        validWeeks = true;
+                        for (String week : inputWeeks) {
+                            if (!courseValidator.validateTeachingWeek(week)) {
+                                System.out.println("Please enter the teaching weeks again.");
+                                validWeeks = false;
+                                break;
+                            }
+                        }
+                    } while (!validWeeks);
+                    adHandler.editLesson(courseCode, indexNum, lessonIndex, changedValue, choice);
+                }
+                case (6) -> System.out.println("Exiting update lesson...");
+                default -> System.out.println("ERROR: Invalid menu option selected");
+            }
+            if (choice >= 0 && choice < 6) {
+                System.out.println("Successfully changed");
+                waitForEnterInput();
+            }
+        } while (choice != 6);
     }
 
     /**
      * Get input for updating a Student object
      */
-    private void updateStudent(){
+    private void updateStudent() {
         try {
             String matric;
             String updatedValue;
@@ -712,20 +708,20 @@ public class AdminInterface extends UserInterface {
 
             System.out.println(adHandler.getStudentOverview());
 
-            while(true) {
+            while (true) {
                 System.out.print("Enter Matriculation Number of Student to edit: ");
                 matric = getInput(typeOfInput.MATRIC_NUM);
-                if(adHandler.checkStudentExists(matric)){
+                if (adHandler.checkStudentExists(matric)) {
                     break;
                 }
                 System.out.println("Student not found, please try again");
             }
 
             do {
-                System.out.println("\n"+
+                System.out.println("\n" +
                         "----------------------------------------------\n" +
                         "| What attribute would you like to edit?     |\n" +
-                        "----------------------------------------------\n"+
+                        "----------------------------------------------\n" +
                         "|  1: userID                                 |\n" +
                         "|  2: Password                               |\n" +
                         "|  3: Name                                   |\n" +
@@ -736,7 +732,7 @@ public class AdminInterface extends UserInterface {
                         "|  8: major                                  |\n" +
                         "|  9: maxAUs                                 |\n" +
                         "| 10: access period                          |\n" +
-                        "| 11: exit                                   |\n" +
+                        "| 11: back                                   |\n" +
                         "----------------------------------------------");
                 System.out.print("Enter choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
@@ -805,7 +801,7 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter student's new end access datetime: ");
                             newEnd = getInput(typeOfInput.DATETIME);
                         } while (!studentValidator.validateDateTimePeriod(newStart, newEnd) ||
-                                !adHandler.editStudent(matric, newStart+"&"+newEnd, choice));
+                                !adHandler.editStudent(matric, newStart + "&" + newEnd, choice));
                     }
                     case (11) -> System.out.println("Exiting update student...");
                     default -> System.out.println("ERROR: Invalid menu option selected");
@@ -815,7 +811,7 @@ public class AdminInterface extends UserInterface {
                     waitForEnterInput();
                 }
             } while (choice != 11);
-        } catch (EscapeException e) {
+        } catch (EscapeException e){
             System.out.println(e.getMessage());
         }
     }

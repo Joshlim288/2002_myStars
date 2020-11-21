@@ -181,17 +181,17 @@ public class AdminHandler{
                 tempCourse.setAcademicUnits(newAUs); // edit Academic Units
             }
             case(5)-> tempCourse.setSchool(input); // edit school
+            case(6)-> { // edit exam datetime
+                String newStart = input.split("&")[0];
+                String newEnd = input.split("&")[1];
+                tempCourse.setExamDateTime(newStart, newEnd);
+            }
             case(8)-> {
                 if (tempCourse.getIndex(input) == null){
                     System.out.println("Index number not found");
                     return false;
                 }
-                removeIndex(courseCode, input);
-            }
-            case(9)-> { // edit exam datetime
-                String newStart = input.split("&")[0];
-                String newEnd = input.split("&")[1];
-                tempCourse.setExamDateTime(newStart, newEnd);
+                tempCourse.getIndexes().removeIf(idx -> idx.getIndexNum().equals(input));
             }
         }
         return true;
@@ -253,13 +253,13 @@ public class AdminHandler{
                 }
                 tempIndex.setGroup(input);
             }
-            case(6)->{
+            case(5)->{
                 int lessonIndex = Integer.parseInt(input)-1;
                 if (tempIndex.getLessons().size() <= lessonIndex || lessonIndex < 0){
                     System.out.println("Index out of range");
                     return false;
                 }
-                removeLesson(courseCode, indexNum, Integer.parseInt(input)-1);
+                tempIndex.getLessons().remove(lessonIndex);
             }
         }
         return true;
@@ -310,9 +310,6 @@ public class AdminHandler{
                 for (String week : inputWeeks)
                     teachingWeeks.add(Integer.parseInt(week));
                 tempLesson.setTeachingWeeks(teachingWeeks);
-            }
-            case(6)-> {
-                return true; // since lesson was temporarily removed, we return early so we don't add back the lesson
             }
         }
         return true;
