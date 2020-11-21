@@ -93,7 +93,7 @@ public class AdminInterface extends UserInterface {
                 while (true) {
                     System.out.print("Enter course code: ");
                     courseCode = getInput(typeOfInput.COURSE_CODE);
-                    if (!adHandler.checkCourseExists(courseCode)){
+                    if (!adHandler.checkCourseExists(courseCode)) {
                         break;
                     }
                     System.out.println("Course already exists");
@@ -122,14 +122,18 @@ public class AdminInterface extends UserInterface {
                         System.out.print("Enter exam end datetime: ");
                         examEnd = getInput(typeOfInput.DATETIME);
                     } while (!courseValidator.validateDateTimePeriod(examStart, examEnd));
-                }
-                else {
+                } else {
                     examStart = null;
                     examEnd = null;
                 }
 
             } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examStart, examEnd));
+        } catch(EscapeException e){
+            System.out.println(e.getMessage());
+            return;
+        }
 
+        try {
             int numIndexes;
             do {
                 System.out.print("Enter number of indexes: ");
@@ -144,7 +148,8 @@ public class AdminInterface extends UserInterface {
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
-            adHandler.removeCourse(courseCode); // Removes the unfinished Course object from the database
+            if (courseCode != null)
+                adHandler.removeCourse(courseCode);
         }
     }
 
@@ -154,7 +159,7 @@ public class AdminInterface extends UserInterface {
      * @throws EscapeException Occurs when the User enters "~" to abort function
      */
     private void createIndex(String courseCode) throws EscapeException {
-        String indexNum;
+        String indexNum = null;
         int indexVacancies;
         int numLessons;
         String group;
@@ -184,7 +189,8 @@ public class AdminInterface extends UserInterface {
                 createLesson(courseCode, indexNum);
             }
         } catch (EscapeException e) {
-            adHandler.removeIndex(courseCode, indexNum);
+            if(indexNum != null)
+                adHandler.removeIndex(courseCode, indexNum);
             throw e;
         }
     }
@@ -290,13 +296,13 @@ public class AdminInterface extends UserInterface {
                 endAccessPeriod = getInput(typeOfInput.DATETIME);
             } while (!adHandler.addStudent(userid, password, studentName, studentMatric, email,
                     gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod));
+            for (Student stud: adHandler.getStudents()){
+                System.out.println("\n" + stud.getName() + ", " + stud.getMatricNum());
+            }
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
 
-        for (Student stud: adHandler.getStudents()){
-            System.out.println("\n" + stud.getName() + ", " + stud.getMatricNum());
-        }
         waitForEnterInput();
     }
 
