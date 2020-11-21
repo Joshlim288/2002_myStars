@@ -312,10 +312,14 @@ public class AdminInterface extends UserInterface {
     private void checkIndex() {
         try {
             String indexNum;
-            do {
+            while(true){
                 System.out.print("\nEnter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
-            } while (!adHandler.checkIndexExists(indexNum));
+                if (adHandler.checkIndexExists(indexNum)){
+                    break;
+                }
+                System.out.println("Index not found");
+            }
             adHandler.printIndexVacancy(indexNum);
             waitForEnterInput();
         } catch (EscapeException e) {
