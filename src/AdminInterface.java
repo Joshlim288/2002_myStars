@@ -144,7 +144,8 @@ public class AdminInterface extends UserInterface {
             waitForEnterInput();
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
-            adHandler.removeCourse(courseCode); // Removes the unfinished Course object from the database
+            if (courseCode != null)
+                adHandler.removeCourse(courseCode);
         }
     }
 
@@ -290,13 +291,13 @@ public class AdminInterface extends UserInterface {
                 endAccessPeriod = getInput(typeOfInput.DATETIME);
             } while (!adHandler.addStudent(userid, password, studentName, studentMatric, email,
                     gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod));
+            for (Student stud: adHandler.getStudents()){
+                System.out.println("\n" + stud.getName() + ", " + stud.getMatricNum());
+            }
         } catch (EscapeException e) {
             System.out.println(e.getMessage());
         }
 
-        for (Student stud: adHandler.getStudents()){
-            System.out.println("\n" + stud.getName() + ", " + stud.getMatricNum());
-        }
         waitForEnterInput();
     }
 
