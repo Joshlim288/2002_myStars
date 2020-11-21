@@ -47,7 +47,7 @@ public class AdminDataManager implements DataManager{
             out.writeObject(adminList);
             out.close();
             fileOut.close();
-            System.out.println("... admin data saved");
+            System.out.println("... Admin Data saved successfully!");
         } catch (IOException e) {
             e.printStackTrace();
         }
