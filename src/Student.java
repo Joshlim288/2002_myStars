@@ -258,7 +258,7 @@ public class Student extends User {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == this) {
+        if (o == null) {
             return false;
         }
         if (!(o instanceof Student)) {

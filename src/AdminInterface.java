@@ -90,8 +90,14 @@ public class AdminInterface extends UserInterface {
         int aus;
         try {
             do {
-                System.out.print("Enter course code: ");
-                courseCode = getInput(typeOfInput.COURSE_CODE);
+                while (true) {
+                    System.out.print("Enter course code: ");
+                    courseCode = getInput(typeOfInput.COURSE_CODE);
+                    if (!adHandler.checkCourseExists(courseCode)){
+                        break;
+                    }
+                    System.out.println("Course already exists");
+                }
 
                 System.out.print("Enter school: ");
                 school = getInput(typeOfInput.NAME);
@@ -154,8 +160,13 @@ public class AdminInterface extends UserInterface {
         String group;
 
         do {
-            System.out.print("Enter index number: ");
-            indexNum = getInput(typeOfInput.INDEX_NUM);
+            while (true) {
+                System.out.print("Enter index number: ");
+                indexNum = getInput(typeOfInput.INDEX_NUM);
+                if (!adHandler.checkIndexExists(indexNum))
+                    break;
+                System.out.println("Index already exists");
+            }
 
             System.out.print("Enter number of vacancies: ");
             indexVacancies = Integer.parseInt(getInput(typeOfInput.INT));
@@ -822,11 +833,15 @@ public class AdminInterface extends UserInterface {
     private void printOverview(){
         try{
             int choice;
-            System.out.println("Choose overview :");
-            System.out.println("1) Print all Students\n" +
-                               "2) Print all Courses\n" +
-                               "3) Print all Courses + Indexes\n" +
-                               "4) Print all Courses + Indexes + Lessons");
+            System.out.println("---------------------------------------------------");
+            System.out.println("| Choose overview:                                |");
+            System.out.println("---------------------------------------------------");
+            System.out.println("| 1: Print all Students                           |\n"+
+                               "| 2: Print all Courses                            |\n"+
+                               "| 3: Print all Courses + Indexes                  |\n"+
+                               "| 4: Print all Courses + Indexes + Lessons        |");
+            System.out.println("---------------------------------------------------");
+            System.out.print("Please enter your choice: ");
             choice = Integer.parseInt(getInput(typeOfInput.INT));
             switch (choice) {
                 case (1) -> System.out.println(adHandler.getStudentOverview());
@@ -856,6 +871,7 @@ public class AdminInterface extends UserInterface {
                 }
                 System.out.println("Student not found");
             }
+            System.out.println("Removing student...");
             adHandler.removeStudent(matricNum);
             System.out.println("Student "+matricNum+" has been removed");
             waitForEnterInput();

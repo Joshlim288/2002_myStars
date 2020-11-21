@@ -233,10 +233,14 @@ public class StudentInterface extends UserInterface {
 
         try{
             do {
-                System.out.println("Choose overview :");
-                System.out.println("1) Print all Courses\n" +
-                                   "2) Print all Courses + Indexes\n" +
-                                   "3) Print all Courses + Indexes + Lessons");
+                System.out.println("---------------------------------------------------");
+                System.out.println("| Choose overview:                                |");
+                System.out.println("---------------------------------------------------");
+                System.out.println("| 1: Print all Courses                            |\n" +
+                                   "| 2: Print all Courses + Indexes                  |\n" +
+                                   "| 3: Print all Courses + Indexes + Lessons        |");
+                System.out.println("---------------------------------------------------");
+                System.out.print("Please enter your choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
             } while (choice > 3 || choice == 0);
             System.out.println(studHandler.getCourseOverview(choice));
