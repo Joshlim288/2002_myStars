@@ -155,7 +155,7 @@ public class AdminInterface extends UserInterface {
      * @throws EscapeException Occurs when the User enters "~" to abort function
      */
     private void createIndex(String courseCode) throws EscapeException {
-        String indexNum;
+        String indexNum = null;
         int indexVacancies;
         int numLessons;
         String group;
@@ -185,7 +185,8 @@ public class AdminInterface extends UserInterface {
                 createLesson(courseCode, indexNum);
             }
         } catch (EscapeException e) {
-            adHandler.removeIndex(courseCode, indexNum);
+            if(indexNum != null)
+                adHandler.removeIndex(courseCode, indexNum);
             throw e;
         }
     }
