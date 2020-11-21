@@ -93,7 +93,7 @@ public class AdminInterface extends UserInterface {
                 while (true) {
                     System.out.print("Enter course code: ");
                     courseCode = getInput(typeOfInput.COURSE_CODE);
-                    if (!adHandler.checkCourseExists(courseCode)){
+                    if (!adHandler.checkCourseExists(courseCode)) {
                         break;
                     }
                     System.out.println("Course already exists");
@@ -122,14 +122,17 @@ public class AdminInterface extends UserInterface {
                         System.out.print("Enter exam end datetime: ");
                         examEnd = getInput(typeOfInput.DATETIME);
                     } while (!courseValidator.validateDateTimePeriod(examStart, examEnd));
-                }
-                else {
+                } else {
                     examStart = null;
                     examEnd = null;
                 }
 
             } while (!adHandler.addCourse(courseCode, courseName, courseType, aus, school, hasExams, examStart, examEnd));
+        } catch(EscapeException e){
+            System.out.println(e.getMessage());
+        }
 
+        try {
             int numIndexes;
             do {
                 System.out.print("Enter number of indexes: ");
