@@ -110,7 +110,7 @@ public class StudentInterface extends UserInterface {
                 validIndex = studHandler.checkValidIndex(indexSelected, studHandler.currentStudent, null);
             } while (!validIndex);
 
-            System.out.println("\nOverview for " + courseSelected.getCourseCode() + ", " + courseSelected.getCourseName() + " | " +
+            System.out.println("\nOverview of Lessons | " + courseSelected.getCourseCode() + ", " + courseSelected.getCourseName() + " | " +
                                "Index Number: " + indexSelected.getIndexNum());
             showLessonsInIndex(indexSelected);
 
@@ -282,7 +282,7 @@ public class StudentInterface extends UserInterface {
             //Get valid index to change to
             do {
                 System.out.print("Enter the index you would like to swap to.\n" +
-                                   "You will be added to wait-list if you choose an index with no vacancies:");
+                                   "You will be added to wait-list if you choose an index with no vacancies: ");
                 indexSelected = studHandler.retrieveIndex(courseSelected, getInput(typeOfInput.INDEX_NUM));
                 validIndex = studHandler.checkValidIndex(indexSelected, studHandler.currentStudent, indexToDrop);
 
@@ -294,10 +294,10 @@ public class StudentInterface extends UserInterface {
                     }
             } while (!validIndex);
 
-            System.out.println("\nOverview for Index " + indexToDrop.getIndexNum() + " (Before Change of Index)");
+            System.out.println("\nOverview of Lessons in Index " + indexToDrop.getIndexNum() + " (Before Change of Index)");
             showLessonsInIndex(indexToDrop);
 
-            System.out.println("\nOverview for Index " + indexSelected.getIndexNum() + " (After Change of Index)");
+            System.out.println("\nOverview of Lessons in Index " + indexSelected.getIndexNum() + " (After Change of Index)");
             showLessonsInIndex(indexSelected);
 
             System.out.print("\nProceed with the changing of index? \n" +
@@ -390,10 +390,10 @@ public class StudentInterface extends UserInterface {
 
             System.out.println("\nOverview of swap for " + courseSelected.getCourseCode()+ ", " + courseSelected.getCourseName());
 
-            System.out.println("\nOverview for " + studHandler.currentStudent.getName() + "'s Index " + indexToSwapOut.getIndexNum() + " (Before Swap)");
+            System.out.println("\nOverview of Lessons for " + studHandler.currentStudent.getName() + "'s Index " + indexToSwapOut.getIndexNum() + " (Before Swap)");
             showLessonsInIndex(indexToSwapOut);
 
-            System.out.println("\nOverview for " + otherStudent.getName() + "'s Index " + indexToSwapIn.getIndexNum() + " (Before Swap)");
+            System.out.println("\nOverview of Lessons for " + otherStudent.getName() + "'s Index " + indexToSwapIn.getIndexNum() + " (Before Swap)");
             showLessonsInIndex(indexToSwapIn);
 
             System.out.print("\nProceed with the swapping of index? \n" +

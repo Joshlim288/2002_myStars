@@ -346,7 +346,7 @@ public class StudentHandler {
                 course = cdm.getCourse(pair.getKey());
                 index = cdm.getCourse(pair.getKey()).getIndex(pair.getValue());
                 stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
-                        + "  | REGISTERED |  " + course.getCourseType() + "\n");
+                        + "  | REGISTERED | " + course.getCourseType() + "\n");
             }
         }
 
