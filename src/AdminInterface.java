@@ -334,6 +334,7 @@ public class AdminInterface extends UserInterface {
         try {
             String indexNum;
             ArrayList<Student> studentList;
+            System.out.println(adHandler.getCourseOverview(2));
             do {
                 System.out.print("Enter index number: ");
                 indexNum = getInput(typeOfInput.INDEX_NUM);
@@ -358,6 +359,7 @@ public class AdminInterface extends UserInterface {
         try {
             String courseCode;
             ArrayList<Student> studentList;
+            System.out.println(adHandler.getCourseOverview(1));
             do {
                 System.out.print("Enter course code: ");
                 courseCode = getInput(typeOfInput.COURSE_CODE);
@@ -932,6 +934,7 @@ public class AdminInterface extends UserInterface {
                 }
                 System.out.print("\nChoose a student from waitlist to force enroll: ");
                 matricNum = getInput(typeOfInput.MATRIC_NUM);
+                System.out.println("Enrolling Student...");
                 if (!adHandler.forceEnrollStudent(indexNum, matricNum)){
                     System.out.println("Student not found");
                     continue;

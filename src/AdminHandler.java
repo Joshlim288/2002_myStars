@@ -641,16 +641,22 @@ public class AdminHandler{
     private void updateWaitlist(String courseCode, String indexNum){
         String matricNum;
         Student toAdd;
-        Index tempIndex = cdm.getCourse(courseCode).getIndex(indexNum);
+        Course tempCourse = cdm.getCourse(courseCode);
+        Index tempIndex = tempCourse.getIndex(indexNum);
         // enroll students from waitlist if slots are now available
         while (tempIndex.getCurrentVacancy() > 0 && !tempIndex.getWaitlist().isEmpty()){
             matricNum = tempIndex.removeFromWaitlist();
             toAdd = sdm.getStudent(matricNum);
             tempIndex.addToEnrolledStudents(matricNum);
-            toAdd.addCourse(courseCode, indexNum, cdm.getCourse(courseCode).getAcademicUnits());
+            toAdd.addCourse(courseCode, indexNum, tempCourse.getAcademicUnits());
             MailHandler.sendMail(toAdd.getEmail(),
-                    "You have been removed from a wait-list!",
-                    "Successful Registration of Course");
+                    "Dear " + toAdd.getName() +
+                            ", you have been successfully removed from the wait-list for the following courses:\n\n" +
+                            courseCode + ", " + tempCourse.getCourseName() + "\n" +
+                            "Index Registered: " + indexNum +  "\n" +
+                            "Current AUs registered: " + toAdd.getCurrentAUs() ,
+                    "Successful Registration for " + tempCourse.getCourseCode() + ", " + tempCourse.getCourseName() +
+                            ": Index " + indexNum);
         }
     }
 
@@ -705,6 +711,15 @@ public class AdminHandler{
                 tempStudent = sdm.getStudent(matricNum);
                 tempStudent.addCourse(crs.getCourseCode(), indexNum, crs.getAcademicUnits());
                 tempStudent.removeCourseFromWaitList(crs.getCourseCode());
+                // send mail
+                MailHandler.sendMail(tempStudent.getEmail(),
+                        "Dear " + tempStudent.getName() +
+                                ", you have been successfully removed from the wait-list for the following courses:\n\n" +
+                                crs.getCourseCode() + ", " + crs.getCourseName() + "\n" +
+                                "Index Registered: " + indexNum +  "\n" +
+                                "Current AUs registered: " + tempStudent.getCurrentAUs() ,
+                        "Successful Registration for " + crs.getCourseCode() + ", " + crs.getCourseName() +
+                                ": Index " + indexNum);
                 return true;
             }
         }
