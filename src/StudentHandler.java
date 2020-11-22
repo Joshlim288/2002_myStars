@@ -251,8 +251,13 @@ public class StudentHandler {
                             if (newLesson.getStartTime().isBefore(oldLesson.getEndTime()) &&
                                     newLesson.getEndTime().isAfter(oldLesson.getStartTime()) &&
                                         !oldLessonWeeks.isEmpty()) {
-                                System.out.println("There is a clash with Index " + indexToCheck.getIndexNum() + "!");
-                                System.out.println("Please choose another index!\n");
+                                ArrayList<Course> courseList = cdm.getCourseList();
+                                for (Course course: courseList)
+                                    if (course.getIndex(indexToCheck.getIndexNum()) != null) {
+                                        System.out.println("There is a clash with " + course.getCourseCode() +
+                                                           ", Index " + indexToCheck.getIndexNum() + "!");
+                                        System.out.println("Please choose another index!\n");
+                                    }
                                 return true;
                             }
                         }
@@ -355,7 +360,7 @@ public class StudentHandler {
                 course = cdm.getCourse(pair2.getKey());
                 index = cdm.getCourse(pair2.getKey()).getIndex(pair2.getValue());
                 stringBuilder.append(course.getCourseCode() + " | " + index.getIndexNum() + " |  " + course.getAcademicUnits()
-                        + "  | WAITLISTED |  " + course.getCourseType() + "\n");
+                        + "  | WAITLISTED | " + course.getCourseType() + "\n");
             }
         }
         stringBuilder.append("-------------------------------------------------\n");

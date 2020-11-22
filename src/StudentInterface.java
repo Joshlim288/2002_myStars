@@ -330,7 +330,7 @@ public class StudentInterface extends UserInterface {
      */
     private void swapIndex() {
         Course courseSelected;
-        boolean validCourse, validOtherStudent;
+        boolean validCourse, validOtherStudent = true;
         Student otherStudent;
 
         if(noRegisteredCourses())
@@ -358,10 +358,7 @@ public class StudentInterface extends UserInterface {
             do {
                 System.out.println("\nEnter the particulars of the student to swap with:");
                 otherStudent = studHandler.retrieveOtherStudent(sc);
-                if (otherStudent != null)
-                    validOtherStudent = studHandler.checkIfRegistered(otherStudent, courseSelected);
-                else
-                    validOtherStudent = false;
+                if (otherStudent == null) validOtherStudent = false;
                 if(!validOtherStudent) {
                     System.out.print("Would you like to try entering the other student's details again?\n" +
                             "Enter 'Y' or 'y' to continue or any other key to return to main menu: ");
@@ -371,6 +368,14 @@ public class StudentInterface extends UserInterface {
                     }
                 }
             } while (!validOtherStudent);
+
+            //Reject if other student not enrolled in the course
+            if (!studHandler.checkIfRegistered(otherStudent, courseSelected)) {
+                System.out.println("\nERROR! " + otherStudent.getName() + " is not registered for this course.");
+                System.out.println("Returning to main menu!");
+                waitForEnterInput();
+                return;
+            }
 
             //indexToSwapIn refers to the index registered by the other student
             //Reject if both students are already registered in the same index
