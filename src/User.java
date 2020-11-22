@@ -60,6 +60,13 @@ public abstract class User implements Serializable {
     }
 
     /**
+     * @param userID String to change the User's userID to
+     */
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    /**
      * @return hashed password of the User as a String
      */
     public String getHashedPassword() {
@@ -67,21 +74,12 @@ public abstract class User implements Serializable {
     }
 
     /**
-     * @return Domain that the User belongs to (e.g. Student, Admin)
+     * Set password for a user
+     * Will automatically hash the given password, so password is not stored as raw text
+     * @param password String to change the user's password to
      */
-    public String getDomain() {return domain;}
-
-    /**
-     * Sets the domain the User belongs to
-     * @param domain new domain the User belongs to
-     */
-    public void setDomain(String domain) { this.domain = domain; }
-
-    /**
-     * @param userID String to change the User's userID to
-     */
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setPassword(String password) {
+        this.hashedPassword = hash(password);
     }
 
     /**
@@ -94,13 +92,15 @@ public abstract class User implements Serializable {
     }
 
     /**
-     * Set password for a user
-     * Will automatically hash the given password, so password is not stored as raw text
-     * @param password String to change the user's password to
+     * @return Domain that the User belongs to (e.g. Student, Admin)
      */
-    public void setPassword(String password) {
-        this.hashedPassword = hash(password);
-    }
+    public String getDomain() {return domain;}
+
+    /**
+     * Sets the domain the User belongs to
+     * @param domain new domain the User belongs to
+     */
+    public void setDomain(String domain) { this.domain = domain; }
 
     /**
      * @return email currently linked to the User
