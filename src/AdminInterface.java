@@ -929,6 +929,10 @@ public class AdminInterface extends UserInterface {
                     System.out.println("Invalid index number");
                     continue;
                 }
+                if (adHandler.getStudentListByIndex(indexNum, true).isEmpty()){
+                    System.out.println("No Student on waitlist");
+                    continue;
+                }
                 for (Student stud: adHandler.getStudentListByIndex(indexNum, true)){
                     System.out.println(stud.getMatricNum() + ", "+ stud.getName());
                 }
