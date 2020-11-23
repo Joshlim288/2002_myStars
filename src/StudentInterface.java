@@ -51,7 +51,8 @@ public class StudentInterface extends UserInterface {
                 System.out.print("Please enter your choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
             } catch (EscapeException e) {
-                logout();
+                System.out.println("Force logging out...");
+                System.out.println("Data has not been saved");
                 return;
             }
             switch (choice) {

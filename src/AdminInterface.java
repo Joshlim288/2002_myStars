@@ -53,7 +53,8 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Please enter your choice: ");
                 choice = Integer.parseInt(getInput(typeOfInput.INT));
             } catch (EscapeException e) {
-                logout();
+                System.out.println("Force logging out...");
+                System.out.println("Data has not been saved");
                 return;
             }
             switch(choice){
@@ -352,7 +353,7 @@ public class AdminInterface extends UserInterface {
 
             System.out.println("\nStudents currently registered for Index " + indexNum + ": ");
             for (Student stud : studentList) {
-                System.out.println(stud.getMatricNum() +", "+ stud.getName());
+                System.out.println(stud.getMatricNum()+", "+ stud.getName()+", "+stud.getGender()+", "+stud.getNationality());
             }
             waitForEnterInput();
         } catch (EscapeException e) {
@@ -376,7 +377,7 @@ public class AdminInterface extends UserInterface {
 
             System.out.println("\nStudents currently registered for " + courseCode + ":");
             for (Student stud : studentList) {
-                System.out.println(stud.getMatricNum() +", "+ stud.getName());
+                System.out.println(stud.getMatricNum()+", "+ stud.getName()+", "+stud.getGender()+", "+stud.getNationality());
             }
             waitForEnterInput();
         } catch (EscapeException e) {
