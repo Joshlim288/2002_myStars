@@ -262,8 +262,14 @@ public class AdminInterface extends UserInterface {
             int maxAUs;
 
             do {
-                System.out.print("Enter Matriculation Number of Student: ");
-                studentMatric = getInput(typeOfInput.MATRIC_NUM);
+                while (true) {
+                    System.out.print("Enter Matriculation Number of Student: ");
+                    studentMatric = getInput(typeOfInput.MATRIC_NUM);
+                    if (!adHandler.checkStudentExists(studentMatric))
+                        break;
+                    System.out.println("ERROR: Student with this matriculation number already exists.");
+                }
+
 
                 System.out.print("Enter student name: ");
                 studentName = getInput(typeOfInput.NAME);
@@ -289,11 +295,13 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter maxAUs: ");
                 maxAUs = Integer.parseInt(getInput(typeOfInput.INT));
 
-                System.out.print("Enter start access period: ");
-                startAccessPeriod = getInput(typeOfInput.DATETIME);
+                do {
+                    System.out.print("Enter start access period: ");
+                    startAccessPeriod = getInput(typeOfInput.DATETIME);
 
-                System.out.print("Enter end access period: ");
-                endAccessPeriod = getInput(typeOfInput.DATETIME);
+                    System.out.print("Enter end access period: ");
+                    endAccessPeriod = getInput(typeOfInput.DATETIME);
+                } while (!studentValidator.validateDateTimePeriod(startAccessPeriod, endAccessPeriod));
             } while (!adHandler.addStudent(userid, password, studentName, studentMatric, email,
                     gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod));
             for (Student stud: adHandler.getStudents()){

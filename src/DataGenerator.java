@@ -59,7 +59,7 @@ public class DataGenerator {
                 "EEE", 18, "2020-11-11 00:00", "2021-01-01 00:00");
 
         Student studentM = new Student("studentm12", "student", "Student M",
-                "U2020202M", "josh0047@e.ntu.edu.sg", "OTHER", "American",
+                "U2020202M", "josh0049@e.ntu.edu.sg", "OTHER", "American",
                 "EEE", 18, "2020-11-11 00:00", "2021-01-01 00:00");
 
         Student studentN = new Student("studentn13", "student", "Student N",
@@ -76,8 +76,8 @@ public class DataGenerator {
 
 
         /*Initialising Courses */
-        ArrayList<Integer> allWeeks = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14));
-        ArrayList<Integer> evenWeeks = new ArrayList<>(Arrays.asList(2,4,6,8,10,12,14));
+        ArrayList<Integer> allWeeks = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13));
+        ArrayList<Integer> evenWeeks = new ArrayList<>(Arrays.asList(2,4,6,8,10,12));
         ArrayList<Integer> oddWeeks = new ArrayList<>(Arrays.asList(1,3,5,7,9,11,13));
 
         Course cz2002 = new Course("CZ2002", "Object-Oriented Design & Programming",
@@ -151,6 +151,10 @@ public class DataGenerator {
         Index index12345 = lj9001.getIndex("12345");
         index12345.addLesson("TUT", "MON", "13:00", "14:00", "TR15", oddWeeks);
 
+        lj9001.addIndex("12346", 10, "SS12");
+        Index index12346 = lj9001.getIndex("12346");
+        index12346.addLesson("TUT", "MON", "09:00", "10:00", "TR17", allWeeks);
+
         /* Adding Students to Courses */
 
         index11111.addToEnrolledStudents("U1111111A");
@@ -175,9 +179,9 @@ public class DataGenerator {
         studentP.addCourse("CZ2002", "11111", 3);
 
         index11111.addToWaitlist("U2020202M");
-        index11111.addToWaitlist("U3030303N");
+        //index11111.addToWaitlist("U3030303N");
         studentM.addCourseToWaitList("CZ2002", "11111");
-        studentN.addCourseToWaitList("CZ2002", "11111");
+        //studentN.addCourseToWaitList("CZ2002", "11111");
 
         index22222.addToEnrolledStudents("U1010101L");
         studentL.addCourse("CZ2002", "22222", 3);
