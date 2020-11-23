@@ -295,11 +295,13 @@ public class AdminInterface extends UserInterface {
                 System.out.print("Enter maxAUs: ");
                 maxAUs = Integer.parseInt(getInput(typeOfInput.INT));
 
-                System.out.print("Enter start access period: ");
-                startAccessPeriod = getInput(typeOfInput.DATETIME);
+                do {
+                    System.out.print("Enter start access period: ");
+                    startAccessPeriod = getInput(typeOfInput.DATETIME);
 
-                System.out.print("Enter end access period: ");
-                endAccessPeriod = getInput(typeOfInput.DATETIME);
+                    System.out.print("Enter end access period: ");
+                    endAccessPeriod = getInput(typeOfInput.DATETIME);
+                } while (!studentValidator.validateDateTimePeriod(startAccessPeriod, endAccessPeriod));
             } while (!adHandler.addStudent(userid, password, studentName, studentMatric, email,
                     gender, nationality, major, maxAUs, startAccessPeriod, endAccessPeriod));
             for (Student stud: adHandler.getStudents()){
