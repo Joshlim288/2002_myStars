@@ -12,9 +12,9 @@ import java.util.Map;
  * @since 1.1
  */
 public class StudentHandler {
-    Student currentStudent;
-    StudentDataManager sdm;
-    CourseDataManager cdm;
+    protected final Student currentStudent;
+    private final StudentDataManager sdm;
+    private final CourseDataManager cdm;
 
     /**
      * Constructor for the handler.<p>
