@@ -262,8 +262,14 @@ public class AdminInterface extends UserInterface {
             int maxAUs;
 
             do {
-                System.out.print("Enter Matriculation Number of Student: ");
-                studentMatric = getInput(typeOfInput.MATRIC_NUM);
+                while (true) {
+                    System.out.print("Enter Matriculation Number of Student: ");
+                    studentMatric = getInput(typeOfInput.MATRIC_NUM);
+                    if (!adHandler.checkStudentExists(studentMatric))
+                        break;
+                    System.out.println("ERROR: Student with this matriculation number already exists.");
+                }
+
 
                 System.out.print("Enter student name: ");
                 studentName = getInput(typeOfInput.NAME);
