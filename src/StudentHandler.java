@@ -95,12 +95,12 @@ public class StudentHandler {
 
             MailHandler.sendMail(studentRemoved.getEmail(),
                     "Dear " + studentRemoved.getName() +
-                            ", you have been successfully removed from the wait-list for the following courses:\n\n" +
+                            ", you have been successfully registered for the following courses:\n\n" +
                             course.getCourseCode() + ", " + course.getCourseName() + "\n" +
                             "Index Registered: " + index.getIndexNum() +  "\n" +
                             "Current AUs registered: " + studentRemoved.getCurrentAUs() ,
                     "Successful Registration for " + course.getCourseCode() + ", " + course.getCourseName() +
-                            ": Index " + index.getIndexNum());
+                            ": Index " + index.getIndexNum() + " from Wait-list");
         }
     }
 
