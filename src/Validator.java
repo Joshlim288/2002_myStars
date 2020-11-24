@@ -30,11 +30,13 @@ public class Validator {
      * @return true if input matches, false otherwise
      */
     public boolean validateInt(String integer) {
-        if (integer.matches("^[0-9]+$")) {
+        try {
+            Integer.parseInt(integer);
             return true;
+        } catch (NumberFormatException e) {
+            System.out.println("ERROR: Input is not a number.");
+            return false;
         }
-        System.out.println("ERROR: Input is not a number.");
-        return false;
     }
 
     /**
