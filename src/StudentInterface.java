@@ -360,6 +360,7 @@ public class StudentInterface extends UserInterface {
                 System.out.println("\nEnter the particulars of the student to swap with:");
                 otherStudent = studHandler.retrieveOtherStudent(sc);
                 if (otherStudent == null) validOtherStudent = false;
+                else validOtherStudent = true;
                 if(!validOtherStudent) {
                     System.out.print("Would you like to try entering the other student's details again?\n" +
                             "Enter 'Y' or 'y' to continue or any other key to return to main menu: ");
