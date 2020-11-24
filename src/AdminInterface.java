@@ -514,6 +514,7 @@ public class AdminInterface extends UserInterface {
      * Some parameters cannot be edited if there are Students already enrolled in the course.<p>
      * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around.<p>
      * @param courseCode Course code of Course object which contains the Index we wish to edit
+     * @throws EscapeException when user enters "~" to abort function
      */
     private void editIndex(String courseCode) throws EscapeException{
         String changedValue;
@@ -626,6 +627,7 @@ public class AdminInterface extends UserInterface {
      * This is to ensure Students are not unfairly removed from courses that they have planned their timetables around.
      * @param courseCode Course code of Course object which contains the Index we wish to edit
      * @param indexNum Index Number of Index object which contains the Lesson we wish to edit
+     * @throws EscapeException when user enters "~" to abort function
      */
     private void editLesson(String courseCode, String indexNum) throws EscapeException{
         String changedValue;
