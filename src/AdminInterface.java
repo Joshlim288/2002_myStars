@@ -431,7 +431,6 @@ public class AdminInterface extends UserInterface {
                             System.out.print("Enter new course code: ");
                             changedValue = getInput(typeOfInput.COURSE_CODE);
                         } while (!adHandler.editCourse(courseCode, changedValue, choice));
-                        System.out.println("Successfully changed");
                         courseCode = changedValue; // to allow further edits of same course in the same method call
                     }
                     case (2) -> { // edit course name
